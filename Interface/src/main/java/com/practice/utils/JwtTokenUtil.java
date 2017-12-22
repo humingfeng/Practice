@@ -24,7 +24,7 @@ public class JwtTokenUtil {
      */
     public static final String JWT_ID = "jwt";
     public static final String JWT_SECRET = "7786df7fc3a34e26a61c034d5ec8245d";
-    public static final int JWT_TTL = 60*60*1000;
+    public static final int JWT_TTL = 30*60*1000;
     public static final String PROFILES = "Xushd";
 
     /**
@@ -75,6 +75,23 @@ public class JwtTokenUtil {
     }
 
     /**
+     * 验证 jwt 是否过期
+     * @param jwt
+     * @return
+     */
+    public static boolean isJwtTimeOut(String jwt){
+        try {
+            Claims claims = parseJWT(jwt);
+
+            return true;
+
+        }catch (Exception e){
+
+        }
+        return false;
+    }
+
+    /**
      * 获取 jwt token 中的用户信息
      * @param jwt
      * @return
@@ -91,10 +108,9 @@ public class JwtTokenUtil {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return null;
-
     }
 
 

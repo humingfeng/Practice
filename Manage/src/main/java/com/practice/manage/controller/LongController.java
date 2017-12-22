@@ -1,12 +1,17 @@
 package com.practice.manage.controller;
 
+import com.practice.enums.AuthEnum;
 import com.practice.result.JsonResult;
+import com.practice.service.LoginService;
 import com.practice.utils.VerifyCodeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,32 +22,52 @@ import java.io.IOException;
 @Controller
 public class LongController {
 
+    @Resource
+    LoginService loginService;
 
     /**
      * Login Index
+     *
      * @return
      */
     @RequestMapping(value = "/login")
-    public String login(){
+    public String login() {
 
         return "login";
     }
 
+    /**
+     * Manage Login check
+     * @param vercode
+     * @param account
+     * @param pass
+     * @param code
+     * @return
+     */
     @RequestMapping(value = "/login/check")
     @ResponseBody
-    public JsonResult loginCheck(){
+    public JsonResult loginCheck(@CookieValue(required = false) String vercode, String account, String pass, String code) {
 
+        if (StringUtils.isBlank(vercode)) {
+            return JsonResult.error(AuthEnum.VERCODE_TIME_OUT);
+        }
 
-        return JsonResult.success();
+        if (!StringUtils.equals(code.toLowerCase(), vercode)) {
+            return JsonResult.error(AuthEnum.VERCODE_ERROR);
+        }
+
+        return loginService.manageLoginCheck(account, pass);
+
     }
 
 
     /**
      * 生成验证码
+     *
      * @param response
      * @throws IOException
      */
-    @RequestMapping(value = "/verifyCode",method = RequestMethod.GET)
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     public void verifyCode(HttpServletResponse response) throws IOException {
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");

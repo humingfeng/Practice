@@ -1,7 +1,7 @@
 /**
  * Created by Xushd on 2017/10/9.
  */
-layui.config({base:"/resources/js/"}).use(['app','element','bodyTab'],function(){
+layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
     var $ = layui.jquery,app = layui.app,
         element = layui.element,tab = layui.bodyTab({
             openTabNum : "50",  //最大可打开窗口数量

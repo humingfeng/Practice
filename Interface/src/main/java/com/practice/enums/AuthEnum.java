@@ -12,6 +12,8 @@ public enum AuthEnum {
     YES_AUTH(200,"正常"),
     USER_NO_EXIST(500, "帐号不存在"),
     PASS_ERROR(500, "密码错误"),
+    VERCODE_TIME_OUT(500, "验证码过期"),
+    VERCODE_ERROR(500, "验证码错误"),
     USER_NO_STATUS(500, "帐号被禁用");
 
     private int status;

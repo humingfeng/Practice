@@ -50,7 +50,6 @@ public class LoginServiceImpl implements LoginService {
         if (manageUsers.size() == 0) {
             return JsonResult.error(AuthEnum.USER_NO_EXIST);
         } else {
-            String sha256 = IDUtils.sha256(password);
 
             ManageUser manageUser = manageUsers.get(0);
 
@@ -60,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
                 return JsonResult.error(AuthEnum.USER_NO_STATUS);
             }
 
-            if (!StringUtils.equals(sha256, manageUser.getPassword())) {
+            if (!StringUtils.equals(password, manageUser.getPassword())) {
                 return JsonResult.error(AuthEnum.PASS_ERROR);
             }
 

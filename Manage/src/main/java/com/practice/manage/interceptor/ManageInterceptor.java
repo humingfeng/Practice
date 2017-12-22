@@ -3,6 +3,7 @@ package com.practice.manage.interceptor;
 import com.practice.enums.AuthEnum;
 import com.practice.result.JsonResult;
 import com.practice.utils.JsonUtils;
+import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -19,29 +20,36 @@ public class ManageInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")){
-                token = cookie.getValue();
-            }
-        }
+        String token=null;
         String requestType = request.getHeader("X-Requested-With");
-        String url = request.getRequestURL().toString();
-
-        if (StringUtils.isNotBlank(token)) {
-//            JsonResult result = loginService.checkManageLoginStatus(token);
-//            if(result.getStatus()==200){
-//                request.setAttribute("token",token);
-//                return true;
-//            }
-        }
         if(StringUtils.isBlank(requestType)){
-            request.getRequestDispatcher("/").forward(request, response);
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("manage_token")){
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+            if (StringUtils.isNotBlank(token) && JwtTokenUtil.isJwtTimeOut(token)) {
+                request.setAttribute("token",token);
+                return true;
+            }
+
+            java.io.PrintWriter out = response.getWriter();
+            out.println("<html>");
+            out.println("<script>");
+            out.println("window.open ('/login','_top')");
+            out.println("</script>");
+            out.println("</html>");
         }else{
             //ajax
+            token = request.getHeader("manage-token");
+            if(StringUtils.isNotBlank(token) && JwtTokenUtil.isJwtTimeOut(token)){
+                request.setAttribute("token",token);
+                return true;
+            }
             PrintWriter writer = response.getWriter();
-            writer.write(JsonUtils.objectToJson(JsonResult.error(AuthEnum.NO_AUTH)));
+            writer.write(JsonUtils.objectToJson(JsonResult.error(AuthEnum.TIME_OUT)));
             writer.flush();
         }
         return false;

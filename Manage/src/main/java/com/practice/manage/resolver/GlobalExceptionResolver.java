@@ -4,7 +4,9 @@ package com.practice.manage.resolver;
 import com.practice.enums.OperateEnum;
 import com.practice.result.JsonResult;
 
+import com.practice.utils.ExceptionUtil;
 import com.practice.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,13 +30,14 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 
         response.setCharacterEncoding("UTF-8");
-        if (!isAppRequest(request)) {
+        String requestType = request.getHeader("X-Requested-With");
+        if(StringUtils.isBlank(requestType)){
             LOGGER.error("Error:{}", ex);
-            return getModelAndView("common/500", ex, request);
+            return getModelAndView("/404", ex, request);
 
         } else {//ajax
             LOGGER.error("Error:{}", ex);
-            String result = JsonUtils.objectToJson(JsonResult.error(OperateEnum.SERVICE_ERROR));
+            String result = JsonUtils.objectToJson(JsonResult.error(ExceptionUtil.getStackTrace(ex)));
             try {
                 PrintWriter writer = response.getWriter();
                 writer.write(result);
@@ -46,11 +49,5 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
         }
     }
 
-
-    public boolean isAppRequest(HttpServletRequest request){
-        String token = request.getHeader("X-Uping-AppKey");;
-        boolean isApp = token!=null ? true:false;
-        return isApp;
-    }
 
 }

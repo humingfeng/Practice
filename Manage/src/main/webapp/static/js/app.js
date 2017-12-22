@@ -15,7 +15,7 @@ layui.define(['layer', 'util', 'sha256', 'cookie','laytpl'], function (e) {
         var _opt = $.extend(opt, {
             success: function (data, textStatus) {
                 //如果返回的不是json对象 跳转到登录
-                if (data.status == 403) {
+                if (data.code == 403) {
                     window.location.href = "/";
                     return;
                 }
@@ -56,7 +56,7 @@ layui.define(['layer', 'util', 'sha256', 'cookie','laytpl'], function (e) {
      */
     var HTTP = function (url, method, param) {
         if (!arguments[2]) param = {};
-        var token = app.getCookieToken() || "nologin";
+        var token = app.getCookieToken() || "";
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: method,  //提交方式
@@ -64,11 +64,11 @@ layui.define(['layer', 'util', 'sha256', 'cookie','laytpl'], function (e) {
                 data: param,//数据，这里使用的是Json格式进行传输
                 dataType: 'json',
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader("platform-manage-token", token);
+                    xhr.setRequestHeader("manage-token", token);
                 },
                 success: function (result) {//返回数据根据结果进行相应的处理
                     //成功
-                    if (result.status == 200) {
+                    if (result.code == 200) {
                         resolve(result);
                     } else {
                         reject(result.message);
