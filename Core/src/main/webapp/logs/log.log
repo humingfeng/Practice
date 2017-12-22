@@ -1,0 +1,239 @@
+[INFO][2017-12-21 23:18:59] org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:304) localhost-startStop-1 Root WebApplicationContext: initialization started 
+[INFO][2017-12-21 23:18:59] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:583) localhost-startStop-1 Refreshing Root WebApplicationContext: startup date [Thu Dec 21 23:18:59 CST 2017]; root of context hierarchy 
+[INFO][2017-12-21 23:18:59] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-dao.xml] 
+[INFO][2017-12-21 23:18:59] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-service.xml] 
+[INFO][2017-12-21 23:18:59] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-jedis.xml] 
+[INFO][2017-12-21 23:18:59] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-dubbo.xml] 
+[INFO][2017-12-21 23:18:59]  localhost-startStop-1 using logger: com.alibaba.dubbo.common.logger.log4j.Log4jLoggerAdapter 
+[INFO][2017-12-21 23:19:00] org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.<init>(AutowiredAnnotationBeanPostProcessor.java:155) localhost-startStop-1 JSR-330 'javax.inject.Inject' annotation found and supported for autowiring 
+[INFO][2017-12-21 23:19:01] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:722) localhost-startStop-1 {dataSource-1} inited 
+[INFO][2017-12-21 23:19:02] com.alibaba.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:120) localhost-startStop-1  [DUBBO] The service ready on spring started. service: com.practice.service.LoginService, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:02] com.alibaba.dubbo.config.ServiceConfig.exportLocal(ServiceConfig.java:523) localhost-startStop-1  [DUBBO] Export dubbo service com.practice.service.LoginService to local registry, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:02] com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:484) localhost-startStop-1  [DUBBO] Export dubbo service com.practice.service.LoginService to url dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&bind.ip=192.168.99.162&bind.port=20880&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:02] com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:495) localhost-startStop-1  [DUBBO] Register dubbo service com.practice.service.LoginService url dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&bind.ip=192.168.99.162&bind.port=20880&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769 to registry registry://192.168.99.110:2181/com.alibaba.dubbo.registry.RegistryService?application=core_provider&dubbo=2.5.7&pid=7448&registry=zookeeper&timestamp=1513869542748, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:03] com.alibaba.dubbo.remoting.transport.AbstractServer.<init>(AbstractServer.java:67) localhost-startStop-1  [DUBBO] Start NettyServer bind /192.168.99.162:20880, export /192.168.99.162:20880, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:03] com.alibaba.dubbo.registry.support.AbstractRegistry.loadProperties(AbstractRegistry.java:203) localhost-startStop-1  [DUBBO] Load registry store file C:\Users\Xushd\.dubbo\dubbo-registry-core_provider-192.168.99.110:2181.cache, data: {com.upingwang.service.LoginService=empty://192.168.99.162:20880/com.upingwang.service.LoginService?anyhost=false&application=core_provider&category=configurators&check=false&dubbo=2.5.7&generic=false&interface=com.upingwang.service.LoginService&methods=getSchoolLoginStatus,getManageLoginStatus&pid=4296&revision=1.0-SNAPSHOT&side=provider&timestamp=1511799477042}, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:03] com.alibaba.dubbo.common.concurrent.ExecutionList.add(ExecutionList.java:76) localhost-startStop-1  [DUBBO] Executor for listenablefuture is null, will use default executor!, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:19:03] org.I0Itec.zkclient.ZkEventThread.run(ZkEventThread.java:65) ZkClient-EventThread-28-192.168.99.110:2181 Starting ZkClient event thread. 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:zookeeper.version=3.4.9-1757313, built on 08/23/2016 06:50 GMT 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:host.name=DESKTOP-JSL83PN 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.version=1.8.0_121 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.vendor=Oracle Corporation 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.home=C:\Program Files\Java\jdk1.8.0_121\jre 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.class.path=D:\Program Files\JetBrains\IntelliJ IDEA 2017.1.3\plugins\maven\lib\maven3\boot\plexus-classworlds-2.5.2.jar;D:\Program Files\JetBrains\IntelliJ IDEA 2017.1.3\lib\idea_rt.jar 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.library.path=C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;D:\Program Files\Git\cmd;D:\Program Files\nodejs\;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;C:\Users\Xushd\AppData\Local\Microsoft\WindowsApps;C:\Users\Xushd\AppData\Roaming\npm;C:\Users\Xushd\AppData\Local\atom\bin;%USERPROFILE%\AppData\Local\Microsoft\WindowsApps;;. 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.io.tmpdir=C:\Users\Xushd\AppData\Local\Temp\ 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.compiler=<NA> 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.name=Windows 10 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.arch=amd64 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.version=10.0 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.name=Xushd 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.home=C:\Users\Xushd 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.dir=C:\Users\Xushd\java\IdeaProjects\Practice\Core 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.ZooKeeper.<init>(ZooKeeper.java:438) DubboZkclientConnector Initiating client connection, connectString=192.168.99.110:2181 sessionTimeout=30000 watcher=org.I0Itec.zkclient.ZkClient@4413dfcc 
+[INFO][2017-12-21 23:19:12] org.I0Itec.zkclient.ZkClient.waitForKeeperState(ZkClient.java:936) DubboZkclientConnector Waiting for keeper state SyncConnected 
+[INFO][2017-12-21 23:19:12] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:13] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:14] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:15] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:16] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:17] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:18] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:19] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:20] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:21] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:23] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:24] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:25] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:26] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:27] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:28] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:29] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:30] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[INFO][2017-12-21 23:19:31] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[WARN][2017-12-21 23:19:32] org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1162) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect 
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1141)
+[ERROR][2017-12-21 23:19:33] com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkClientWrapper.start(ZkClientWrapper.java:53) localhost-startStop-1  [DUBBO] Timeout! zookeeper server can not be connected in : 30000ms!, dubbo version: 2.5.7, current host: 127.0.0.1 
+java.util.concurrent.TimeoutException
+	at java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkClientWrapper.start(ZkClientWrapper.java:51)
+	at com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkclientZookeeperClient.<init>(ZkclientZookeeperClient.java:39)
+	at com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkclientZookeeperTransporter.connect(ZkclientZookeeperTransporter.java:10)
+	at com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter$Adaptive.connect(ZookeeperTransporter$Adaptive.java)
+	at com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry.<init>(ZookeeperRegistry.java:69)
+	at com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistryFactory.createRegistry(ZookeeperRegistryFactory.java:37)
+	at com.alibaba.dubbo.registry.support.AbstractRegistryFactory.getRegistry(AbstractRegistryFactory.java:95)
+	at com.alibaba.dubbo.registry.RegistryFactory$Adaptive.getRegistry(RegistryFactory$Adaptive.java)
+	at com.alibaba.dubbo.registry.integration.RegistryProtocol.getRegistry(RegistryProtocol.java:201)
+	at com.alibaba.dubbo.registry.integration.RegistryProtocol.export(RegistryProtocol.java:118)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolListenerWrapper.export(ProtocolListenerWrapper.java:54)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper.export(ProtocolFilterWrapper.java:92)
+	at com.alibaba.dubbo.rpc.Protocol$Adaptive.export(Protocol$Adaptive.java)
+	at com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:499)
+	at com.alibaba.dubbo.config.ServiceConfig.doExportUrls(ServiceConfig.java:351)
+	at com.alibaba.dubbo.config.ServiceConfig.doExport(ServiceConfig.java:312)
+	at com.alibaba.dubbo.config.ServiceConfig.export(ServiceConfig.java:211)
+	at com.alibaba.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:122)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:167)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:393)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:347)
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:883)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546)
+	at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:443)
+	at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:325)
+	at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:107)
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4939)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5434)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1559)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1549)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[INFO][2017-12-21 23:19:33] com.alibaba.dubbo.registry.support.AbstractRegistry.register(AbstractRegistry.java:273) localhost-startStop-1  [DUBBO] Register: dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769, dubbo version: 2.5.7, current host: 127.0.0.1 
+[ERROR][2017-12-21 23:19:33] org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:350) localhost-startStop-1 Context initialization failed 
+java.lang.IllegalStateException: Failed to register dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769 to registry 192.168.99.110:2181, cause: Failed to register dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769 to zookeeper zookeeper://192.168.99.110:2181/com.alibaba.dubbo.registry.RegistryService?application=core_provider&dubbo=2.5.7&interface=com.alibaba.dubbo.registry.RegistryService&pid=7448&timestamp=1513869542748, cause: Zookeeper is not connected yet!
+	at com.alibaba.dubbo.registry.support.FailbackRegistry.register(FailbackRegistry.java:149)
+	at com.alibaba.dubbo.registry.integration.RegistryProtocol.export(RegistryProtocol.java:120)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolListenerWrapper.export(ProtocolListenerWrapper.java:54)
+	at com.alibaba.dubbo.rpc.protocol.ProtocolFilterWrapper.export(ProtocolFilterWrapper.java:92)
+	at com.alibaba.dubbo.rpc.Protocol$Adaptive.export(Protocol$Adaptive.java)
+	at com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:499)
+	at com.alibaba.dubbo.config.ServiceConfig.doExportUrls(ServiceConfig.java:351)
+	at com.alibaba.dubbo.config.ServiceConfig.doExport(ServiceConfig.java:312)
+	at com.alibaba.dubbo.config.ServiceConfig.export(ServiceConfig.java:211)
+	at com.alibaba.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:122)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:167)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:393)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:347)
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:883)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546)
+	at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:443)
+	at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:325)
+	at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:107)
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4939)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5434)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1559)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1549)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.alibaba.dubbo.rpc.RpcException: Failed to register dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=7448&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869542769 to zookeeper zookeeper://192.168.99.110:2181/com.alibaba.dubbo.registry.RegistryService?application=core_provider&dubbo=2.5.7&interface=com.alibaba.dubbo.registry.RegistryService&pid=7448&timestamp=1513869542748, cause: Zookeeper is not connected yet!
+	at com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry.doRegister(ZookeeperRegistry.java:112)
+	at com.alibaba.dubbo.registry.support.FailbackRegistry.register(FailbackRegistry.java:136)
+	... 27 more
+Caused by: java.lang.IllegalStateException: Zookeeper is not connected yet!
+	at com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkClientWrapper.createPersistent(ZkClientWrapper.java:82)
+	at com.alibaba.dubbo.remoting.zookeeper.zkclient.ZkclientZookeeperClient.createPersistent(ZkclientZookeeperClient.java:45)
+	at com.alibaba.dubbo.remoting.zookeeper.support.AbstractZookeeperClient.create(AbstractZookeeperClient.java:47)
+	at com.alibaba.dubbo.remoting.zookeeper.support.AbstractZookeeperClient.create(AbstractZookeeperClient.java:41)
+	at com.alibaba.dubbo.remoting.zookeeper.support.AbstractZookeeperClient.create(AbstractZookeeperClient.java:41)
+	at com.alibaba.dubbo.remoting.zookeeper.support.AbstractZookeeperClient.create(AbstractZookeeperClient.java:41)
+	at com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry.doRegister(ZookeeperRegistry.java:110)
+	... 28 more
+[INFO][2017-12-21 23:19:33] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:984) localhost-startStop-1 Closing Root WebApplicationContext: startup date [Thu Dec 21 23:18:59 CST 2017]; root of context hierarchy 
+[INFO][2017-12-21 23:19:33] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1447) localhost-startStop-1 {dataSource-1} closed 
+[INFO][2017-12-21 23:21:24] org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:304) localhost-startStop-1 Root WebApplicationContext: initialization started 
+[INFO][2017-12-21 23:21:24] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:583) localhost-startStop-1 Refreshing Root WebApplicationContext: startup date [Thu Dec 21 23:21:24 CST 2017]; root of context hierarchy 
+[INFO][2017-12-21 23:21:24] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-dao.xml] 
+[INFO][2017-12-21 23:21:24] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-service.xml] 
+[INFO][2017-12-21 23:21:24] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-jedis.xml] 
+[INFO][2017-12-21 23:21:24] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-dubbo.xml] 
+[INFO][2017-12-21 23:21:24]  localhost-startStop-1 using logger: com.alibaba.dubbo.common.logger.log4j.Log4jLoggerAdapter 
+[INFO][2017-12-21 23:21:25] org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.<init>(AutowiredAnnotationBeanPostProcessor.java:155) localhost-startStop-1 JSR-330 'javax.inject.Inject' annotation found and supported for autowiring 
+[INFO][2017-12-21 23:21:25] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:722) localhost-startStop-1 {dataSource-1} inited 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:120) localhost-startStop-1  [DUBBO] The service ready on spring started. service: com.practice.service.LoginService, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.config.ServiceConfig.exportLocal(ServiceConfig.java:523) localhost-startStop-1  [DUBBO] Export dubbo service com.practice.service.LoginService to local registry, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:484) localhost-startStop-1  [DUBBO] Export dubbo service com.practice.service.LoginService to url dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&bind.ip=192.168.99.162&bind.port=20880&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.config.ServiceConfig.doExportUrlsFor1Protocol(ServiceConfig.java:495) localhost-startStop-1  [DUBBO] Register dubbo service com.practice.service.LoginService url dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&bind.ip=192.168.99.162&bind.port=20880&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326 to registry registry://192.168.99.110:2181/com.alibaba.dubbo.registry.RegistryService?application=core_provider&dubbo=2.5.7&pid=6992&registry=zookeeper&timestamp=1513869687298, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.remoting.transport.AbstractServer.<init>(AbstractServer.java:67) localhost-startStop-1  [DUBBO] Start NettyServer bind /192.168.99.162:20880, export /192.168.99.162:20880, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.registry.support.AbstractRegistry.loadProperties(AbstractRegistry.java:203) localhost-startStop-1  [DUBBO] Load registry store file C:\Users\Xushd\.dubbo\dubbo-registry-core_provider-192.168.99.110:2181.cache, data: {com.upingwang.service.LoginService=empty://192.168.99.162:20880/com.upingwang.service.LoginService?anyhost=false&application=core_provider&category=configurators&check=false&dubbo=2.5.7&generic=false&interface=com.upingwang.service.LoginService&methods=getSchoolLoginStatus,getManageLoginStatus&pid=4296&revision=1.0-SNAPSHOT&side=provider&timestamp=1511799477042}, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] com.alibaba.dubbo.common.concurrent.ExecutionList.add(ExecutionList.java:76) localhost-startStop-1  [DUBBO] Executor for listenablefuture is null, will use default executor!, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:27] org.I0Itec.zkclient.ZkEventThread.run(ZkEventThread.java:65) ZkClient-EventThread-28-192.168.99.110:2181 Starting ZkClient event thread. 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:zookeeper.version=3.4.9-1757313, built on 08/23/2016 06:50 GMT 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:host.name=DESKTOP-JSL83PN 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.version=1.8.0_121 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.vendor=Oracle Corporation 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.home=C:\Program Files\Java\jdk1.8.0_121\jre 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.class.path=D:\Program Files\JetBrains\IntelliJ IDEA 2017.1.3\plugins\maven\lib\maven3\boot\plexus-classworlds-2.5.2.jar;D:\Program Files\JetBrains\IntelliJ IDEA 2017.1.3\lib\idea_rt.jar 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.library.path=C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;D:\Program Files\Git\cmd;D:\Program Files\nodejs\;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;C:\Users\Xushd\AppData\Local\Microsoft\WindowsApps;C:\Users\Xushd\AppData\Roaming\npm;C:\Users\Xushd\AppData\Local\atom\bin;%USERPROFILE%\AppData\Local\Microsoft\WindowsApps;;. 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.io.tmpdir=C:\Users\Xushd\AppData\Local\Temp\ 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:java.compiler=<NA> 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.name=Windows 10 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.arch=amd64 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:os.version=10.0 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.name=Xushd 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.home=C:\Users\Xushd 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.Environment.logEnv(Environment.java:100) DubboZkclientConnector Client environment:user.dir=C:\Users\Xushd\java\IdeaProjects\Practice\Core 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.ZooKeeper.<init>(ZooKeeper.java:438) DubboZkclientConnector Initiating client connection, connectString=192.168.99.110:2181 sessionTimeout=30000 watcher=org.I0Itec.zkclient.ZkClient@312adb60 
+[INFO][2017-12-21 23:21:37] org.I0Itec.zkclient.ZkClient.waitForKeeperState(ZkClient.java:936) DubboZkclientConnector Waiting for keeper state SyncConnected 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect(ClientCnxn.java:1032) DubboZkclientConnector-SendThread(192.168.99.110:2181) Opening socket connection to server 192.168.99.110/192.168.99.110:2181. Will not attempt to authenticate using SASL (unknown error) 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.ClientCnxn$SendThread.primeConnection(ClientCnxn.java:876) DubboZkclientConnector-SendThread(192.168.99.110:2181) Socket connection established to 192.168.99.110/192.168.99.110:2181, initiating session 
+[INFO][2017-12-21 23:21:37] org.apache.zookeeper.ClientCnxn$SendThread.onConnected(ClientCnxn.java:1299) DubboZkclientConnector-SendThread(192.168.99.110:2181) Session establishment complete on server 192.168.99.110/192.168.99.110:2181, sessionid = 0x160676ea6670001, negotiated timeout = 30000 
+[INFO][2017-12-21 23:21:37] org.I0Itec.zkclient.ZkClient.processStateChanged(ZkClient.java:713) DubboZkclientConnector-EventThread zookeeper state changed (SyncConnected) 
+[INFO][2017-12-21 23:21:37] com.alibaba.dubbo.registry.support.AbstractRegistry.register(AbstractRegistry.java:273) localhost-startStop-1  [DUBBO] Register: dubbo://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:37] com.alibaba.dubbo.registry.support.AbstractRegistry.subscribe(AbstractRegistry.java:296) localhost-startStop-1  [DUBBO] Subscribe: provider://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&category=configurators&check=false&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326, dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:37] com.alibaba.dubbo.registry.support.AbstractRegistry.notify(AbstractRegistry.java:384) localhost-startStop-1  [DUBBO] Notify urls for subscribe url provider://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&category=configurators&check=false&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326, urls: [empty://192.168.99.162:20880/com.practice.service.LoginService?anyhost=false&application=core_provider&category=configurators&check=false&dubbo=2.5.7&generic=false&interface=com.practice.service.LoginService&methods=manageLoginCheck&pid=6992&revision=1.0-SNAPSHOT&side=provider&timestamp=1513869687326], dubbo version: 2.5.7, current host: 127.0.0.1 
+[INFO][2017-12-21 23:21:37] org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:344) localhost-startStop-1 Root WebApplicationContext: initialization completed in 13157 ms 
+[INFO][2017-12-21 23:21:37] org.springframework.web.servlet.FrameworkServlet.initServletBean(FrameworkServlet.java:489) localhost-startStop-1 FrameworkServlet 'practice-core': initialization started 
+[INFO][2017-12-21 23:21:37] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:583) localhost-startStop-1 Refreshing WebApplicationContext for namespace 'practice-core-servlet': startup date [Thu Dec 21 23:21:37 CST 2017]; parent: Root WebApplicationContext 
+[INFO][2017-12-21 23:21:37] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) localhost-startStop-1 Loading XML bean definitions from class path resource [spring/spring-mvc.xml] 
+[INFO][2017-12-21 23:21:37] org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.<init>(AutowiredAnnotationBeanPostProcessor.java:155) localhost-startStop-1 JSR-330 'javax.inject.Inject' annotation found and supported for autowiring 
+[INFO][2017-12-21 23:21:38] org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry.register(AbstractHandlerMethodMapping.java:543) localhost-startStop-1 Mapped "{[/]}" onto public java.lang.String com.practice.controller.IndexController.index() 
+[INFO][2017-12-21 23:21:38] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.initControllerAdviceCache(RequestMappingHandlerAdapter.java:534) localhost-startStop-1 Looking for @ControllerAdvice: WebApplicationContext for namespace 'practice-core-servlet': startup date [Thu Dec 21 23:21:37 CST 2017]; parent: Root WebApplicationContext 
+[INFO][2017-12-21 23:21:38] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.initControllerAdviceCache(RequestMappingHandlerAdapter.java:534) localhost-startStop-1 Looking for @ControllerAdvice: WebApplicationContext for namespace 'practice-core-servlet': startup date [Thu Dec 21 23:21:37 CST 2017]; parent: Root WebApplicationContext 
+[INFO][2017-12-21 23:21:39] org.springframework.web.servlet.FrameworkServlet.initServletBean(FrameworkServlet.java:508) localhost-startStop-1 FrameworkServlet 'practice-core': initialization completed in 1932 ms 
