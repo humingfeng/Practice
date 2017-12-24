@@ -14,15 +14,24 @@
     <!-- 消费方用什么协议获取服务（用dubbo协议在20880端口暴露服务） -->
     <dubbo:protocol port="20880" />
 
+    <dubbo:consumer timeout="30000" />
 
     <!-- 调用的接口 -->
     <dubbo:reference id="loginService" interface="com.practice.service.LoginService"/>
 
+    <dubbo:reference id="userService" interface="com.practice.service.UserService"/>
 
-    <!--<dubbo:reference id="systemService" interface="com.upingwang.core.service.SystemService"/>-->
-    <!--<dubbo:reference id="redisService" interface="com.upingwang.core.service.RedisService"/>-->
-    <!--<dubbo:reference id="schoolService" interface="com.upingwang.core.service.SchoolService"/>-->
-    <!--<dubbo:reference id="imgUploadService" interface="com.upingwang.core.service.ImgUploadService"/>-->
+    <dubbo:reference id="versionService" interface="com.practice.service.VersionService"/>
+
+    <dubbo:reference id="dictionaryService" interface="com.practice.service.DictionaryService"/>
+
+    <dubbo:reference id="roleService" interface="com.practice.service.RoleService"/>
+
+    <dubbo:reference id="menuService" interface="com.practice.service.MenuService"/>
+
+    <dubbo:reference id="permissionService" interface="com.practice.service.PermissionService"/>
+
+
 
 
 </beans>

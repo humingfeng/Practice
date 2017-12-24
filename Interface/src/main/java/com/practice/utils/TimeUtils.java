@@ -55,6 +55,37 @@ public class TimeUtils {
         return dateTime.toString(DateTimeFormat.forPattern(format));
     }
 
+    /**
+     * DateTime to String
+     * @param date
+     * @return
+     */
+    public static String getDateString(Date date) {
+        SimpleDateFormat format3 = new SimpleDateFormat(format_default);
+        return format3.format(date);
+    }
+
+
+    /**
+     * 通过字符串获取Date
+     * @param time
+     * @return
+     */
+    public static Date getDateFromStringShort(String time) {
+        DateTime dateTime = DateTime.parse(time, format_short);
+        return dateTime.toDate();
+    }
+
+    /**
+     * 通过字符串获取Date
+     * @param time
+     * @return
+     */
+    public static Date getDateFromString(String time) {
+        DateTime dateTime = DateTime.parse(time, format);
+        return dateTime.toDate();
+    }
+
 //    /**
 //     * 获取当前日期字符串 yyyyMMdd
 //     * @return

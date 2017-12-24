@@ -1,11 +1,20 @@
 package com.practice.manage.controller;
 
+import com.practice.service.VersionService;
+import com.practice.vo.SystemInfoVO;
 import com.practice.dto.TokenUserDTO;
 import com.practice.utils.JwtTokenUtil;
+import com.practice.vo.VersionVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Index controller
@@ -15,8 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
+
+    @Resource
+    private VersionService versionService;
+
     @RequestMapping(value = "/")
-    public String index(@CookieValue(required = false,value = "manage_token") String token) {
+    public String index(@CookieValue(required = false,value = "manage_token") String token,Model model) {
 
         if (StringUtils.isNotBlank(token)) {
 
@@ -26,10 +39,14 @@ public class IndexController {
                 return "login";
             }
 
+            model.addAttribute("userName",tokeUser.getAccount());
+            model.addAttribute("headImg",tokeUser.getHeadImg());
 
         } else {
             return "login";
         }
+
+
 
         return "index";
     }
@@ -38,5 +55,52 @@ public class IndexController {
     public String index404() {
 
         return "404";
+    }
+
+    /**
+     * Welcome
+     * @return
+     */
+    @RequestMapping(value = "/auth/welcome")
+    public String indexWelcome(Model model){
+
+        Properties properties = System.getProperties();
+
+        SystemInfoVO dto = new SystemInfoVO();
+        dto.setJavaVersion(properties.getProperty("java.version"));
+        dto.setJavaVendor(properties.getProperty("java.vendor"));
+        dto.setOsName(properties.getProperty("os.name"));
+        dto.setOsArch(properties.getProperty("os.arch"));
+        dto.setOsVersion(properties.getProperty("os.version"));
+        dto.setCurVersion("v0.0.1");
+        dto.setMysqlVersion("v5.6.21");
+        model.addAttribute("system",dto);
+
+        List<VersionVO> versionLog = versionService.listVersion();
+
+        model.addAttribute("versionLog",versionLog);
+
+
+
+        return "welcome";
+    }
+
+    /**
+     * jump common
+     * @param module
+     * @param page
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/auth/jump/{module}/{page}")
+    public String indexJump(@PathVariable String module,
+                            @PathVariable String page,
+                            String id, Model model){
+
+        if(StringUtils.isNotBlank(id)){
+            model.addAttribute("id",id);
+        }
+        return module+"/"+page;
     }
 }

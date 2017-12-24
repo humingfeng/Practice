@@ -1,5 +1,6 @@
 package com.practice.service.impl;
 
+import com.practice.dto.NavDTO;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.AuthEnum;
 import com.practice.mapper.ManageUserMapper;
@@ -7,8 +8,8 @@ import com.practice.po.ManageUser;
 import com.practice.po.ManageUserExample;
 import com.practice.result.JsonResult;
 import com.practice.service.LoginService;
+import com.practice.service.UserService;
 import com.practice.utils.ExceptionUtil;
-import com.practice.utils.IDUtils;
 import com.practice.utils.JsonUtils;
 import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Resource
     private ManageUserMapper manageUserMapper;
+    @Resource
+    private UserService userService;
 
     /**
      * Manage Login Check
@@ -53,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
 
             ManageUser manageUser = manageUsers.get(0);
 
-            Integer stopStatus = 9;
+            Integer stopStatus = 0;
 
             if (manageUser.getStatus().equals(stopStatus)) {
                 return JsonResult.error(AuthEnum.USER_NO_STATUS);
@@ -64,9 +67,12 @@ public class LoginServiceImpl implements LoginService {
             }
 
             try {
-                String token = JwtTokenUtil.createJWT(JsonUtils.objectToJson(new TokenUserDTO(manageUser.getId(), 1L, manageUser.getNickName())));
+                String token = JwtTokenUtil.createJWT(JsonUtils.objectToJson(new TokenUserDTO(manageUser.getId(),manageUser.getNickName(),manageUser.getHeadImg())));
 
-                //TODO 获取用户权限 更新用户登录状态
+
+
+                userService.createUserNavsAndPermissionCache(manageUser.getId());
+
 
                 return JsonResult.success(token);
 

@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2017/12/21 23:17
+ * @author Xushd  2017/12/22 20:54
  */
 public class ManageUser implements Serializable {
     private Long id;

@@ -7,7 +7,7 @@ package com.practice.enums;
 public enum AuthEnum {
 
     SUCCESS(200, "登录成功"),
-    NO_AUTH(403,"没有权限"),
+    NO_AUTH(401,"没有权限"),
     TIME_OUT(403,"登录超时"),
     YES_AUTH(200,"正常"),
     USER_NO_EXIST(500, "帐号不存在"),

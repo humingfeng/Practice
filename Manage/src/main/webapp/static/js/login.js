@@ -14,7 +14,6 @@ layui.config({
         app.post('/login/check',data.field).then(d=>{
             app.layerMessage('登录成功!');
             app.setCookieToken(d.message);
-            console.log(d.message);
             app.time(_=>{
                 window.location.href = "/";
             })

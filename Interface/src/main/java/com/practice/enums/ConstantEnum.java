@@ -6,17 +6,28 @@ package com.practice.enums;
  */
 public enum ConstantEnum {
     /**
-     * json result status error
+     * json result status
      */
     JSONRESULT_STATUS_ERROR(500),
-    /**
-     * json result status success
-     */
     JSONRESULT_STATUS_SUCCESS(200),
+    JSONRESULT_STATUS_AUTH(403),
+
     /**
-     * json result status auth
+     * cache keys
      */
-    JSONRESULT_STATUS_AUTH(403);
+    CACHE_MANGE_USER_NAVS("CACHE_MANGE_USER_NAVS"),
+    CACHE_MANGE_USER_PERMISSION("CACHE_MANGE_USER_PERMISSION"),
+    CACHE_DICTIONARY("CACHE_DICTIONARY"),
+
+    /**
+     * default head img
+     */
+    DEFAULT_HEADIMG_MAN("http://static.uping.wang/default/defalut_man.jpg"),
+    DEFAULT_HEADIMG_WOMAN("http://static.uping.wang/default/defalut_women.jpg");
+
+
+
+
 
     private Integer intValue;
     private String strValue;
@@ -43,4 +54,5 @@ public enum ConstantEnum {
     public String getStrValue() {
         return strValue;
     }
+
 }

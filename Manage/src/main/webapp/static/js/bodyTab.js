@@ -16,7 +16,8 @@ layui.define(["element","jquery",'app'],function(exports){
 	//获取二级菜单数据
 	Tab.prototype.render = function() {
 		var url = this.tabConfig.url;
-		app.get(url).then(d => {
+        app.get(url).then(d=> {
+
 			var data = d.data;
             //显示左侧菜单
             if($(".navBar").html() == ''){
@@ -28,7 +29,7 @@ layui.define(["element","jquery",'app'],function(exports){
                 })
             }
 		},e=>{
-			console.error(e);
+			console.log(e);
 		})
 	}
 

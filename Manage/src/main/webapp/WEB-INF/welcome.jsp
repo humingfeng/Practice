@@ -81,23 +81,13 @@
         </a>
     </div>
 </div>
-<blockquote class="layui-elem-quote explain">
+<blockquote class="layui-elem-quote explain" style="margin-left: 10px;">
     <p>1</p>
     <p>2</p>
     <p>3</p>
 </blockquote>
 <div class="row">
-    <div class="sysNotice col">
-        <blockquote class="layui-elem-quote title">更新日志</blockquote>
-        <div class="layui-elem-quote layui-quote-nm">
-            <c:forEach items="${versionLog}" var="item">
-                <h3># ${item.version}（${item.title}） - ${item.author}  - ${item.time}</h3>
-                <c:forEach items="${item.items}" var="child">
-                    <p>* ${child.title}</p>
-                </c:forEach>
-            </c:forEach>
-        </div>
-    </div>
+
     <div class="sysNotice col">
         <blockquote class="layui-elem-quote title">系统基本参数</blockquote>
         <table class="layui-table">
@@ -137,7 +127,27 @@
             </tbody>
         </table>
     </div>
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">更新日志</blockquote>
+        <div class="layui-elem-quote layui-quote-nm ">
+            <ul class="layui-timeline">
+                <c:forEach items="${versionLog}" var="item">
+                <li class="layui-timeline-item">
+                    <i class="iconfont icon-riqi layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">${item.time}  # ${item.version}（${item.title}） - ${item.author}</h3>
+                        <blockquote class="layui-elem-quote " style="border-left: 5px solid #ff5823">
+                        <c:forEach items="${item.items}" var="child">
+                            <p>* ${child.title}</p>
+                        </c:forEach>
+                        </blockquote>
+                    </div>
+                </li>
+            </c:forEach>
+            </ul>
+        </div>
+    </div>
 </div>
-<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
 </body>
 </html>

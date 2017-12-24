@@ -5,7 +5,7 @@ layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
     var $ = layui.jquery,app = layui.app,
         element = layui.element,tab = layui.bodyTab({
             openTabNum : "50",  //最大可打开窗口数量
-            url : "/admin/user/navs" //获取菜单json地址
+            url : "/auth/user/nav" //获取菜单json地址
         });
 
     //隐藏左侧导航
@@ -32,7 +32,7 @@ layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
     //退出
     $(".signOut").click(function(){
         app.layerConfirm("确定退出当前登录用户 ?" ,_=>{
-            app.get('/admin/logout').then(d=>{
+            app.get('/auth/user/logout').then(d=>{
                 app.delCookieToken();
                 app.layerMessage('退出成功！');
                 window.sessionStorage.removeItem("menu");
@@ -115,6 +115,7 @@ layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
         }else{
             app.layerMessage("您点击的速度超过了服务器的响应速度，还是等两秒再刷新吧！");
         }
+
     })
     //刷新后还原打开的窗口
     if(window.sessionStorage.getItem("menu") != null){

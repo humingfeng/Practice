@@ -37,7 +37,7 @@
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
-        <!-- targetPackage：mapper接口生成的位置 -->
+         <!--targetPackage：mapper接口生成的位置-->
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.practice.mapper"
                              targetProject="src/main/java">
@@ -47,7 +47,17 @@
 
         <!-- 指定数据库表 -->
 
-        <table schema="" tableName="manage_user"/>
+        <!--<table schema="" tableName="manage_user"/>-->
+        <!--<table schema="" tableName="manage_permission"/>-->
+        <!--<table schema="" tableName="manage_nav"/>-->
+        <!--<table schema="" tableName="manage_role"/>-->
+        <!--<table schema="" tableName="manage_role_permission"/>-->
+        <!--<table schema="" tableName="manage_user_role"/>-->
+        <!--<table schema="" tableName="manage_user_nav"/>-->
+        <!--<table schema="" tableName="manage_version"/>-->
+        <!--<table schema="" tableName="manage_version_item"/>-->
+        <!--<table schema="" tableName="manage_dictionary"/>-->
+        <table schema="" tableName="manage_role_nav"/>
 
 
     </context>

@@ -1,7 +1,10 @@
 package com.practice.manage.resolver;
 
 
+import com.practice.PermissonException;
+import com.practice.enums.AuthEnum;
 import com.practice.enums.OperateEnum;
+import com.practice.manage.aspect.PermissionAspect;
 import com.practice.result.JsonResult;
 
 import com.practice.utils.ExceptionUtil;
@@ -36,8 +39,19 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
             return getModelAndView("/404", ex, request);
 
         } else {//ajax
-            LOGGER.error("Error:{}", ex);
-            String result = JsonUtils.objectToJson(JsonResult.error(ExceptionUtil.getStackTrace(ex)));
+
+            String result = "";
+
+            if(ex.getCause() instanceof PermissonException){
+
+                result = JsonUtils.objectToJson(JsonResult.error(AuthEnum.NO_AUTH));
+
+            }else{
+
+                result = JsonUtils.objectToJson(JsonResult.error(ExceptionUtil.getStackTrace(ex)));
+                LOGGER.error("Error:{}", ex);
+            }
+
             try {
                 PrintWriter writer = response.getWriter();
                 writer.write(result);
@@ -48,6 +62,8 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
             return new ModelAndView();
         }
     }
+
+
 
 
 }

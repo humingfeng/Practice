@@ -10,17 +10,17 @@ public class TokenUserDTO implements Serializable{
 
     private Long id;
 
-    private Long roleId;
+    private String account;
 
-    private String nickName;
+    private String headImg;
 
     public TokenUserDTO() {
     }
 
-    public TokenUserDTO(Long id, Long roleId, String nickName) {
+    public TokenUserDTO(Long id, String account,String headImg) {
         this.id = id;
-        this.roleId = roleId;
-        this.nickName = nickName;
+        this.account = account;
+        this.headImg = headImg;
     }
 
     public Long getId() {
@@ -31,19 +31,30 @@ public class TokenUserDTO implements Serializable{
         this.id = id;
     }
 
-    public Long getRoleId() {
-        return roleId;
+
+
+    public String getAccount() {
+        return account;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getHeadImg() {
+        return headImg;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
+
+    @Override
+    public String toString() {
+        return "TokenUserDTO{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", headImg='" + headImg + '\'' +
+                '}';
     }
 }

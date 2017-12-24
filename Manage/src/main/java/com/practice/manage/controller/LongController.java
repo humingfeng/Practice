@@ -61,6 +61,7 @@ public class LongController {
     }
 
 
+
     /**
      * 生成验证码
      *
