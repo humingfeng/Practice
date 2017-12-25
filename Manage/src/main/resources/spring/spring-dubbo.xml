@@ -31,6 +31,8 @@
 
     <dubbo:reference id="permissionService" interface="com.practice.service.PermissionService"/>
 
+    <dubbo:reference id="activityService" interface="com.practice.service.ActivityService"/>
+
 
 
 

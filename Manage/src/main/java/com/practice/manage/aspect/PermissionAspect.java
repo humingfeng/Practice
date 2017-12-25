@@ -1,6 +1,6 @@
 package com.practice.manage.aspect;
 
-import com.practice.PermissonException;
+import com.practice.exception.PermissonException;
 import com.practice.enums.AuthEnum;
 import com.practice.manage.target.ControllerPermisson;
 import com.practice.service.UserService;

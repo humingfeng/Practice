@@ -1,10 +1,8 @@
 package com.practice.manage.resolver;
 
 
-import com.practice.PermissonException;
+import com.practice.exception.PermissonException;
 import com.practice.enums.AuthEnum;
-import com.practice.enums.OperateEnum;
-import com.practice.manage.aspect.PermissionAspect;
 import com.practice.result.JsonResult;
 
 import com.practice.utils.ExceptionUtil;

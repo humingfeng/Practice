@@ -184,7 +184,7 @@ public class SystemController {
      * @param param
      * @return
      */
-    @ControllerPermisson(value = "/dictionary/add")
+    @ControllerPermisson(value = "dictionary/list")
     @RequestMapping(value = "/dictionary/list",method = RequestMethod.POST)
     @ResponseBody
     public JsonResult ajaxDictionaryList(PageSearchParam param){
@@ -198,7 +198,7 @@ public class SystemController {
      * @param dictionary
      * @return
      */
-    @ControllerPermisson(value = "/dictionary/add")
+    @ControllerPermisson(value = "dictionary/add")
     @RequestMapping(value = "/dictionary/add",method = RequestMethod.POST)
     @ResponseBody
     public JsonResult ajaxDictionaryAdd(@RequestAttribute String token,ManageDictionary dictionary){
@@ -223,6 +223,7 @@ public class SystemController {
      * @param dictionary
      * @return
      */
+    @ControllerPermisson(value = "dictionary/update")
     @RequestMapping(value = "/dictionary/update",method = RequestMethod.POST)
     @ResponseBody
     public JsonResult ajaxDictionaryUpdate(@RequestAttribute String token,ManageDictionary dictionary){
@@ -231,9 +232,24 @@ public class SystemController {
     }
 
     /**
+     * Dictioanry delete
+     * @param token
+     * @param dictionary
+     * @return
+     */
+    @ControllerPermisson(value = "dictionary/delete")
+    @RequestMapping(value = "/dictionary/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult ajaxDictionaryDelete(@RequestAttribute String token,ManageDictionary dictionary){
+
+        return dictionaryService.updateDictionary(token,dictionary);
+    }
+
+    /**
      * Dictionary cache
      * @return
      */
+    @ControllerPermisson(value = "dictionary/reset/cache")
     @RequestMapping(value = "/dictionary/reset/cache")
     @ResponseBody
     public JsonResult ajaxDictionaryCacheReset(){

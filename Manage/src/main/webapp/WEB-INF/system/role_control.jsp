@@ -28,7 +28,7 @@
                     <div class="layui-field-box">
                         <div class="layui-form-item">
                             {{# layui.each(item.children,function(indexC,itemC){ }}
-                            <input type="checkbox" name="nav[{{indexC}}]" title="{{itemC.name}}" value="{{itemC.id}}_{{itemC.parentId}}"
+                            <input type="checkbox" name="nav[{{itemC.id}}]" title="{{itemC.name}}" value="{{itemC.id}}_{{itemC.parentId}}"
                                    {{# if(itemC.checked){ }}
                                    checked
                                    {{# } }}

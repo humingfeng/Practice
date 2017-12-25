@@ -20,6 +20,6 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all"/>
     <%--self--%>
-    <link rel="stylesheet" href="////at.alicdn.com/t/font_518799_eu49d3bifw78ehfr.css" media="all"/>
+    <link rel="stylesheet" href="////at.alicdn.com/t/font_518799_zxqn7rpw68zg2e29.css" media="all"/>
     <link rel="stylesheet" href="/static/css/main.css" media="all"/>
 </head>
