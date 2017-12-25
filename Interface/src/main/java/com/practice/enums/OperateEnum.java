@@ -1,7 +1,8 @@
 package com.practice.enums;
 
 /**
- * Created by Xushd on 2017/3/30.
+ *
+ * @author Xushd  2017/12/25 20:16
  */
 public enum OperateEnum {
 
@@ -19,6 +20,7 @@ public enum OperateEnum {
     SERVICE_ERROR(500,"服务器错误"),
     LOGIN_TIME_OUT(500,"登录信息错误，请重新登录"),
     USE_STATUS_ERROR(500,"当前登录用户状态不可修改"),
+    REPEAT(500,"重复"),
     FILE_UPLOAD_SUCCESS(200,"上传成功");
 
     private int state;

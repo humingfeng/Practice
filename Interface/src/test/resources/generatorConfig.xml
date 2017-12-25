@@ -57,7 +57,10 @@
         <!--<table schema="" tableName="manage_version"/>-->
         <!--<table schema="" tableName="manage_version_item"/>-->
         <!--<table schema="" tableName="manage_dictionary"/>-->
-        <table schema="" tableName="manage_role_nav"/>
+        <!--<table schema="" tableName="manage_role_nav"/>-->
+        <!--<table schema="" tableName="manage_activity_type"/>-->
+        <!--<table schema="" tableName="manage_activity_classify"/>-->
+        <!--<table schema="" tableName="manage_activity_theme"/>-->
 
 
     </context>

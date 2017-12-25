@@ -1,4 +1,4 @@
-package com.practice;
+package com.practice.exception;
 
 /**
  * @author Xushd  2017/12/24 23:57
