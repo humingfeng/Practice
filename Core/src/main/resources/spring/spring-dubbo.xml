@@ -51,7 +51,9 @@
     <bean id="permissionService" class="com.practice.service.impl.PermissionServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.PermissionService" ref="permissionService"></dubbo:service>
 
-
+    <!--activityService-->
+    <bean id="activityService" class="com.practice.service.impl.ActivityServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.ActivityService" ref="activityService"></dubbo:service>
 
 
 

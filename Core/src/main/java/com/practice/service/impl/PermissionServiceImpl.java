@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
+import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManagePermissionMapper;
 import com.practice.mapper.ManageRolePermissionMapper;
 import com.practice.po.ManagePermission;
@@ -102,7 +103,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         permissionMapper.insertSelective(managePermission);
 
-        return JsonResult.success(managePermission);
+        return JsonResult.success(OperateEnum.SUCCESS);
     }
 
     /**
