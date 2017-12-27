@@ -62,6 +62,13 @@
         <!--<table schema="" tableName="manage_activity_classify"/>-->
         <!--<table schema="" tableName="manage_activity_theme"/>-->
 
+        <!--<table schema="" tableName="province"/>-->
+        <!--<table schema="" tableName="city"/>-->
+        <!--<table schema="" tableName="area"/>-->
+        <!--<table schema="" tableName="edu"/>-->
+        <!--<table schema="" tableName="school"/>-->
+
+
 
     </context>
 </generatorConfiguration>
