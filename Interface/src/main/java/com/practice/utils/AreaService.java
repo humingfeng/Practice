@@ -1,5 +1,8 @@
 package com.practice.utils;
 
+import com.practice.dto.AreaDTO;
+import com.practice.dto.CityDTO;
+import com.practice.dto.ProvinceDTO;
 import com.practice.result.JsonResult;
 
 /**
@@ -27,4 +30,25 @@ public interface AreaService {
      * @return
      */
     JsonResult listAreaByCid(Long cid);
+
+    /**
+     * Get provinceDTO by provinceId
+     * @param provinceId
+     * @return
+     */
+    ProvinceDTO getProvice(Long provinceId);
+
+    /**
+     * Get CityDTO by cityId
+     * @param cityId
+     * @return
+     */
+    CityDTO getCity(Long cityId);
+
+    /**
+     * Get AreaDTO by areaId
+     * @param areaId
+     * @return
+     */
+    AreaDTO getArea(Long areaId);
 }

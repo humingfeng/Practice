@@ -1,6 +1,9 @@
 package com.practice.service;
 
+import com.practice.dto.AreaDTO;
+import com.practice.dto.CityDTO;
 import com.practice.dto.NavDTO;
+import com.practice.dto.ProvinceDTO;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageDictionary;
 
@@ -70,4 +73,85 @@ public interface CacheService {
      * @return
      */
     List<String> getManageUserPermission(Long id);
+
+    /**
+     * Get provice list
+     * @return
+     */
+    List<ProvinceDTO> getProvinceList();
+
+    /**
+     * Set provice list
+     * @param list
+     */
+    void setProvinceList(List<ProvinceDTO> list);
+
+    /**
+     * Get province by pid
+     * @param pid
+     * @return
+     */
+    ProvinceDTO getProvince(Long pid);
+
+    /**
+     * Set province by pid
+     * @param pid
+     * @param provinceDTO
+     */
+    void setProvince(Long pid,ProvinceDTO provinceDTO);
+
+    /**
+     * Get city list
+     * @return
+     */
+    List<CityDTO> getCityList(Long pid);
+
+    /**
+     * Set city list
+     * @param pid
+     * @param list
+     */
+    void setCityList(Long pid,List<CityDTO> list);
+
+    /**
+     * Get city by cid
+     * @param cid
+     * @return
+     */
+    CityDTO getCity(Long cid);
+
+    /**
+     * Set city by cid
+     * @param cid
+     * @param cityDTO
+     */
+    void setCity(Long cid,CityDTO cityDTO);
+
+    /**
+     * Get area list
+     * @param cid
+     * @return
+     */
+    List<AreaDTO> getAreaList(Long cid);
+
+    /**
+     * Set area list
+     * @param cid
+     * @param list
+     */
+    void setAreaList(Long cid,List<AreaDTO> list);
+
+    /**
+     * Get area by aid
+     * @param aid
+     * @return
+     */
+    AreaDTO getArea(Long aid);
+
+    /**
+     * Set area by aid
+     * @param aid
+     * @param areaDTO
+     */
+    void setArea(Long aid,AreaDTO areaDTO);
 }

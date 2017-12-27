@@ -665,62 +665,52 @@ public class EduExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserEqualTo(String value) {
+        public Criteria andUpdateUserEqualTo(Long value) {
             addCriterion("update_user =", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserNotEqualTo(String value) {
+        public Criteria andUpdateUserNotEqualTo(Long value) {
             addCriterion("update_user <>", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserGreaterThan(String value) {
+        public Criteria andUpdateUserGreaterThan(Long value) {
             addCriterion("update_user >", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserGreaterThanOrEqualTo(String value) {
+        public Criteria andUpdateUserGreaterThanOrEqualTo(Long value) {
             addCriterion("update_user >=", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserLessThan(String value) {
+        public Criteria andUpdateUserLessThan(Long value) {
             addCriterion("update_user <", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserLessThanOrEqualTo(String value) {
+        public Criteria andUpdateUserLessThanOrEqualTo(Long value) {
             addCriterion("update_user <=", value, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserLike(String value) {
-            addCriterion("update_user like", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserNotLike(String value) {
-            addCriterion("update_user not like", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIn(List<String> values) {
+        public Criteria andUpdateUserIn(List<Long> values) {
             addCriterion("update_user in", values, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserNotIn(List<String> values) {
+        public Criteria andUpdateUserNotIn(List<Long> values) {
             addCriterion("update_user not in", values, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserBetween(String value1, String value2) {
+        public Criteria andUpdateUserBetween(Long value1, Long value2) {
             addCriterion("update_user between", value1, value2, "updateUser");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserNotBetween(String value1, String value2) {
+        public Criteria andUpdateUserNotBetween(Long value1, Long value2) {
             addCriterion("update_user not between", value1, value2, "updateUser");
             return (Criteria) this;
         }

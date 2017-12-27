@@ -7,7 +7,38 @@ import java.util.Date;
  *
  * @author Xushd on 2017/12/27 16:29
  */
-public class School implements Serializable{
+public class School implements Serializable {
+
+    private String province;
+
+    private String city;
+
+    private String area;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     private Long id;
 
     private String name;
@@ -36,7 +67,7 @@ public class School implements Serializable{
 
     private Date updateTime;
 
-    private String updateUser;
+    private Long updateUser;
 
     public Long getId() {
         return id;
@@ -150,11 +181,11 @@ public class School implements Serializable{
         this.updateTime = updateTime;
     }
 
-    public String getUpdateUser() {
+    public Long getUpdateUser() {
         return updateUser;
     }
 
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser == null ? null : updateUser.trim();
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
     }
 }

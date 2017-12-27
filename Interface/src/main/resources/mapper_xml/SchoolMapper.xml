@@ -16,7 +16,7 @@
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -121,7 +121,7 @@
       #{proviceId,jdbcType=BIGINT}, #{cityId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, 
       #{linkMan,jdbcType=VARCHAR}, #{linkPhone,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.School">
@@ -217,7 +217,7 @@
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
-        #{updateUser,jdbcType=VARCHAR},
+        #{updateUser,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -273,7 +273,7 @@
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateUser != null">
-        update_user = #{record.updateUser,jdbcType=VARCHAR},
+        update_user = #{record.updateUser,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -296,7 +296,7 @@
       delflag = #{record.delflag,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      update_user = #{record.updateUser,jdbcType=VARCHAR}
+      update_user = #{record.updateUser,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -344,7 +344,7 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
-        update_user = #{updateUser,jdbcType=VARCHAR},
+        update_user = #{updateUser,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -364,7 +364,7 @@
       delflag = #{delflag,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=VARCHAR}
+      update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
