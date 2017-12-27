@@ -33,6 +33,12 @@
 
     <dubbo:reference id="activityService" interface="com.practice.service.ActivityService"/>
 
+    <dubbo:reference id="eduService" interface="com.practice.service.EduService"/>
+
+    <dubbo:reference id="schoolService" interface="com.practice.service.SchoolService"/>
+
+    <dubbo:reference id="areaService" interface="com.practice.service.ActivityService"/>
+
 
 
 
