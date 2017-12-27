@@ -77,7 +77,7 @@ public class AreaServiceImpl implements AreaService {
             list = new ArrayList<>();
 
             for (City city : cities) {
-                list.add(new CityDTO(city.getCityId(), city.getCity()));
+                list.add(new CityDTO(city.getCityId(), city.getCity())) ;
             }
 
             cacheService.setCityList(pid,list);
@@ -117,5 +117,103 @@ public class AreaServiceImpl implements AreaService {
         }
 
         return JsonResult.success(areaList);
+    }
+
+    /**
+     * Get provinceDTO by provinceId
+     *
+     * @param provinceId
+     * @return
+     */
+    @Override
+    public ProvinceDTO getProvice(Long provinceId) {
+
+        ProvinceDTO provinceDTO = cacheService.getProvince(provinceId);
+
+        if(provinceDTO==null){
+
+            ProvinceExample provinceExample = new ProvinceExample();
+
+            provinceExample.createCriteria().andProvinceIdEqualTo(provinceId);
+
+            List<Province> provinces = provinceMapper.selectByExample(provinceExample);
+
+            if(provinces.size()>0){
+                Province province = provinces.get(0);
+
+                provinceDTO = new ProvinceDTO(provinceId, province.getProvince());
+
+                cacheService.setProvince(provinceId,provinceDTO);
+
+            }
+        }
+
+        return provinceDTO;
+    }
+
+    /**
+     * Get CityDTO by cityId
+     *
+     * @param cityId
+     * @return
+     */
+    @Override
+    public CityDTO getCity(Long cityId) {
+
+        CityDTO cityDTO = cacheService.getCity(cityId);
+
+        if(cityDTO==null){
+
+            CityExample cityExample = new CityExample();
+
+            cityExample.createCriteria().andCityIdEqualTo(cityId);
+
+            List<City> cities = cityMapper.selectByExample(cityExample);
+
+            if(cities.size()>0){
+
+                City city = cities.get(0);
+
+                cityDTO = new CityDTO(cityId, city.getCity());
+
+                cacheService.setCity(cityId,cityDTO);
+
+            }
+        }
+
+        return cityDTO;
+    }
+
+    /**
+     * Get AreaDTO by areaId
+     *
+     * @param areaId
+     * @return
+     */
+    @Override
+    public AreaDTO getArea(Long areaId) {
+
+        AreaDTO areaDTO = cacheService.getArea(areaId);
+
+        if(areaDTO==null){
+
+            AreaExample areaExample = new AreaExample();
+
+            areaExample.createCriteria().andAreaIdEqualTo(areaId);
+
+            List<Area> areas = areaMapper.selectByExample(areaExample);
+
+            if(areas.size()>0){
+
+                Area area = areas.get(0);
+
+                areaDTO = new AreaDTO(areaId, area.getArea());
+
+                cacheService.setArea(areaId,areaDTO);
+
+            }
+        }
+
+        return areaDTO;
     }
 }

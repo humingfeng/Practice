@@ -55,7 +55,16 @@
     <bean id="activityService" class="com.practice.service.impl.ActivityServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.ActivityService" ref="activityService"></dubbo:service>
 
+    <!--eduService-->
+    <bean id="eduService" class="com.practice.service.impl.EduServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.EduService" ref="eduService"></dubbo:service>
 
+    <!--schoolService-->
+    <bean id="schoolService" class="com.practice.service.impl.SchoolServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.SchoolService" ref="schoolService"></dubbo:service>
 
+    <!--areaService-->
+    <bean id="areaService" class="com.practice.service.impl.AreaServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.ActivityService" ref="areaService"></dubbo:service>
 
 </beans>

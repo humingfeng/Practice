@@ -1,7 +1,10 @@
 package com.practice.service.impl;
 
 import com.practice.dao.JedisClient;
+import com.practice.dto.AreaDTO;
+import com.practice.dto.CityDTO;
 import com.practice.dto.NavDTO;
+import com.practice.dto.ProvinceDTO;
 import com.practice.enums.ConstantEnum;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageDictionary;
@@ -137,5 +140,166 @@ public class CacheServiceImpl implements CacheService {
             return JsonUtils.jsonToList(s,String.class);
         }
         return null;
+    }
+
+    /**
+     * Get provice list
+     *
+     * @return
+     */
+    @Override
+    public List<ProvinceDTO> getProvinceList() {
+
+        String hget = jedisClient.hget(ConstantEnum.CACHE_PROVINCE.getStrValue(), "KEY:LIST");
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,ProvinceDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set provice list
+     *
+     * @param list
+     */
+    @Override
+    public void setProvinceList(List<ProvinceDTO> list) {
+
+        jedisClient.hset(ConstantEnum.CACHE_PROVINCE.getStrValue(),"KEY:LIST",JsonUtils.objectToJson(list));
+
+    }
+
+    /**
+     * Get province by pid
+     *
+     * @param pid
+     * @return
+     */
+    @Override
+    public ProvinceDTO getProvince(Long pid) {
+
+        String hget = jedisClient.hget(ConstantEnum.CACHE_PROVINCE.getStrValue(), "KEY:" + pid);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,ProvinceDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set province by pid
+     *
+     * @param pid
+     * @param provinceDTO
+     */
+    @Override
+    public void setProvince(Long pid, ProvinceDTO provinceDTO) {
+
+        jedisClient.hset(ConstantEnum.CACHE_PROVINCE.getStrValue(),"KEY:"+pid,JsonUtils.objectToJson(provinceDTO));
+    }
+
+    /**
+     * Get city list
+     *
+     * @return
+     */
+    @Override
+    public List<CityDTO> getCityList(Long pid) {
+        String hget = jedisClient.hget(ConstantEnum.CACHE_CITY.getStrValue(), "KEY:LIST:"+pid);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,CityDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set city list
+     *
+     * @param list
+     */
+    @Override
+    public void setCityList(Long pid, List<CityDTO> list) {
+        jedisClient.hset(ConstantEnum.CACHE_CITY.getStrValue(), "KEY:LIST:"+pid,JsonUtils.objectToJson(list));
+    }
+
+    /**
+     * Get city by cid
+     *
+     * @param cid
+     * @return
+     */
+    @Override
+    public CityDTO getCity(Long cid) {
+        String hget = jedisClient.hget(ConstantEnum.CACHE_CITY.getStrValue(), "KEY:" + cid);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,CityDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set city by cid
+     *
+     * @param cid
+     * @param cityDTO
+     */
+    @Override
+    public void setCity(Long cid, CityDTO cityDTO) {
+        jedisClient.hset(ConstantEnum.CACHE_CITY.getStrValue(), "KEY:" + cid,JsonUtils.objectToJson(cityDTO));
+    }
+
+    /**
+     * Get area list
+     *
+     * @return
+     */
+    @Override
+    public List<AreaDTO> getAreaList(Long cid) {
+        String hget = jedisClient.hget(ConstantEnum.CACHE_AREA.getStrValue(), "KEY:LIST:"+cid);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,AreaDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set area list
+     *
+     * @param list
+     */
+    @Override
+    public void setAreaList(Long cid,List<AreaDTO> list) {
+        jedisClient.hset(ConstantEnum.CACHE_AREA.getStrValue(), "KEY:LIST:"+cid,JsonUtils.objectToJson(list));
+    }
+
+    /**
+     * Get area by aid
+     *
+     * @param aid
+     * @return
+     */
+    @Override
+    public AreaDTO getArea(Long aid) {
+        String hget = jedisClient.hget(ConstantEnum.CACHE_AREA.getStrValue(), "KEY:" + aid);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,AreaDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set area by aid
+     *
+     * @param aid
+     * @param areaDTO
+     */
+    @Override
+    public void setArea(Long aid, AreaDTO areaDTO) {
+        jedisClient.hset(ConstantEnum.CACHE_AREA.getStrValue(), "KEY:" + aid,JsonUtils.objectToJson(areaDTO));
     }
 }
