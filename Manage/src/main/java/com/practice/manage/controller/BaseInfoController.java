@@ -6,7 +6,7 @@ import com.practice.po.School;
 import com.practice.result.JsonResult;
 import com.practice.service.EduService;
 import com.practice.service.SchoolService;
-import com.practice.utils.AreaService;
+import com.practice.service.AreaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -54,7 +54,8 @@ public class BaseInfoController {
      * @param edu
      * @return
      */
-    @RequestMapping(value = "/auth/baseinfo/edu/list")
+    @RequestMapping(value = "/auth/baseinfo/edu/add" +
+            "")
     @ResponseBody
     public JsonResult ajaxEduAdd(@RequestAttribute String token, Edu edu){
         return eduService.addEdu(token,edu);
@@ -86,10 +87,12 @@ public class BaseInfoController {
      * Edu usable list
      * @return
      */
-    @RequestMapping(value = "/auth/baseinfo/edu/usable/list")
+    @RequestMapping(value = "/auth/baseinfo/edu/usable/list/{pid}/{cid}/{aid}")
     @ResponseBody
-    public JsonResult ajaxEduUsableList(){
-        return eduService.listEduUsable();
+    public JsonResult ajaxEduUsableList(@PathVariable Long pid,
+                                        @PathVariable Long cid,
+                                        @PathVariable Long aid){
+        return eduService.listEduUsable(pid,cid,aid);
     }
 
     /**
@@ -98,7 +101,7 @@ public class BaseInfoController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/baseinfo/edu/delete/id")
+    @RequestMapping(value = "/auth/baseinfo/edu/delete/{id}")
     @ResponseBody
     public JsonResult ajaxEduDelete(@RequestAttribute String token,@PathVariable Long id){
         return eduService.deleteEdu(token,id);

@@ -7,11 +7,12 @@ import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.EduMapper;
 import com.practice.mapper.SchoolMapper;
+import com.practice.po.Edu;
 import com.practice.po.School;
 import com.practice.po.SchoolExample;
 import com.practice.result.JsonResult;
 import com.practice.service.SchoolService;
-import com.practice.utils.AreaService;
+import com.practice.service.AreaService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -74,6 +75,10 @@ public class SchoolServiceImpl implements SchoolService {
             school.setProvince(areaService.getProvice(school.getProviceId()).getName());
             school.setCity(areaService.getCity(school.getCityId()).getName());
             school.setArea(areaService.getArea(school.getAreaId()).getName());
+
+            Edu edu = eduMapper.selectByPrimaryKey(school.getEduId());
+
+            school.setEduName(edu.getName());
         }
 
         PageInfo<School> schoolPageInfo = new PageInfo<>(schools);
@@ -121,6 +126,8 @@ public class SchoolServiceImpl implements SchoolService {
 
         Date date = new Date();
 
+
+
         school.setUpdateTime(date);
 
         school.setCreateTime(date);
@@ -163,6 +170,8 @@ public class SchoolServiceImpl implements SchoolService {
                 return JsonResult.error(OperateEnum.REPEAT);
             }
         }
+
+
 
         school.setUpdateUser(tokeUser.getId());
 

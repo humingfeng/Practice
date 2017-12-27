@@ -15,6 +15,16 @@ public class School implements Serializable {
 
     private String area;
 
+    private String eduName;
+
+    public String getEduName() {
+        return eduName;
+    }
+
+    public void setEduName(String eduName) {
+        this.eduName = eduName;
+    }
+
     public String getProvince() {
         return province;
     }

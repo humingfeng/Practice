@@ -1,4 +1,4 @@
-package com.practice.utils;
+package com.practice.service;
 
 import com.practice.dto.AreaDTO;
 import com.practice.dto.CityDTO;

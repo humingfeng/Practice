@@ -52,6 +52,6 @@ public interface EduService {
      * List usable edu
      * @return
      */
-    JsonResult listEduUsable();
+    JsonResult listEduUsable(Long pid,Long cid,Long aid);
 
 }

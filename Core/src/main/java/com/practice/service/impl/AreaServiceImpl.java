@@ -9,7 +9,7 @@ import com.practice.mapper.ProvinceMapper;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
-import com.practice.utils.AreaService;
+import com.practice.service.AreaService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -37,7 +37,7 @@
 
     <dubbo:reference id="schoolService" interface="com.practice.service.SchoolService"/>
 
-    <dubbo:reference id="areaService" interface="com.practice.service.ActivityService"/>
+    <dubbo:reference id="areaService" interface="com.practice.service.AreaService"/>
 
 
 

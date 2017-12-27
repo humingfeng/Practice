@@ -13,7 +13,7 @@ import com.practice.po.EduExample;
 import com.practice.po.SchoolExample;
 import com.practice.result.JsonResult;
 import com.practice.service.EduService;
-import com.practice.utils.AreaService;
+import com.practice.service.AreaService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -213,12 +213,15 @@ public class EduServiceImpl implements EduService {
      * @return
      */
     @Override
-    public JsonResult listEduUsable() {
+    public JsonResult listEduUsable(Long pid,Long cid,Long aid) {
 
         EduExample eduExample = new EduExample();
 
         eduExample.createCriteria().andDelflagEqualTo(0)
-                .andStatusEqualTo(1);
+                .andStatusEqualTo(1)
+                .andProviceIdEqualTo(pid)
+                .andCityIdEqualTo(cid)
+                .andAreaIdEqualTo(aid);
 
         List<Edu> edus = eduMapper.selectByExample(eduExample);
 
