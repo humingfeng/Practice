@@ -39,6 +39,8 @@
 
     <dubbo:reference id="areaService" interface="com.practice.service.AreaService"/>
 
+    <dubbo:reference id="basesService" interface="com.practice.service.BasesService"/>
+
 
 
 

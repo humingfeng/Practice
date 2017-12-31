@@ -14,4 +14,6 @@
     <context:component-scan base-package="com.practice.service"/>
 
     <bean id="permissionAspect" class="com.practice.manage.aspect.PermissionAspect"/>
+
+    <bean id="uploadService" class="com.practice.manage.service.impl.UploadServiceImpl"/>
 </beans>

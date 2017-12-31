@@ -17,6 +17,15 @@ layui.define(['app', 'form', 'laytpl', 'laypage'], exports => {
     var tpl,pageParam = {pageIndex:1,pageSize:10,searchFileds:{},pageStatus:1},operate={},listData=[];
     var obj = new Page();
 
+    var load;
+    $(function(){
+        load = app.showLoading('加载中。。。');
+    })
+
+    $(document).ready(function(){
+        app.closeLoading(load);
+    })
+
     /**
      * 绑定页面do-action事件
      */

@@ -69,6 +69,9 @@ public class JsonResult implements Serializable{
     public static JsonResult success(String message) {
         return new JsonResult(ConstantEnum.JSONRESULT_STATUS_SUCCESS.getIntValue(),message,null);
     }
+    public static JsonResult success(String message,Object object) {
+        return new JsonResult(ConstantEnum.JSONRESULT_STATUS_SUCCESS.getIntValue(),message,object);
+    }
 
     public static JsonResult success(Object object) {
         return new JsonResult(ConstantEnum.JSONRESULT_STATUS_SUCCESS.getIntValue(),"success",object);

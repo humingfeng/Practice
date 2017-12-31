@@ -233,12 +233,15 @@ layui.define(["element","jquery",'app'],function(exports){
 
         $(".layui-nav-child dd").removeClass('layui-this')
 
-        $(".layui-nav-child dd").each(function(){
-            if($(this).find("cite").text() == curmenu.title){
-                $(this).addClass('layui-this');
-                $(this).parent().parent().addClass('layui-nav-itemed').siblings().removeClass('layui-nav-itemed')
-            }
-        })
+		if(curmenu){
+            $(".layui-nav-child dd").each(function(){
+                if($(this).find("cite").text() == curmenu.title){
+                    $(this).addClass('layui-this');
+                    $(this).parent().parent().addClass('layui-nav-itemed').siblings().removeClass('layui-nav-itemed')
+                }
+            })
+
+        }
 
 		// new Tab().tabMove();
 	})

@@ -67,4 +67,8 @@
     <bean id="areaService" class="com.practice.service.impl.AreaServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.AreaService" ref="areaService"></dubbo:service>
 
+    <!--basesService-->
+    <bean id="basesService" class="com.practice.service.impl.BasesServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.BasesService" ref="basesService"></dubbo:service>
+
 </beans>

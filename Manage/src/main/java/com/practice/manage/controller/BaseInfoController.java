@@ -2,8 +2,10 @@ package com.practice.manage.controller;
 
 import com.practice.dto.PageSearchParam;
 import com.practice.po.Edu;
+import com.practice.po.ManageBase;
 import com.practice.po.School;
 import com.practice.result.JsonResult;
+import com.practice.service.BasesService;
 import com.practice.service.EduService;
 import com.practice.service.SchoolService;
 import com.practice.service.AreaService;
@@ -28,6 +30,8 @@ public class BaseInfoController {
     private SchoolService schoolService;
     @Resource
     private AreaService areaService;
+    @Resource
+    private BasesService basesService;
     /**
      * Edu index
      * @return
@@ -205,5 +209,87 @@ public class BaseInfoController {
     @ResponseBody
     public JsonResult ajaxAreaList(@PathVariable Long cid){
         return areaService.listAreaByCid(cid);
+    }
+
+
+    /**
+     * Bases index
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases")
+    public String indexBases(){
+        return "baseinfo/bases";
+    }
+
+    /**
+     * Bases list
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/list")
+    @ResponseBody
+    public JsonResult ajaxBasesList(PageSearchParam param){
+        return basesService.listBases(param);
+    }
+
+    /**
+     * Bases add
+     * @param token
+     * @param base
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/add")
+    @ResponseBody
+    public JsonResult ajaxBasesAdd(@RequestAttribute String token, ManageBase base){
+
+        return basesService.addBases(token,base);
+    }
+
+    /**
+     * Bases get
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/{id}")
+    @ResponseBody
+    public JsonResult ajaxBasesObj(@PathVariable Long id){
+        return basesService.getBases(id);
+    }
+
+    /**
+     * Bases update
+     * @param token
+     * @param base
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/update")
+    @ResponseBody
+    public JsonResult ajaxBasesUpdate(@RequestAttribute String token, ManageBase base){
+
+        return basesService.updateBases(token,base);
+    }
+
+    /**
+     * Bases delete
+     * @param token
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/delete/{id}")
+    @ResponseBody
+    public JsonResult ajaxBasesDelete(@RequestAttribute String token, @PathVariable Long id){
+
+        return basesService.deleteBases(token,id);
+    }
+
+    /**
+     * Bases list usable
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/bases/usable")
+    @ResponseBody
+    public JsonResult ajaxBasesUsable(){
+
+        return basesService.listBasesUsable();
     }
 }
