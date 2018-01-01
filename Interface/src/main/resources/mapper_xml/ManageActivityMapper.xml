@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.practice.mapper.ManageActivityMapper">
+  <resultMap id="BaseResultMap" type="com.practice.po.ManageActivity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type_id" jdbcType="BIGINT" property="typeId" />
+    <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
+    <result column="theme_id" jdbcType="BIGINT" property="themeId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="organize_id" jdbcType="BIGINT" property="organizeId" />
+    <result column="base_id" jdbcType="BIGINT" property="baseId" />
+    <result column="duration" jdbcType="REAL" property="duration" />
+    <result column="duration_type" jdbcType="INTEGER" property="durationType" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="self" jdbcType="INTEGER" property="self" />
+    <result column="sign" jdbcType="INTEGER" property="sign" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="close_type" jdbcType="INTEGER" property="closeType" />
+    <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="check_leader" jdbcType="INTEGER" property="checkLeader" />
+    <result column="check_apply" jdbcType="INTEGER" property="checkApply" />
+    <result column="check_sign" jdbcType="INTEGER" property="checkSign" />
+    <result column="check_supervise" jdbcType="INTEGER" property="checkSupervise" />
+    <result column="check_task" jdbcType="INTEGER" property="checkTask" />
+    <result column="check_introduce" jdbcType="INTEGER" property="checkIntroduce" />
+    <result column="check_enroll" jdbcType="INTEGER" property="checkEnroll" />
+    <result column="check_evaluate" jdbcType="INTEGER" property="checkEvaluate" />
+    <result column="delflag" jdbcType="INTEGER" property="delflag" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, type_id, classify_id, theme_id, name, organize_id, base_id, duration, duration_type, 
+    begin_time, end_time, self, sign, number, close_type, close_time, money, status, 
+    check_leader, check_apply, check_sign, check_supervise, check_task, check_introduce, 
+    check_enroll, check_evaluate, delflag, update_user, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.practice.po.ManageActivityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manage_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_activity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from manage_activity
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.practice.po.ManageActivityExample">
+    delete from manage_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.practice.po.ManageActivity">
+    insert into manage_activity (id, type_id, classify_id, 
+      theme_id, name, organize_id, 
+      base_id, duration, duration_type, 
+      begin_time, end_time, self, 
+      sign, number, close_type, 
+      close_time, money, status, 
+      check_leader, check_apply, check_sign, 
+      check_supervise, check_task, check_introduce, 
+      check_enroll, check_evaluate, delflag, 
+      update_user, update_time)
+    values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{classifyId,jdbcType=BIGINT}, 
+      #{themeId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{organizeId,jdbcType=BIGINT}, 
+      #{baseId,jdbcType=BIGINT}, #{duration,jdbcType=REAL}, #{durationType,jdbcType=INTEGER}, 
+      #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{self,jdbcType=INTEGER}, 
+      #{sign,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{closeType,jdbcType=INTEGER}, 
+      #{closeTime,jdbcType=TIMESTAMP}, #{money,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{checkLeader,jdbcType=INTEGER}, #{checkApply,jdbcType=INTEGER}, #{checkSign,jdbcType=INTEGER}, 
+      #{checkSupervise,jdbcType=INTEGER}, #{checkTask,jdbcType=INTEGER}, #{checkIntroduce,jdbcType=INTEGER}, 
+      #{checkEnroll,jdbcType=INTEGER}, #{checkEvaluate,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, 
+      #{updateUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.practice.po.ManageActivity">
+    insert into manage_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="classifyId != null">
+        classify_id,
+      </if>
+      <if test="themeId != null">
+        theme_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="organizeId != null">
+        organize_id,
+      </if>
+      <if test="baseId != null">
+        base_id,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="durationType != null">
+        duration_type,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="self != null">
+        self,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="closeType != null">
+        close_type,
+      </if>
+      <if test="closeTime != null">
+        close_time,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="checkLeader != null">
+        check_leader,
+      </if>
+      <if test="checkApply != null">
+        check_apply,
+      </if>
+      <if test="checkSign != null">
+        check_sign,
+      </if>
+      <if test="checkSupervise != null">
+        check_supervise,
+      </if>
+      <if test="checkTask != null">
+        check_task,
+      </if>
+      <if test="checkIntroduce != null">
+        check_introduce,
+      </if>
+      <if test="checkEnroll != null">
+        check_enroll,
+      </if>
+      <if test="checkEvaluate != null">
+        check_evaluate,
+      </if>
+      <if test="delflag != null">
+        delflag,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="classifyId != null">
+        #{classifyId,jdbcType=BIGINT},
+      </if>
+      <if test="themeId != null">
+        #{themeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        #{organizeId,jdbcType=BIGINT},
+      </if>
+      <if test="baseId != null">
+        #{baseId,jdbcType=BIGINT},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=REAL},
+      </if>
+      <if test="durationType != null">
+        #{durationType,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="self != null">
+        #{self,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="closeType != null">
+        #{closeType,jdbcType=INTEGER},
+      </if>
+      <if test="closeTime != null">
+        #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="checkLeader != null">
+        #{checkLeader,jdbcType=INTEGER},
+      </if>
+      <if test="checkApply != null">
+        #{checkApply,jdbcType=INTEGER},
+      </if>
+      <if test="checkSign != null">
+        #{checkSign,jdbcType=INTEGER},
+      </if>
+      <if test="checkSupervise != null">
+        #{checkSupervise,jdbcType=INTEGER},
+      </if>
+      <if test="checkTask != null">
+        #{checkTask,jdbcType=INTEGER},
+      </if>
+      <if test="checkIntroduce != null">
+        #{checkIntroduce,jdbcType=INTEGER},
+      </if>
+      <if test="checkEnroll != null">
+        #{checkEnroll,jdbcType=INTEGER},
+      </if>
+      <if test="checkEvaluate != null">
+        #{checkEvaluate,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null">
+        #{delflag,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.practice.po.ManageActivityExample" resultType="java.lang.Long">
+    select count(*) from manage_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update manage_activity
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.typeId != null">
+        type_id = #{record.typeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.classifyId != null">
+        classify_id = #{record.classifyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.themeId != null">
+        theme_id = #{record.themeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizeId != null">
+        organize_id = #{record.organizeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.baseId != null">
+        base_id = #{record.baseId,jdbcType=BIGINT},
+      </if>
+      <if test="record.duration != null">
+        duration = #{record.duration,jdbcType=REAL},
+      </if>
+      <if test="record.durationType != null">
+        duration_type = #{record.durationType,jdbcType=INTEGER},
+      </if>
+      <if test="record.beginTime != null">
+        begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.self != null">
+        self = #{record.self,jdbcType=INTEGER},
+      </if>
+      <if test="record.sign != null">
+        sign = #{record.sign,jdbcType=INTEGER},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.closeType != null">
+        close_type = #{record.closeType,jdbcType=INTEGER},
+      </if>
+      <if test="record.closeTime != null">
+        close_time = #{record.closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.money != null">
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkLeader != null">
+        check_leader = #{record.checkLeader,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkApply != null">
+        check_apply = #{record.checkApply,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkSign != null">
+        check_sign = #{record.checkSign,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkSupervise != null">
+        check_supervise = #{record.checkSupervise,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkTask != null">
+        check_task = #{record.checkTask,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkIntroduce != null">
+        check_introduce = #{record.checkIntroduce,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkEnroll != null">
+        check_enroll = #{record.checkEnroll,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkEvaluate != null">
+        check_evaluate = #{record.checkEvaluate,jdbcType=INTEGER},
+      </if>
+      <if test="record.delflag != null">
+        delflag = #{record.delflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update manage_activity
+    set id = #{record.id,jdbcType=BIGINT},
+      type_id = #{record.typeId,jdbcType=BIGINT},
+      classify_id = #{record.classifyId,jdbcType=BIGINT},
+      theme_id = #{record.themeId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      organize_id = #{record.organizeId,jdbcType=BIGINT},
+      base_id = #{record.baseId,jdbcType=BIGINT},
+      duration = #{record.duration,jdbcType=REAL},
+      duration_type = #{record.durationType,jdbcType=INTEGER},
+      begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      self = #{record.self,jdbcType=INTEGER},
+      sign = #{record.sign,jdbcType=INTEGER},
+      number = #{record.number,jdbcType=INTEGER},
+      close_type = #{record.closeType,jdbcType=INTEGER},
+      close_time = #{record.closeTime,jdbcType=TIMESTAMP},
+      money = #{record.money,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=INTEGER},
+      check_leader = #{record.checkLeader,jdbcType=INTEGER},
+      check_apply = #{record.checkApply,jdbcType=INTEGER},
+      check_sign = #{record.checkSign,jdbcType=INTEGER},
+      check_supervise = #{record.checkSupervise,jdbcType=INTEGER},
+      check_task = #{record.checkTask,jdbcType=INTEGER},
+      check_introduce = #{record.checkIntroduce,jdbcType=INTEGER},
+      check_enroll = #{record.checkEnroll,jdbcType=INTEGER},
+      check_evaluate = #{record.checkEvaluate,jdbcType=INTEGER},
+      delflag = #{record.delflag,jdbcType=INTEGER},
+      update_user = #{record.updateUser,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.practice.po.ManageActivity">
+    update manage_activity
+    <set>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="classifyId != null">
+        classify_id = #{classifyId,jdbcType=BIGINT},
+      </if>
+      <if test="themeId != null">
+        theme_id = #{themeId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        organize_id = #{organizeId,jdbcType=BIGINT},
+      </if>
+      <if test="baseId != null">
+        base_id = #{baseId,jdbcType=BIGINT},
+      </if>
+      <if test="duration != null">
+        duration = #{duration,jdbcType=REAL},
+      </if>
+      <if test="durationType != null">
+        duration_type = #{durationType,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="self != null">
+        self = #{self,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="closeType != null">
+        close_type = #{closeType,jdbcType=INTEGER},
+      </if>
+      <if test="closeTime != null">
+        close_time = #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="checkLeader != null">
+        check_leader = #{checkLeader,jdbcType=INTEGER},
+      </if>
+      <if test="checkApply != null">
+        check_apply = #{checkApply,jdbcType=INTEGER},
+      </if>
+      <if test="checkSign != null">
+        check_sign = #{checkSign,jdbcType=INTEGER},
+      </if>
+      <if test="checkSupervise != null">
+        check_supervise = #{checkSupervise,jdbcType=INTEGER},
+      </if>
+      <if test="checkTask != null">
+        check_task = #{checkTask,jdbcType=INTEGER},
+      </if>
+      <if test="checkIntroduce != null">
+        check_introduce = #{checkIntroduce,jdbcType=INTEGER},
+      </if>
+      <if test="checkEnroll != null">
+        check_enroll = #{checkEnroll,jdbcType=INTEGER},
+      </if>
+      <if test="checkEvaluate != null">
+        check_evaluate = #{checkEvaluate,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null">
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageActivity">
+    update manage_activity
+    set type_id = #{typeId,jdbcType=BIGINT},
+      classify_id = #{classifyId,jdbcType=BIGINT},
+      theme_id = #{themeId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      organize_id = #{organizeId,jdbcType=BIGINT},
+      base_id = #{baseId,jdbcType=BIGINT},
+      duration = #{duration,jdbcType=REAL},
+      duration_type = #{durationType,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      self = #{self,jdbcType=INTEGER},
+      sign = #{sign,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      close_type = #{closeType,jdbcType=INTEGER},
+      close_time = #{closeTime,jdbcType=TIMESTAMP},
+      money = #{money,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      check_leader = #{checkLeader,jdbcType=INTEGER},
+      check_apply = #{checkApply,jdbcType=INTEGER},
+      check_sign = #{checkSign,jdbcType=INTEGER},
+      check_supervise = #{checkSupervise,jdbcType=INTEGER},
+      check_task = #{checkTask,jdbcType=INTEGER},
+      check_introduce = #{checkIntroduce,jdbcType=INTEGER},
+      check_enroll = #{checkEnroll,jdbcType=INTEGER},
+      check_evaluate = #{checkEvaluate,jdbcType=INTEGER},
+      delflag = #{delflag,jdbcType=INTEGER},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
