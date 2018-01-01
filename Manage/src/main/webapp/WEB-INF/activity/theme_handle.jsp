@@ -66,7 +66,7 @@
             $("#typeId").empty();
             $("#typeId").append("<option value=''>请选择</option>");
             layui.each(d.data,function(index,item){
-                $("#typeId").append("<option value='"+item.id+"' >"+item.name+"</option>");
+                $("#typeId").append("<option value='"+item.id+"' >"+item.value+"</option>");
             })
             form.render('select');
             if(id){
@@ -98,7 +98,7 @@
                 $("#classifyId").empty();
                 $("#classifyId").append("<option value=''>请选择</option>");
                 layui.each(d.data,function(index,item){
-                    $("#classifyId").append("<option value='"+item.id+"' >"+item.name+"</option>");
+                    $("#classifyId").append("<option value='"+item.id+"' >"+item.value+"</option>");
                 })
                 form.render('select');
             },e=>{}).finally(_=>{app.closeLoading(load)});

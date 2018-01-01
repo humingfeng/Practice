@@ -68,7 +68,9 @@
         <!--<table schema="" tableName="edu"/>-->
         <!--<table schema="" tableName="school"/>-->
 
-        <table schema="" tableName="manage_base"/>
+        <!--<table schema="" tableName="manage_base"/>-->
+
+        <table schema="" tableName="manage_activity"/>
 
 
 

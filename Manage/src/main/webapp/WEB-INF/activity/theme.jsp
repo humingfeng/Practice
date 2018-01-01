@@ -76,14 +76,14 @@
                 </td>
                 <td>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small do-action"
+                        <a class="layui-btn layui-btn-xs do-action"
                            data-type="handle" data-url="/auth/jump/activity/theme_handle?id={{item.id}}" data-name="编辑">
                             <i class="iconfont icon-bianji"></i>
                             编辑
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="deleteUrl"
+                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="deleteUrl"
                            data-url="/auth/activity/theme/delete/{{item.id}}" data-name="{{item.name}},删除会影响拥有该主题的活动" data-index="{{index}}">
                             <i class="iconfont icon-shanchu"></i>
                             删除

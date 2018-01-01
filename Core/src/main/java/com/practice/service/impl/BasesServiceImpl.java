@@ -2,6 +2,7 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -208,7 +210,13 @@ public class BasesServiceImpl implements BasesService {
 
         List<ManageBase> manageBases = baseMapper.selectByExample(example);
 
-        return JsonResult.success(manageBases);
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageBase manageBase : manageBases) {
+            list.add(new KeyValueDTO(manageBase.getId(),manageBase.getName()));
+        }
+
+        return JsonResult.success(list);
     }
 
     /**

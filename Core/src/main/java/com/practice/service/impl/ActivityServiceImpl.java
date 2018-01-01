@@ -1,23 +1,27 @@
 package com.practice.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManageActivityClassifyMapper;
+import com.practice.mapper.ManageActivityMapper;
 import com.practice.mapper.ManageActivityThemeMapper;
 import com.practice.mapper.ManageActivityTypeMapper;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
+import com.practice.service.UserService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
+import com.practice.utils.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +37,10 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityClassifyMapper classifyMapper;
     @Resource
     private ManageActivityThemeMapper themeMapper;
-
+    @Resource
+    private ManageActivityMapper activityMapper;
+    @Resource
+    private UserService  userService;
 
     /**
      * List activity type
@@ -202,7 +209,15 @@ public class ActivityServiceImpl implements ActivityService {
 
         typeExample.createCriteria().andStatusEqualTo(1).andDelflagEqualTo(0);
 
-        return JsonResult.success(typeMapper.selectByExample(typeExample));
+        List<ManageActivityType> manageActivityTypes = typeMapper.selectByExample(typeExample);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityType manageActivityType : manageActivityTypes) {
+            list.add(new KeyValueDTO(manageActivityType.getId(),manageActivityType.getName()));
+        }
+
+        return JsonResult.success(list);
     }
 
     /**
@@ -375,9 +390,21 @@ public class ActivityServiceImpl implements ActivityService {
     public JsonResult listClassifyUsable(Long id) {
         ManageActivityClassifyExample classifyExample = new ManageActivityClassifyExample();
 
-        classifyExample.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(1).andTypeIdEqualTo(id);
+        classifyExample.createCriteria()
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1)
+                .andTypeIdEqualTo(id);
 
-        return JsonResult.success(classifyMapper.selectByExample(classifyExample));
+        List<ManageActivityClassify> manageActivityClassifies = classifyMapper.selectByExample(classifyExample);
+
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityClassify activityClassify : manageActivityClassifies) {
+            list.add(new KeyValueDTO(activityClassify.getId(),activityClassify.getName()));
+        }
+
+        return JsonResult.success(list);
     }
 
     /**
@@ -508,7 +535,17 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        //TODO 当期主题如果存在活动 则不可删除
+        ManageActivityExample manageActivityExample = new ManageActivityExample();
+
+        manageActivityExample.createCriteria()
+                .andThemeIdEqualTo(id).andDelflagEqualTo(0);
+
+        long l = activityMapper.countByExample(manageActivityExample);
+
+        if(l>0){
+            return JsonResult.error("该主题已被应用到活动中，无法删除");
+        }
+
 
         ManageActivityTheme activityTheme = new ManageActivityTheme();
 
@@ -547,8 +584,197 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityThemeExample themeExample = new ManageActivityThemeExample();
 
-        themeExample.createCriteria().andClassifyIdEqualTo(id).andStatusEqualTo(1).andDelflagEqualTo(0);
+        themeExample.createCriteria()
+                .andClassifyIdEqualTo(id)
+                .andStatusEqualTo(1)
+                .andDelflagEqualTo(0);
 
-        return JsonResult.success(themeMapper.selectByExample(themeExample));
+        List<ManageActivityTheme> manageActivityThemes = themeMapper.selectByExample(themeExample);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityTheme manageActivityTheme : manageActivityThemes) {
+            list.add(new KeyValueDTO(manageActivityTheme.getId(),manageActivityTheme.getName()));
+        }
+
+        return JsonResult.success(list);
+    }
+
+    /**
+     * List activity manage
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JsonResult listManage(PageSearchParam param) {
+
+        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+
+        ManageActivityExample activityExample = new ManageActivityExample();
+
+        List<ManageActivity> manageActivities = activityMapper.selectByExample(activityExample);
+
+        for (ManageActivity manageActivity : manageActivities) {
+
+            manageActivity.setType(typeMapper.selectByPrimaryKey(manageActivity.getTypeId()).getName());
+
+            manageActivity.setClassify(classifyMapper.selectByPrimaryKey(manageActivity.getClassifyId()).getName());
+
+            manageActivity.setTheme(themeMapper.selectByPrimaryKey(manageActivity.getThemeId()).getName());
+
+        }
+
+
+        PageInfo<ManageActivity> manageActivityPageInfo = new PageInfo<>(manageActivities);
+
+        return JsonResult.success(manageActivityPageInfo);
+    }
+
+    /**
+     * Add activity manage
+     *
+     * @param manageActivity
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult addActivityManage(ManageActivity manageActivity, String token) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageUser userPO = userService.getUserPO(tokeUser.getId());
+
+        manageActivity.setId(null);
+
+        manageActivity.setOrganizeId(userPO.getOrganizeId());
+
+        Date date = new Date();
+
+        if(StringUtils.isBlank(manageActivity.getCloseTimeStr())){
+            manageActivity.setCloseTime(date);
+        }else{
+            manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
+        }
+
+        if(manageActivity.getSign()==1){
+            manageActivity.setCheckSign(3);
+        }else{
+            manageActivity.setCheckSign(0);
+        }
+
+        if(StringUtils.isNotBlank(manageActivity.getTimeStr())){
+            String timeStr = manageActivity.getTimeStr();
+
+            String[] split = timeStr.split(" - ");
+
+            Date dateBegin = TimeUtils.getDateFromString(split[0]);
+
+            Date dateEnd = TimeUtils.getDateFromString(split[1]);
+
+            manageActivity.setBeginTime(dateBegin);
+
+            manageActivity.setEndTime(dateEnd);
+
+        }
+
+        manageActivity.setCheckLeader(3);
+
+        manageActivity.setCheckApply(3);
+
+        manageActivity.setCheckSupervise(3);
+
+        manageActivity.setCheckTask(3);
+
+        manageActivity.setCheckIntroduce(3);
+
+        manageActivity.setCheckEnroll(3);
+
+        manageActivity.setCheckEvaluate(3);
+
+
+        manageActivity.setStatus(9);
+
+        manageActivity.setUpdateTime(date);
+
+        manageActivity.setUpdateUser(tokeUser.getId());
+
+        manageActivity.setDelflag(0);
+
+        activityMapper.insertSelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get activity manage
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult getActivityManage(Long id) {
+        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
+        if(manageActivity.getCloseType()==1){
+            manageActivity.setCloseTimeStr(TimeUtils.getDateStringShort(manageActivity.getCloseTime()));
+        }
+
+        Date beginTime = manageActivity.getBeginTime();
+
+        Date endTime = manageActivity.getEndTime();
+
+        manageActivity.setTimeStr(TimeUtils.getDateString(beginTime)+" - "+TimeUtils.getDateString(endTime));
+
+        return JsonResult.success(manageActivity);
+    }
+
+    /**
+     * Update activity manage
+     *
+     * @param manageActivity
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult updateActivityManage(ManageActivity manageActivity, String token) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        Date date = new Date();
+
+        if(StringUtils.isBlank(manageActivity.getCloseTimeStr())){
+            manageActivity.setCloseTime(date);
+        }else{
+            manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
+        }
+
+        if(manageActivity.getSign()==1){
+            manageActivity.setCheckSign(3);
+        }else{
+            manageActivity.setCheckSign(0);
+        }
+
+        if(StringUtils.isNotBlank(manageActivity.getTimeStr())){
+            String timeStr = manageActivity.getTimeStr();
+
+            String[] split = timeStr.split(" - ");
+
+            Date dateBegin = TimeUtils.getDateFromString(split[0]);
+
+            Date dateEnd = TimeUtils.getDateFromString(split[1]);
+
+            manageActivity.setBeginTime(dateBegin);
+
+            manageActivity.setEndTime(dateEnd);
+
+        }
+
+        manageActivity.setUpdateUser(tokeUser.getId());
+
+        manageActivity.setUpdateTime(date);
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
     }
 }

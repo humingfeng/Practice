@@ -320,6 +320,16 @@ public class UserServiceImpl implements UserService {
         return JsonResult.success(manageUser);
     }
 
+    /**
+     * Get user
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ManageUser getUserPO(Long id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
 
     /**
      * List user role

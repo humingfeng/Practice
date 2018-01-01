@@ -68,14 +68,14 @@
                 <td>{{ item.createTime }}</td>
                 <td>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small do-action"
+                        <a class="layui-btn layui-btn-xs do-action"
                            data-type="handle" data-url="/auth/jump/system/version_handle?id={{item.id}}" data-name="编辑">
                             <i class="iconfont icon-bianji"></i>
                             编辑
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="deleteUrl"
+                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="deleteUrl"
                            data-url="/auth/system/version/delete/{{item.id}}" data-name="{{item.versionNum}}" data-index="{{index}}">
                             <i class="iconfont icon-shanchu"></i>
                             删除

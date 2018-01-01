@@ -1,33 +1,43 @@
 package com.practice.manage.controller;
 
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
+import com.practice.po.ManageActivity;
 import com.practice.po.ManageActivityClassify;
 import com.practice.po.ManageActivityTheme;
 import com.practice.po.ManageActivityType;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
+import com.practice.service.BasesService;
+import com.practice.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Xushd  2017/12/25 20:40
  */
+@RequestMapping(value = "/auth/activity")
 @Controller
 public class ActivityController {
 
     @Resource
     private ActivityService activityService;
+    @Resource
+    private BasesService basesService;
 
     /**
      * Activity Type index
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type")
+    @RequestMapping(value = "/type")
     public String indexType(){
 
         return "activity/type";
@@ -38,7 +48,7 @@ public class ActivityController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/list")
+    @RequestMapping(value = "/type/list")
     @ResponseBody
     public JsonResult ajaxTypeList(PageSearchParam param){
 
@@ -51,7 +61,7 @@ public class ActivityController {
      * @param activityType
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/add")
+    @RequestMapping(value = "/type/add")
     @ResponseBody
     public JsonResult ajaxTypeAdd(@RequestAttribute String token, ManageActivityType activityType){
         return activityService.addType(token,activityType);
@@ -63,7 +73,7 @@ public class ActivityController {
      * @param activityType
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/update")
+    @RequestMapping(value = "/type/update")
     @ResponseBody
     public JsonResult ajaxTypeUpdate(@RequestAttribute String token,ManageActivityType activityType){
         return activityService.updateType(token,activityType);
@@ -75,7 +85,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/delete/{id}")
+    @RequestMapping(value = "/type/delete/{id}")
     @ResponseBody
     public JsonResult ajaxTypeDelete(@RequestAttribute String token, @PathVariable Long id){
         return activityService.deleteType(token,id);
@@ -86,7 +96,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/{id}")
+    @RequestMapping(value = "/type/{id}")
     @ResponseBody
     public JsonResult ajaxType(@PathVariable Long id){
         return activityService.getType(id);
@@ -96,7 +106,7 @@ public class ActivityController {
      * Activity type usable list
      * @return
      */
-    @RequestMapping(value = "/auth/activity/type/usable")
+    @RequestMapping(value = "/type/usable")
     @ResponseBody
     public JsonResult ajaxTypeUsable(){
         return activityService.listTypeUsable();
@@ -106,7 +116,7 @@ public class ActivityController {
      * Activity classify index
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify")
+    @RequestMapping(value = "/classify")
     public String indexClassify(){
 
         return "activity/classify";
@@ -117,7 +127,7 @@ public class ActivityController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/list")
+    @RequestMapping(value = "/classify/list")
     @ResponseBody
     public JsonResult ajaxClassifyList(PageSearchParam param){
 
@@ -130,7 +140,7 @@ public class ActivityController {
      * @param activityClassify
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/add")
+    @RequestMapping(value = "/classify/add")
     @ResponseBody
     public JsonResult ajaxClassifyAdd(@RequestAttribute String token, ManageActivityClassify activityClassify){
         return activityService.addClassify(token,activityClassify);
@@ -142,7 +152,7 @@ public class ActivityController {
      * @param activityClassify
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/update")
+    @RequestMapping(value = "/classify/update")
     @ResponseBody
     public JsonResult ajaxClassifyUpdate(@RequestAttribute String token,ManageActivityClassify activityClassify){
         return activityService.updateClassify(token,activityClassify);
@@ -154,7 +164,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/delete/{id}")
+    @RequestMapping(value = "/classify/delete/{id}")
     @ResponseBody
     public JsonResult ajaxClassifyDelete(@RequestAttribute String token, @PathVariable Long id){
         return activityService.deleteClassify(token,id);
@@ -165,7 +175,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/{id}")
+    @RequestMapping(value = "/classify/{id}")
     @ResponseBody
     public JsonResult ajaxClassify(@PathVariable Long id){
         return activityService.getClassify(id);
@@ -175,7 +185,7 @@ public class ActivityController {
      * Activity classify usable list
      * @return
      */
-    @RequestMapping(value = "/auth/activity/classify/usable/{id}")
+    @RequestMapping(value = "/classify/usable/{id}")
     @ResponseBody
     public JsonResult ajaxClassifyUsable(@PathVariable Long id){
         return activityService.listClassifyUsable(id);
@@ -187,7 +197,7 @@ public class ActivityController {
      * Activity theme
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme")
+    @RequestMapping(value = "/theme")
     public String indexTheme(){
 
         return "activity/theme";
@@ -198,7 +208,7 @@ public class ActivityController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/list")
+    @RequestMapping(value = "/theme/list")
     @ResponseBody
     public JsonResult ajaxThemeList(PageSearchParam param){
 
@@ -211,7 +221,7 @@ public class ActivityController {
      * @param activityTheme
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/add")
+    @RequestMapping(value = "/theme/add")
     @ResponseBody
     public JsonResult ajaxThemeAdd(@RequestAttribute String token, ManageActivityTheme activityTheme){
         return activityService.addTheme(token,activityTheme);
@@ -223,7 +233,7 @@ public class ActivityController {
      * @param activityTheme
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/update")
+    @RequestMapping(value = "/theme/update")
     @ResponseBody
     public JsonResult ajaxThemeUpdate(@RequestAttribute String token,ManageActivityTheme activityTheme){
         return activityService.updateTheme(token,activityTheme);
@@ -235,7 +245,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/delete/{id}")
+    @RequestMapping(value = "/theme/delete/{id}")
     @ResponseBody
     public JsonResult ajaxThemeDelete(@RequestAttribute String token, @PathVariable Long id){
         return activityService.deleteTheme(token,id);
@@ -246,7 +256,7 @@ public class ActivityController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/{id}")
+    @RequestMapping(value = "/theme/{id}")
     @ResponseBody
     public JsonResult ajaxTheme(@PathVariable Long id){
         return activityService.getTheme(id);
@@ -256,10 +266,104 @@ public class ActivityController {
      * Activity theme usable list
      * @return
      */
-    @RequestMapping(value = "/auth/activity/theme/usable/{id}")
+    @RequestMapping(value = "/theme/usable/{id}")
     @ResponseBody
     public JsonResult ajaxThemeUsable(@PathVariable Long id){
         return activityService.listThemeUsable(id);
     }
 
+    /**
+     * Activity manage
+     * @return
+     */
+    @RequestMapping(value = "/manage")
+    public String indexActivityManage(Model model){
+
+        JsonResult jsonResult = activityService.listTypeUsable();
+
+        List<KeyValueDTO> keyValueDTOS = JsonUtils.jsonToList(JsonUtils.objectToJson(jsonResult.getData()), KeyValueDTO.class);
+
+        model.addAttribute("types",keyValueDTOS);
+
+
+        return "activity/manage";
+    }
+
+    /**
+     * Activity manage list
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/manage/list")
+    @ResponseBody
+    public JsonResult ajaxActivityManageList(PageSearchParam param){
+        return activityService.listManage(param);
+    }
+
+    /**
+     * Activity manage handle
+     * @return
+     */
+    @RequestMapping(value = "/manage/base/handle")
+    public String indexActivityBaseAdd(Long id,Model model){
+
+        JsonResult jsonResultTypes = activityService.listTypeUsable();
+
+        List<KeyValueDTO> keyValueDTOSTypes = JsonUtils.jsonToList(JsonUtils.objectToJson(jsonResultTypes.getData()), KeyValueDTO.class);
+
+        model.addAttribute("types",keyValueDTOSTypes);
+
+        JsonResult jsonResultBases = basesService.listBasesUsable();
+
+        List<KeyValueDTO> keyValueDTOSBases = JsonUtils.jsonToList(JsonUtils.objectToJson(jsonResultBases.getData()), KeyValueDTO.class);
+
+        model.addAttribute("bases",keyValueDTOSBases);
+
+        if(id==null){
+            model.addAttribute("id","");
+        }else{
+            model.addAttribute("id",id);
+        }
+
+        return "activity/manage_base";
+    }
+
+    /**
+     * Activity manage add
+     * @param manageActivity
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/manage/base/add")
+    @ResponseBody
+    public JsonResult ajaxActivityBaseAdd(ManageActivity manageActivity,@RequestAttribute String token){
+
+        return activityService.addActivityManage(manageActivity,token);
+
+    }
+
+    /**
+     * Activity manage obj
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/manage/obj/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityObj(@PathVariable Long id){
+
+        return activityService.getActivityManage(id);
+    }
+
+    /**
+     * Activity manage update
+     * @param manageActivity
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/manage/update")
+    @ResponseBody
+    public JsonResult ajaxActivityUpdate(ManageActivity manageActivity,@RequestAttribute String token){
+
+        return activityService.updateActivityManage(manageActivity,token);
+    }
 }

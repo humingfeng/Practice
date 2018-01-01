@@ -51,6 +51,12 @@ public interface UserService {
     JsonResult getUser(Long id);
 
     /**
+     * Get user
+     * @param id
+     * @return
+     */
+    ManageUser getUserPO(Long id);
+    /**
      * User logout
      * @param token
      * @return

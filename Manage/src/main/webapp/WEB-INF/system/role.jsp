@@ -71,21 +71,21 @@
                 </td>
                 <td>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small do-action"
+                        <a class="layui-btn layui-btn-xs do-action"
                            data-type="handle" data-url="/auth/jump/system/role_handle?id={{item.id}}" data-name="编辑">
                             <i class="iconfont icon-bianji"></i>
                             编辑
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-warm do-action"
+                        <a class="layui-btn layui-btn-xs layui-btn-warm do-action"
                            data-type="handle" data-url="/auth/jump/system/role_control?id={{item.id}}" data-name="权限菜单控制">
                             <i class="iconfont icon-permission"></i>
                             权限菜单控制
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="delete"
+                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="delete"
                            data-url="/auth/system/role/delete" data-name="{{item.name}},删除会影响拥有该角色的用户" data-index="{{index}}">
                             <i class="iconfont icon-shanchu"></i>
                             删除

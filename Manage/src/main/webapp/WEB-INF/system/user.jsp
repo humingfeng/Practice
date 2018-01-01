@@ -82,20 +82,20 @@
                 </td>
                 <td>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small do-action" data-type="handle" data-url="/auth/jump/system/user_handle?id={{item.id}}" data-name="用户编辑">
+                        <a class="layui-btn layui-btn-xs do-action" data-type="handle" data-url="/auth/jump/system/user_handle?id={{item.id}}" data-name="用户编辑">
                             <i class="iconfont icon-bianji"></i>
                             编辑
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-warm do-action"
+                        <a class="layui-btn layui-btn-xs layui-btn-warm do-action"
                            data-type="handle" data-url="/auth/jump/system/user_control?id={{item.id}}" data-name="分配角色">
                             <i class="iconfont icon-permission"></i>
                             分配角色
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="delete"
+                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="delete"
                            data-url="/auth/system/user/delete" data-name="{{item.account}}" data-index="{{index}}">
                             <i class="iconfont icon-shanchu"></i>
                             删除

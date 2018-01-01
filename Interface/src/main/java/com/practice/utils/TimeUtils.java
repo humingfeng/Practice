@@ -65,6 +65,16 @@ public class TimeUtils {
         return format3.format(date);
     }
 
+    /**
+     * DateTime to String
+     * @param date
+     * @return
+     */
+    public static String getDateStringShort(Date date) {
+        SimpleDateFormat format3 = new SimpleDateFormat(format_default_short);
+        return format3.format(date);
+    }
+
 
     /**
      * 通过字符串获取Date

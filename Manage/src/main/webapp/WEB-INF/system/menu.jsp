@@ -66,14 +66,14 @@
                                 </td>
                                 <td>
                                     <div class="layui-inline">
-                                        <a class="layui-btn layui-btn-small do-action"
+                                        <a class="layui-btn layui-btn-xs do-action"
                                            data-type="handle" data-url="/auth/jump/system/menu_handle?id={{item.id}}" data-name="编辑">
                                             <i class="iconfont icon-bianji"></i>
                                             编辑
                                         </a>
                                     </div>
                                     <div class="layui-inline">
-                                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="delete"
+                                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="delete"
                                            data-url="/auth/system/menu/update" data-name="{{item.name}}" data-id="{{item.id}}" data-parent="0">
                                             <i class="iconfont icon-shanchu"></i>
                                             删除
@@ -98,14 +98,14 @@
                                 </td>
                                 <td>
                                     <div class="layui-inline">
-                                        <a class="layui-btn layui-btn-small do-action"
+                                        <a class="layui-btn layui-btn-xs do-action"
                                            data-type="handle" data-url="/auth/jump/system/menu_handle?id={{child.id}}" data-name="编辑">
                                             <i class="iconfont icon-bianji"></i>
                                             编辑
                                         </a>
                                     </div>
                                     <div class="layui-inline">
-                                        <a class="layui-btn layui-btn-small layui-btn-danger do-action-page" data-type="delete"
+                                        <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="delete"
                                            data-url="/auth/system/menu/delete" data-name="{{child.name}}" data-id="{{child.id}}" data-parent="{{child.parentId}}">
                                             <i class="iconfont icon-shanchu"></i>
                                             删除
