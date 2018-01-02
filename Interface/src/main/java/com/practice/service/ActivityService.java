@@ -1,10 +1,7 @@
 package com.practice.service;
 
 import com.practice.dto.PageSearchParam;
-import com.practice.po.ManageActivity;
-import com.practice.po.ManageActivityClassify;
-import com.practice.po.ManageActivityTheme;
-import com.practice.po.ManageActivityType;
+import com.practice.po.*;
 import com.practice.result.JsonResult;
 
 /**
@@ -174,4 +171,26 @@ public interface ActivityService {
      * @return
      */
     JsonResult updateActivityManage(ManageActivity manageActivity, String token);
+
+    /**
+     * Get activity manage PO
+     * @param id
+     * @return
+     */
+    ManageActivity getActivityManagePO(Long id);
+
+    /**
+     * Get introduce
+     * @param activityId
+     * @return
+     */
+    ManageActivityIntroduce getActivityIntroduce(Long activityId);
+
+    /**
+     * Update introduce
+     * @param token
+     * @param introduce
+     * @return
+     */
+    JsonResult updateActivityIntroduce(String token, ManageActivityIntroduce introduce);
 }

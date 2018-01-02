@@ -103,7 +103,7 @@
                     </div>
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs do-action"
-                           data-type="handle" data-url="/auth/activity/manage/base/handle?id={{item.id}}" data-name="基本信息">
+                           data-type="handle" data-url="/auth/activity/manage/set/{{item.id}}" data-name="基本信息">
                             <i class="iconfont icon-bianji"></i>
                             设置
                         </a>
@@ -124,6 +124,7 @@
 </div>
 <!--分页-->
 <div id="page" style="text-align: right"></div>
+
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript">
     layui.config({base:"/static/js/"}).use(['pagelist','app','form'],function(){

@@ -76,8 +76,8 @@
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
 <script type="text/javascript">
-    layui.config({base:"/static/js/"}).use(['app','form','jsonToForm','layedit'],function(){
-        var $ = layui.$,form = layui.form,app = layui.app,layedit= layui.layedit;
+    layui.config({base:"/static/js/"}).use(['app','form','jsonToForm'],function(){
+        var $ = layui.$,form = layui.form,app = layui.app;
 
         var load;
 

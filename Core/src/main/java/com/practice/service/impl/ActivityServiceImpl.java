@@ -6,10 +6,7 @@ import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
-import com.practice.mapper.ManageActivityClassifyMapper;
-import com.practice.mapper.ManageActivityMapper;
-import com.practice.mapper.ManageActivityThemeMapper;
-import com.practice.mapper.ManageActivityTypeMapper;
+import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
@@ -41,6 +38,8 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityMapper activityMapper;
     @Resource
     private UserService  userService;
+    @Resource
+    private ManageActivityIntroduceMapper introduceMapper;
 
     /**
      * List activity type
@@ -774,6 +773,71 @@ public class ActivityServiceImpl implements ActivityService {
         manageActivity.setUpdateTime(date);
 
         activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get activity manage PO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ManageActivity getActivityManagePO(Long id) {
+        return activityMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * Get introduce
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ManageActivityIntroduce getActivityIntroduce(Long activityId) {
+
+        ManageActivityIntroduceExample example = new ManageActivityIntroduceExample();
+
+        example.createCriteria()
+                .andActivityIdEqualTo(activityId);
+
+        List<ManageActivityIntroduce> introduces = introduceMapper.selectByExample(example);
+
+        if(introduces.size()==0){
+            return new ManageActivityIntroduce();
+        }
+
+        return introduces.get(0);
+    }
+
+    /**
+     * Update introduce
+     *
+     * @param token
+     * @param introduce
+     * @return
+     */
+    @Override
+    public JsonResult updateActivityIntroduce(String token, ManageActivityIntroduce introduce) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+
+        introduce.setUpdateUser(tokeUser.getId());
+
+        introduce.setUpdateTime(new Date());
+
+        if(introduce.getId()==0L){
+
+            introduce.setId(null);
+
+            introduceMapper.insertSelective(introduce);
+        }else{
+
+            introduceMapper.updateByPrimaryKeySelective(introduce);
+
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
