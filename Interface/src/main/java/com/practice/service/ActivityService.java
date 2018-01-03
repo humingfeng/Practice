@@ -279,4 +279,35 @@ public interface ActivityService {
      * @return
      */
     JsonResult delLeader(Long id);
+
+    /**
+     * List supervise
+     * @param activityId
+     * @return
+     */
+    JsonResult listSupervise(Long activityId);
+
+    /**
+     * Add supervise
+     * @param activityId
+     * @param token
+     * @param userId
+     * @return
+     */
+    JsonResult addSupervise(Long activityId, String token, Long userId);
+
+    /**
+     * Del supervise
+     * @param id
+     * @return
+     */
+    JsonResult delSupervise(Long id);
+
+    /**
+     * Close supervise
+     * @param activityId
+     * @param status
+     * @return
+     */
+    JsonResult statusSupervise(Long activityId,int status);
 }

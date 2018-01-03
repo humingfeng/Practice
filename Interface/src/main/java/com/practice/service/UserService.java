@@ -92,4 +92,11 @@ public interface UserService {
      * @return
      */
     List<String> listUserPermission(String token);
+
+    /**
+     * List users by organize
+     * @param token
+     * @return
+     */
+    List<ManageUser> listUserByOrganize(String token);
 }

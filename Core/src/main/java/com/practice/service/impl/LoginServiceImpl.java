@@ -67,7 +67,7 @@ public class LoginServiceImpl implements LoginService {
             }
 
             try {
-                String token = JwtTokenUtil.createJWT(JsonUtils.objectToJson(new TokenUserDTO(manageUser.getId(),manageUser.getNickName(),manageUser.getHeadImg())));
+                String token = JwtTokenUtil.createJWT(JsonUtils.objectToJson(new TokenUserDTO(manageUser.getId(),manageUser.getNickName(),manageUser.getHeadImg(),manageUser.getOrganizeId())));
 
 
 

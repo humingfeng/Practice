@@ -14,13 +14,24 @@ public class TokenUserDTO implements Serializable{
 
     private String headImg;
 
+    private Long oid;
+
+    public Long getOid() {
+        return oid;
+    }
+
+    public void setOid(Long oid) {
+        this.oid = oid;
+    }
+
     public TokenUserDTO() {
     }
 
-    public TokenUserDTO(Long id, String account,String headImg) {
+    public TokenUserDTO(Long id, String account,String headImg,Long oid) {
         this.id = id;
         this.account = account;
         this.headImg = headImg;
+        this.oid = oid;
     }
 
     public Long getId() {

@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Xushd  2017/12/21 22:07
  */
 @Controller
-public class LongController {
+public class LoginController {
 
     @Resource
     LoginService loginService;

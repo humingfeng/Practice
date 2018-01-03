@@ -222,13 +222,12 @@ layui.define(['layer', 'sha256', 'cookie'], function (e) {
         layer.confirm(t, {
             title: "询问",
             resize: false,
-            btn: ['确定删除', '容我想想'],
-            btnAlign: 'c',
+            btn: ['确定', '取消'],
             icon: 3
         }, function () {
             c();
         }, function () {
-            app.layerMessage("好吧！");
+           // app.layerMessage("好吧！");
         });
     };
     /**

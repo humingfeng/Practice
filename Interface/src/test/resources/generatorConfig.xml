@@ -13,7 +13,7 @@
         </commentGenerator>
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.2.82:3306/practice" userId="root"
+                        connectionURL="jdbc:mysql://192.168.99.110:3306/practice" userId="root"
                         password="123456">
         </jdbcConnection>
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
@@ -77,7 +77,9 @@
 
         <!--<table schema="" tableName="manage_activity_attention"/>-->
 
-        <table schema="" tableName="manage_activity_leader"/>
+        <!--<table schema="" tableName="manage_activity_leader"/>-->
+
+        <!--<table schema="" tableName="manage_activity_supervise"/>-->
 
 
 

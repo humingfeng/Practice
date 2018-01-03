@@ -8,8 +8,8 @@ import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.BasesService;
 import com.practice.service.DictionaryService;
+import com.practice.service.UserService;
 import com.practice.utils.JsonUtils;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +35,8 @@ public class ActivityController {
     private BasesService basesService;
     @Resource
     private DictionaryService dictionaryService;
+    @Resource
+    private UserService userService;
 
     /**
      * Activity Type index
@@ -554,7 +556,12 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/leader/{activityId}")
-    public String indexActivityLeader(@PathVariable Long activityId, Model model) {
+    public String indexActivityLeader(@PathVariable Long activityId, Model model,@RequestAttribute String token) {
+
+
+        List<ManageUser> userList = userService.listUserByOrganize(token);
+
+        model.addAttribute("userList",userList);
 
         model.addAttribute("activityId",activityId);
 
@@ -580,7 +587,7 @@ public class ActivityController {
      * @param userIds
      * @return
      */
-    @RequestMapping(value = "/leader/add/activityId")
+    @RequestMapping(value = "/leader/add/{activityId}")
     @ResponseBody
     public JsonResult ajaxActivityLeaderAdd(@PathVariable Long activityId,
                                             @RequestAttribute String token,
@@ -637,9 +644,68 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/supervise/{activityId}")
-    public String indexActivitySupervise(@PathVariable Long activityId) {
+    public String indexActivitySupervise(@PathVariable Long activityId,Model model,@RequestAttribute String token) {
+
+        ManageActivity activityManage = activityService.getActivityManagePO(activityId);
+
+        model.addAttribute("status",activityManage.getCheckSupervise());
+
+        List<ManageUser> userList = userService.listUserByOrganize(token);
+
+        model.addAttribute("userList",userList);
 
         return "activity/supervise";
+    }
+
+    /**
+     * Activity supervise list
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/supervise/list/{activityId}")
+    @ResponseBody
+    public JsonResult ajaxActivitySuperviseList(@PathVariable Long activityId){
+
+        return activityService.listSupervise(activityId);
+    }
+
+    /**
+     * Activity supervise add
+     * @param activityId
+     * @param token
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/supervise/add/{activityId}")
+    @ResponseBody
+    public JsonResult ajaxActivitySuperviseAdd(@PathVariable Long activityId,
+                                               @RequestAttribute String token,
+                                               Long userId){
+        return activityService.addSupervise(activityId,token,userId);
+    }
+
+    /**
+     * Activity supervise del
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/supervise/del/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivitySuperviseDel(@PathVariable Long id){
+
+        return activityService.delSupervise(id);
+    }
+
+    /**
+     * Activity close supervise
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/supervise/status/{activityId}/{status}")
+    @ResponseBody
+    public JsonResult ajaxActivitySuperviseStatus(@PathVariable Long activityId,@PathVariable int status){
+
+        return activityService.statusSupervise(activityId,status);
     }
 
     /**
@@ -686,6 +752,10 @@ public class ActivityController {
      */
     @RequestMapping(value = "/attention/{activityId}")
     public String indexActivityAttention(@PathVariable Long activityId, Model model) {
+
+        List<ManageDictionary> manageDictionaries = dictionaryService.listDictionaryByEnumFromCache(DicParentEnum.ATTENTION_TYPE);
+
+        model.addAttribute("types",manageDictionaries);
 
         model.addAttribute("activityId",activityId);
 

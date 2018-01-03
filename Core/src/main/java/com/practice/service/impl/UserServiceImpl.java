@@ -161,6 +161,31 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * List users by organize
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public List<ManageUser> listUserByOrganize(String token) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        Long oid = tokeUser.getOid();
+
+
+        ManageUserExample example = new ManageUserExample();
+
+        example.createCriteria()
+                .andOrganizeIdEqualTo(oid)
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        return userMapper.selectByExample(example);
+
+    }
+
+    /**
      * List  user nav
      *
      * @param token
@@ -293,7 +318,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if (manageUser.getStatus() == 0 && manageUser.getId().equals(tokeUser.getId())) {
+        if (manageUser.getStatus()!=null && manageUser.getStatus() == 0 && manageUser.getId().equals(tokeUser.getId())) {
             return JsonResult.error(OperateEnum.USE_STATUS_ERROR);
         }
 

@@ -39,7 +39,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Resource
     private ManageActivityMapper activityMapper;
     @Resource
-    private UserService  userService;
+    private UserService userService;
     @Resource
     private ManageActivityIntroduceMapper introduceMapper;
     @Resource
@@ -50,6 +50,8 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityLeaderMapper leaderMapper;
     @Resource
     private DictionaryService dictionaryService;
+    @Resource
+    private ManageActivitySuperviseMapper superviseMapper;
 
     /**
      * List activity type
@@ -60,7 +62,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listType(PageSearchParam param) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         ManageActivityTypeExample typeExample = new ManageActivityTypeExample();
 
@@ -68,7 +70,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         String filed = "name";
 
-        if(param.getFiled(filed)!=null){
+        if (param.getFiled(filed) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(filed)));
         }
 
@@ -99,7 +101,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = typeMapper.countByExample(typeExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error(OperateEnum.REPEAT);
         }
 
@@ -135,7 +137,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        if(StringUtils.isNotBlank(activityType.getName())){
+        if (StringUtils.isNotBlank(activityType.getName())) {
 
             ManageActivityTypeExample typeExample = new ManageActivityTypeExample();
 
@@ -143,7 +145,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             long l = typeMapper.countByExample(typeExample);
 
-            if(l>0){
+            if (l > 0) {
                 return JsonResult.error(OperateEnum.REPEAT);
             }
         }
@@ -177,7 +179,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = classifyMapper.countByExample(classifyExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error("该类型下有分类，不可删除");
         }
 
@@ -223,7 +225,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<KeyValueDTO> list = new ArrayList<>();
 
         for (ManageActivityType manageActivityType : manageActivityTypes) {
-            list.add(new KeyValueDTO(manageActivityType.getId(),manageActivityType.getName()));
+            list.add(new KeyValueDTO(manageActivityType.getId(), manageActivityType.getName()));
         }
 
         return JsonResult.success(list);
@@ -238,7 +240,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listClassify(PageSearchParam param) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         ManageActivityClassifyExample classifyExample = new ManageActivityClassifyExample();
 
@@ -246,7 +248,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         String filed = "name";
 
-        if(param.getFiled(filed)!=null){
+        if (param.getFiled(filed) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(filed)));
         }
 
@@ -282,7 +284,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = classifyMapper.countByExample(classifyExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error(OperateEnum.REPEAT);
         }
 
@@ -317,7 +319,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        if(StringUtils.isNotBlank(activityClassify.getName())){
+        if (StringUtils.isNotBlank(activityClassify.getName())) {
 
             ManageActivityClassifyExample classifyExample = new ManageActivityClassifyExample();
 
@@ -325,7 +327,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             long l = classifyMapper.countByExample(classifyExample);
 
-            if(l>0){
+            if (l > 0) {
                 return JsonResult.error(OperateEnum.REPEAT);
             }
 
@@ -358,7 +360,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = themeMapper.countByExample(themeExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error("该分类下有主题，不可删除");
         }
 
@@ -410,7 +412,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<KeyValueDTO> list = new ArrayList<>();
 
         for (ManageActivityClassify activityClassify : manageActivityClassifies) {
-            list.add(new KeyValueDTO(activityClassify.getId(),activityClassify.getName()));
+            list.add(new KeyValueDTO(activityClassify.getId(), activityClassify.getName()));
         }
 
         return JsonResult.success(list);
@@ -425,7 +427,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listTheme(PageSearchParam param) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         String filed = "name";
 
@@ -433,7 +435,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityThemeExample.Criteria criteria = themeExample.createCriteria().andDelflagEqualTo(0);
 
-        if(param.getFiled(filed)!=null){
+        if (param.getFiled(filed) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(filed)));
         }
 
@@ -471,7 +473,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = themeMapper.countByExample(themeExample);
 
-        if(l>0){
+        if (l > 0) {
 
             return JsonResult.error(OperateEnum.REPEAT);
         }
@@ -508,7 +510,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        if(StringUtils.isNotBlank(activityTheme.getName())){
+        if (StringUtils.isNotBlank(activityTheme.getName())) {
 
             ManageActivityThemeExample themeExample = new ManageActivityThemeExample();
 
@@ -516,7 +518,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             long l = themeMapper.countByExample(themeExample);
 
-            if(l>0){
+            if (l > 0) {
 
                 return JsonResult.error(OperateEnum.REPEAT);
             }
@@ -551,7 +553,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = activityMapper.countByExample(manageActivityExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error("该主题已被应用到活动中，无法删除");
         }
 
@@ -603,7 +605,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<KeyValueDTO> list = new ArrayList<>();
 
         for (ManageActivityTheme manageActivityTheme : manageActivityThemes) {
-            list.add(new KeyValueDTO(manageActivityTheme.getId(),manageActivityTheme.getName()));
+            list.add(new KeyValueDTO(manageActivityTheme.getId(), manageActivityTheme.getName()));
         }
 
         return JsonResult.success(list);
@@ -618,7 +620,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listManage(PageSearchParam param) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         ManageActivityExample activityExample = new ManageActivityExample();
 
@@ -652,27 +654,25 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        ManageUser userPO = userService.getUserPO(tokeUser.getId());
-
         manageActivity.setId(null);
 
-        manageActivity.setOrganizeId(userPO.getOrganizeId());
+        manageActivity.setOrganizeId(tokeUser.getOid());
 
         Date date = new Date();
 
-        if(StringUtils.isBlank(manageActivity.getCloseTimeStr())){
+        if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
-        }else{
+        } else {
             manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
         }
 
-        if(manageActivity.getSign()==1){
+        if (manageActivity.getSign() == 1) {
             manageActivity.setCheckSign(3);
-        }else{
+        } else {
             manageActivity.setCheckSign(0);
         }
 
-        if(StringUtils.isNotBlank(manageActivity.getTimeStr())){
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr())) {
             String timeStr = manageActivity.getTimeStr();
 
             String[] split = timeStr.split(" - ");
@@ -724,7 +724,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult getActivityManage(Long id) {
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
-        if(manageActivity.getCloseType()==1){
+        if (manageActivity.getCloseType() == 1) {
             manageActivity.setCloseTimeStr(TimeUtils.getDateStringShort(manageActivity.getCloseTime()));
         }
 
@@ -732,7 +732,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Date endTime = manageActivity.getEndTime();
 
-        manageActivity.setTimeStr(TimeUtils.getDateString(beginTime)+" - "+TimeUtils.getDateString(endTime));
+        manageActivity.setTimeStr(TimeUtils.getDateString(beginTime) + " - " + TimeUtils.getDateString(endTime));
 
         return JsonResult.success(manageActivity);
     }
@@ -751,19 +751,19 @@ public class ActivityServiceImpl implements ActivityService {
 
         Date date = new Date();
 
-        if(StringUtils.isBlank(manageActivity.getCloseTimeStr())){
+        if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
-        }else{
+        } else {
             manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
         }
 
-        if(manageActivity.getSign()==1){
+        if (manageActivity.getSign() == 1) {
             manageActivity.setCheckSign(3);
-        }else{
+        } else {
             manageActivity.setCheckSign(0);
         }
 
-        if(StringUtils.isNotBlank(manageActivity.getTimeStr())){
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr())) {
             String timeStr = manageActivity.getTimeStr();
 
             String[] split = timeStr.split(" - ");
@@ -814,7 +814,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<ManageActivityIntroduce> introduces = introduceMapper.selectByExample(example);
 
-        if(introduces.size()==0){
+        if (introduces.size() == 0) {
             return new ManageActivityIntroduce();
         }
 
@@ -838,12 +838,12 @@ public class ActivityServiceImpl implements ActivityService {
 
         introduce.setUpdateTime(new Date());
 
-        if(introduce.getId()==0L){
+        if (introduce.getId() == 0L) {
 
             introduce.setId(null);
 
             introduceMapper.insertSelective(introduce);
-        }else{
+        } else {
 
             introduceMapper.updateByPrimaryKeySelective(introduce);
 
@@ -899,7 +899,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult addApply(String token,Long activityId, String gradeIds) {
+    public JsonResult addApply(String token, Long activityId, String gradeIds) {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
@@ -911,36 +911,17 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<ManageActivityApply> list = new ArrayList<>();
 
-        String[] grades = gradeIds.split(",");
+        if (dicIds.contains(Long.valueOf(gradeIds))) {
 
-        for (String grade : grades) {
+            ManageDictionary dictionary = dictionaryService.getDictionaryPO(Long.valueOf(gradeIds));
 
-            if(dicIds.contains(Long.valueOf(grade))){
+            String param = dictionary.getParam();
 
-                ManageDictionary dictionary = dictionaryService.getDictionaryPO(Long.valueOf(grade));
+            String[] split = param.split("\\|");
 
-                String param = dictionary.getParam();
+            for (String s : split) {
+                Long gradeId = Long.valueOf(s);
 
-                String[] split = param.split("\\|");
-
-                for (String s : split) {
-                    Long gradeId = Long.valueOf(s);
-
-                    ManageActivityApply activityApply = new ManageActivityApply();
-
-                    activityApply.setId(null);
-
-                    activityApply.setActivityId(activityId);
-
-                    activityApply.setUpdateTime(new Date());
-
-                    activityApply.setUpdateUser(tokeUser.getId());
-
-                    activityApply.setGradeId(gradeId);
-
-                    list.add(activityApply);
-                }
-            }else{
                 ManageActivityApply activityApply = new ManageActivityApply();
 
                 activityApply.setId(null);
@@ -951,14 +932,42 @@ public class ActivityServiceImpl implements ActivityService {
 
                 activityApply.setUpdateUser(tokeUser.getId());
 
-                activityApply.setGradeId(Long.valueOf(grade));
+                activityApply.setGradeId(gradeId);
 
                 list.add(activityApply);
             }
+        } else {
+            ManageActivityApply activityApply = new ManageActivityApply();
+
+            activityApply.setId(null);
+
+            activityApply.setActivityId(activityId);
+
+            activityApply.setUpdateTime(new Date());
+
+            activityApply.setUpdateUser(tokeUser.getId());
+
+            activityApply.setGradeId(Long.valueOf(gradeIds));
+
+            list.add(activityApply);
+
         }
 
+        ManageActivityApplyExample example = new ManageActivityApplyExample();
+
         for (ManageActivityApply manageActivityApply : list) {
-            applyMapper.insertSelective(manageActivityApply);
+
+            example.clear();
+
+            example.createCriteria().andGradeIdEqualTo(manageActivityApply.getGradeId()).andActivityIdEqualTo(activityId);
+
+            long l = applyMapper.countByExample(example);
+
+            if (l == 0L) {
+                applyMapper.insertSelective(manageActivityApply);
+            }
+
+
         }
 
         return JsonResult.success(OperateEnum.SUCCESS);
@@ -972,6 +981,19 @@ public class ActivityServiceImpl implements ActivityService {
      */
     @Override
     public JsonResult delApply(Long id) {
+
+        ManageActivityApply manageActivityApply = applyMapper.selectByPrimaryKey(id);
+
+        ManageActivityApplyExample example = new ManageActivityApplyExample();
+
+        example.createCriteria().andActivityIdEqualTo(manageActivityApply.getActivityId());
+
+        long l = applyMapper.countByExample(example);
+
+        if (l == 1) {
+
+            return JsonResult.error("活动必须有一个或多个适用年级");
+        }
 
         applyMapper.deleteByPrimaryKey(id);
 
@@ -1105,21 +1127,43 @@ public class ActivityServiceImpl implements ActivityService {
 
         Date date = new Date();
 
+        ManageActivityLeaderExample example = new ManageActivityLeaderExample();
         for (String s : split) {
 
-            ManageActivityLeader leader = new ManageActivityLeader();
 
-            leader.setMain(0);
+            example.clear();
 
-            leader.setActivityId(activityId);
+            example.createCriteria().andUserIdEqualTo(Long.valueOf(s)).andActivityIdEqualTo(activityId);
 
-            leader.setUserId(Long.valueOf(s));
+            long l = leaderMapper.countByExample(example);
 
-            leader.setUpdateUser(tokeUser.getId());
+            if (l == 0L) {
 
-            leader.setUpdateTime(date);
+                example.clear();
 
-            leaderMapper.insertSelective(leader);
+                example.createCriteria().andActivityIdEqualTo(activityId);
+
+                long l1 = leaderMapper.countByExample(example);
+
+                ManageActivityLeader leader = new ManageActivityLeader();
+
+                if (l1 == 0L) {
+                    leader.setMain(1);
+                } else {
+                    leader.setMain(0);
+                }
+
+                leader.setActivityId(activityId);
+
+                leader.setUserId(Long.valueOf(s));
+
+                leader.setUpdateUser(tokeUser.getId());
+
+                leader.setUpdateTime(date);
+
+                leaderMapper.insertSelective(leader);
+            }
+
 
         }
 
@@ -1142,7 +1186,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityLeader leader = new ManageActivityLeader();
 
-        if(main==0){
+        if (main == 0) {
 
             ManageActivityLeaderExample example = new ManageActivityLeaderExample();
 
@@ -1152,7 +1196,7 @@ public class ActivityServiceImpl implements ActivityService {
                     .andIdNotEqualTo(id);
             long l = leaderMapper.countByExample(example);
 
-            if(l==0){
+            if (l == 0) {
                 return JsonResult.error("只剩这个主负责人了！");
             }
         }
@@ -1183,10 +1227,138 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityLeader manageActivityLeader = leaderMapper.selectByPrimaryKey(id);
 
-        if(manageActivityLeader.getMain()==1){
+        if (manageActivityLeader.getMain() == 1) {
             return JsonResult.error("这是主负责人，要想删除先免去主负责人");
         }
+
+        ManageActivityLeaderExample example = new ManageActivityLeaderExample();
+
+        example.createCriteria().andActivityIdEqualTo(manageActivityLeader.getActivityId());
+
+        long l = leaderMapper.countByExample(example);
+
+        if (l == 1) {
+
+            return JsonResult.error("活动必须有一个或多个负责人");
+        }
+
+
         leaderMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List supervise
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listSupervise(Long activityId) {
+
+        ManageActivitySuperviseExample example = new ManageActivitySuperviseExample();
+
+        example.createCriteria().andActivityIdEqualTo(activityId);
+
+        List<ManageActivitySupervise> manageActivitySupervises = superviseMapper.selectByExample(example);
+
+        for (ManageActivitySupervise supervise : manageActivitySupervises) {
+
+            ManageUser user = userService.getUserPO(supervise.getUserId());
+
+            supervise.setUserName(user.getNickName());
+
+        }
+
+        return JsonResult.success(manageActivitySupervises);
+    }
+
+    /**
+     * Add supervise
+     *
+     * @param activityId
+     * @param token
+     * @param userId
+     * @return
+     */
+    @Override
+    public JsonResult addSupervise(Long activityId, String token, Long userId) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivitySuperviseExample example = new ManageActivitySuperviseExample();
+
+        example.createCriteria().andActivityIdEqualTo(activityId).andUserIdEqualTo(userId);
+
+        long l = superviseMapper.countByExample(example);
+
+        if(l>0){
+            return JsonResult.error(OperateEnum.REPEAT);
+        }
+
+        ManageActivitySupervise supervise = new ManageActivitySupervise();
+
+        supervise.setId(null);
+
+        supervise.setActivityId(activityId);
+
+        supervise.setUserId(userId);
+
+        supervise.setUpdateTime(new Date());
+
+        supervise.setUpdateUser(tokeUser.getId());
+
+        superviseMapper.insertSelective(supervise);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del supervise
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delSupervise(Long id) {
+
+        ManageActivitySupervise supervise = superviseMapper.selectByPrimaryKey(id);
+
+        ManageActivitySuperviseExample example = new ManageActivitySuperviseExample();
+
+        example.createCriteria().andActivityIdEqualTo(supervise.getActivityId());
+
+        long l = superviseMapper.countByExample(example);
+
+        if (l == 1) {
+            return JsonResult.error("活动监督人不能一个都没有，除非关闭这个功能");
+        }
+
+
+        superviseMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+
+    }
+
+    /**
+     * Close supervise
+     *
+     * @param activityId
+     * @param status
+     * @return
+     */
+    @Override
+    public JsonResult statusSupervise(Long activityId,int status) {
+
+        ManageActivity activity = new ManageActivity();
+
+        activity.setId(activityId);
+
+        activity.setCheckSupervise(status);
+
+        activityMapper.updateByPrimaryKeySelective(activity);
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
