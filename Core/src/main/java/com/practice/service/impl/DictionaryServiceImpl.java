@@ -175,4 +175,15 @@ public class DictionaryServiceImpl implements DictionaryService {
 
         return list;
     }
+
+    /**
+     * Get dictionary PO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ManageDictionary getDictionaryPO(Long id) {
+        return dictionaryMapper.selectByPrimaryKey(id);
+    }
 }

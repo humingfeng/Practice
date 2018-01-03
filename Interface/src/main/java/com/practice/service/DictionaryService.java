@@ -56,4 +56,10 @@ public interface DictionaryService {
      */
     List<ManageDictionary> listDictionaryByEnumFromCache(DicParentEnum dicParentEnum);
 
+    /**
+     * Get dictionary PO
+     * @param id
+     * @return
+     */
+    ManageDictionary getDictionaryPO(Long id);
 }

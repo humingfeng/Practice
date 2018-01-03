@@ -14,6 +14,7 @@ public enum DicParentEnum {
      */
     USER_TYPE(1L, "用户类型", "USER_TYPE"),
     ORGANIZE_TYPE(2L, "组织类型", "ORGANIZE_TYPE"),
+    ATTENTION_TYPE(46L, "注意事项类型", "ATTENTION_TYPE"),
     PERIOD(3L, "学段", "PERIOD");
 
     private Long id;

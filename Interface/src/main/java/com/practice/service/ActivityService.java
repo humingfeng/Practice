@@ -193,4 +193,90 @@ public interface ActivityService {
      * @return
      */
     JsonResult updateActivityIntroduce(String token, ManageActivityIntroduce introduce);
+
+    /**
+     * List apply
+     * @param activityId
+     * @return
+     */
+    JsonResult listApply(Long activityId);
+
+    /**
+     * Add apply
+     * @param token
+     * @param activityId
+     * @param gradeIds
+     * @return
+     */
+    JsonResult addApply(String token,Long activityId, String gradeIds);
+
+    /**
+     * Del apply
+     * @param id
+     * @return
+     */
+    JsonResult delApply(Long id);
+
+    /**
+     * List attention
+     * @param activityId
+     * @return
+     */
+    JsonResult listAttention(Long activityId);
+
+    /**
+     * Add attention
+     * @param token
+     * @param attention
+     * @return
+     */
+    JsonResult addAttention(String token, ManageActivityAttention attention);
+
+    /**
+     * Update attention
+     * @param token
+     * @param attention
+     * @return
+     */
+    JsonResult updateAttention(String token, ManageActivityAttention attention);
+
+    /**
+     * Del attention
+     * @param id
+     * @return
+     */
+    JsonResult delAttention(Long id);
+
+    /**
+     * List leader
+     * @param activityId
+     * @return
+     */
+    JsonResult listLeader(Long activityId);
+
+    /**
+     * Add leader
+     * @param token
+     * @param activityId
+     * @param userIds
+     * @return
+     */
+    JsonResult addLeader(String token, Long activityId, String userIds);
+
+    /**
+     * update leader
+     * @param token
+     * @param id
+     * @param activityId
+     * @param main
+     * @return
+     */
+    JsonResult updateLeader(String token, Long id, Long activityId, int main);
+
+    /**
+     * del leader
+     * @param id
+     * @return
+     */
+    JsonResult delLeader(Long id);
 }

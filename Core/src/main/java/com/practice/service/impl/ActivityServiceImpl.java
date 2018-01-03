@@ -2,6 +2,7 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.ApplyDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
@@ -10,6 +11,7 @@ import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
+import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
@@ -40,6 +42,14 @@ public class ActivityServiceImpl implements ActivityService {
     private UserService  userService;
     @Resource
     private ManageActivityIntroduceMapper introduceMapper;
+    @Resource
+    private ManageActivityApplyMapper applyMapper;
+    @Resource
+    private ManageActivityAttentionMapper attentionMapper;
+    @Resource
+    private ManageActivityLeaderMapper leaderMapper;
+    @Resource
+    private DictionaryService dictionaryService;
 
     /**
      * List activity type
@@ -838,6 +848,345 @@ public class ActivityServiceImpl implements ActivityService {
             introduceMapper.updateByPrimaryKeySelective(introduce);
 
         }
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List apply
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listApply(Long activityId) {
+
+        ManageActivityApplyExample applyExample = new ManageActivityApplyExample();
+
+        applyExample.createCriteria()
+                .andActivityIdEqualTo(activityId);
+
+        List<ManageActivityApply> activityApplies = applyMapper.selectByExample(applyExample);
+
+        List<ApplyDTO> list = new ArrayList<>();
+        for (ManageActivityApply activityApply : activityApplies) {
+
+            ApplyDTO applyDTO = new ApplyDTO();
+
+            applyDTO.setId(activityApply.getId());
+
+            applyDTO.setGradeId(activityApply.getGradeId());
+
+            ManageDictionary dictionary = dictionaryService.getDictionaryPO(activityApply.getGradeId());
+
+            applyDTO.setGrade(dictionary.getName());
+
+            applyDTO.setPeriod(dictionary.getParam());
+
+            list.add(applyDTO);
+
+        }
+
+        return JsonResult.success(list);
+    }
+
+    /**
+     * Add apply
+     *
+     * @param token
+     * @param activityId
+     * @param gradeIds
+     * @return
+     */
+    @Override
+    public JsonResult addApply(String token,Long activityId, String gradeIds) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        List<Long> dicIds = new ArrayList<>();
+
+        dicIds.add(26L);
+        dicIds.add(27L);
+        dicIds.add(28L);
+
+        List<ManageActivityApply> list = new ArrayList<>();
+
+        String[] grades = gradeIds.split(",");
+
+        for (String grade : grades) {
+
+            if(dicIds.contains(Long.valueOf(grade))){
+
+                ManageDictionary dictionary = dictionaryService.getDictionaryPO(Long.valueOf(grade));
+
+                String param = dictionary.getParam();
+
+                String[] split = param.split("\\|");
+
+                for (String s : split) {
+                    Long gradeId = Long.valueOf(s);
+
+                    ManageActivityApply activityApply = new ManageActivityApply();
+
+                    activityApply.setId(null);
+
+                    activityApply.setActivityId(activityId);
+
+                    activityApply.setUpdateTime(new Date());
+
+                    activityApply.setUpdateUser(tokeUser.getId());
+
+                    activityApply.setGradeId(gradeId);
+
+                    list.add(activityApply);
+                }
+            }else{
+                ManageActivityApply activityApply = new ManageActivityApply();
+
+                activityApply.setId(null);
+
+                activityApply.setActivityId(activityId);
+
+                activityApply.setUpdateTime(new Date());
+
+                activityApply.setUpdateUser(tokeUser.getId());
+
+                activityApply.setGradeId(Long.valueOf(grade));
+
+                list.add(activityApply);
+            }
+        }
+
+        for (ManageActivityApply manageActivityApply : list) {
+            applyMapper.insertSelective(manageActivityApply);
+        }
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del apply
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delApply(Long id) {
+
+        applyMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List attention
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listAttention(Long activityId) {
+
+        ManageActivityAttentionExample example = new ManageActivityAttentionExample();
+
+        example.createCriteria()
+                .andActivityIdEqualTo(activityId);
+
+        List<ManageActivityAttention> attentions = attentionMapper.selectByExample(example);
+
+        for (ManageActivityAttention attention : attentions) {
+
+            attention.setTypeStr(dictionaryService.getDictionaryPO(attention.getType()).getName());
+
+        }
+
+        return JsonResult.success(attentions);
+    }
+
+    /**
+     * Add attention
+     *
+     * @param token
+     * @param attention
+     * @return
+     */
+    @Override
+    public JsonResult addAttention(String token, ManageActivityAttention attention) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        attention.setId(null);
+
+        attention.setUpdateTime(new Date());
+
+        attention.setUpdateUser(tokeUser.getId());
+
+        attentionMapper.insertSelective(attention);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Update attention
+     *
+     * @param token
+     * @param attention
+     * @return
+     */
+    @Override
+    public JsonResult updateAttention(String token, ManageActivityAttention attention) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+
+        attention.setUpdateTime(new Date());
+
+        attention.setUpdateUser(tokeUser.getId());
+
+        attentionMapper.updateByPrimaryKeySelective(attention);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del attention
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delAttention(Long id) {
+
+        attentionMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List leader
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listLeader(Long activityId) {
+
+        ManageActivityLeaderExample leaderExample = new ManageActivityLeaderExample();
+
+        leaderExample.createCriteria()
+                .andActivityIdEqualTo(activityId);
+
+        List<ManageActivityLeader> leaders = leaderMapper.selectByExample(leaderExample);
+
+        for (ManageActivityLeader leader : leaders) {
+
+            ManageUser userPO = userService.getUserPO(leader.getUserId());
+
+            leader.setUserName(userPO.getNickName());
+        }
+
+        return JsonResult.success(leaders);
+    }
+
+    /**
+     * Add leader
+     *
+     * @param token
+     * @param activityId
+     * @param userIds
+     * @return
+     */
+    @Override
+    public JsonResult addLeader(String token, Long activityId, String userIds) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        String[] split = userIds.split(",");
+
+        Date date = new Date();
+
+        for (String s : split) {
+
+            ManageActivityLeader leader = new ManageActivityLeader();
+
+            leader.setMain(0);
+
+            leader.setActivityId(activityId);
+
+            leader.setUserId(Long.valueOf(s));
+
+            leader.setUpdateUser(tokeUser.getId());
+
+            leader.setUpdateTime(date);
+
+            leaderMapper.insertSelective(leader);
+
+        }
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * update leader
+     *
+     * @param token
+     * @param id
+     * @param activityId
+     * @param main
+     * @return
+     */
+    @Override
+    public JsonResult updateLeader(String token, Long id, Long activityId, int main) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivityLeader leader = new ManageActivityLeader();
+
+        if(main==0){
+
+            ManageActivityLeaderExample example = new ManageActivityLeaderExample();
+
+            example.createCriteria()
+                    .andActivityIdEqualTo(activityId)
+                    .andMainEqualTo(1)
+                    .andIdNotEqualTo(id);
+            long l = leaderMapper.countByExample(example);
+
+            if(l==0){
+                return JsonResult.error("只剩这个主负责人了！");
+            }
+        }
+
+        leader.setId(id);
+
+        leader.setActivityId(activityId);
+
+        leader.setMain(main);
+
+        leader.setUpdateTime(new Date());
+
+        leader.setUpdateUser(tokeUser.getId());
+
+        leaderMapper.updateByPrimaryKeySelective(leader);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * del leader
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delLeader(Long id) {
+
+        ManageActivityLeader manageActivityLeader = leaderMapper.selectByPrimaryKey(id);
+
+        if(manageActivityLeader.getMain()==1){
+            return JsonResult.error("这是主负责人，要想删除先免去主负责人");
+        }
+        leaderMapper.deleteByPrimaryKey(id);
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
