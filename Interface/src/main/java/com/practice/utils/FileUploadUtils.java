@@ -3,6 +3,7 @@ package com.practice.utils;
 import com.aliyun.oss.OSSClient;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -28,6 +29,24 @@ public class FileUploadUtils {
         return newFileName;
 
     }
+
+    /**
+     * Upload stream to oss
+     * @param param
+     * @param inputStream
+     * @return
+     */
+    public static String UploadStreamOSS(Map<String, String> param, InputStream inputStream){
+
+        OSSClient client = new OSSClient(param.get("endpoint"), param.get("accessKeyId"), param.get("accessKeySecret"));
+
+        String newFileName = IDUtils.genImageName() + ".png";
+
+        client.putObject(param.get("bucketName"),param.get("key")+newFileName, inputStream);
+
+        return newFileName;
+    }
+
 
 
 }

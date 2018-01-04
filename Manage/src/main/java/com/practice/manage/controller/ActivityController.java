@@ -632,9 +632,56 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/sign/{activityId}")
-    public String indexActivitySign(@PathVariable Long activityId) {
+    public String indexActivitySign(@PathVariable Long activityId,Model model) {
+
+        ManageActivitySign sign = activityService.getActivitySign(activityId);
+
+        model.addAttribute("sign",sign);
+
+        model.addAttribute("activityId",activityId);
 
         return "activity/sign";
+    }
+
+    /**
+     * Activity sign update
+     * @param token
+     * @param sign
+     * @return
+     */
+    @RequestMapping(value = "/sign/update")
+    @ResponseBody
+    public JsonResult ajaxActivitySignUpdate(@RequestAttribute String token,ManageActivitySign sign){
+
+        return activityService.updateActivitySign(token,sign);
+    }
+
+    /**
+     * Activity sign in ercode create
+     * @param activityId
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/sign/ercode_in/{activityId}/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivitySignInCreateErcode(@PathVariable Long activityId,
+                                                     @PathVariable Long id){
+        return activityService.createActivitySignInErcode(activityId,id);
+    }
+
+    /**
+     * Activity sign out ercode create
+     * @param activityId
+     * @param id
+     * @param diff
+     * @return
+     */
+    @RequestMapping(value = "/sign/ercode_out/{activityId}/{id}/{diff}")
+    @ResponseBody
+    public JsonResult ajaxActivitySingOutCreateErcode(@PathVariable Long activityId,
+                                                      @PathVariable Long id,
+                                                      @PathVariable int diff){
+        return activityService.createActivitySignOutErcode(activityId,id,diff);
     }
 
     /**
@@ -715,7 +762,9 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/task/{activityId}")
-    public String indexActivityTask(@PathVariable Long activityId) {
+    public String indexActivityTask(@PathVariable Long activityId,Model model) {
+
+
 
         return "activity/task";
     }
@@ -727,9 +776,27 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/enroll/{activityId}")
-    public String indexActivityEnroll(@PathVariable Long activityId) {
+    public String indexActivityEnroll(@PathVariable Long activityId,Model model) {
+
+        ManageActivityEnroll enroll = activityService.getActivityEnroll(activityId);
+
+        model.addAttribute("activityId",activityId);
+
+        model.addAttribute("enroll",enroll);
 
         return "activity/enroll";
+    }
+
+    /**
+     * Activity Enroll update
+     * @param token
+     * @param enroll
+     * @return
+     */
+    @RequestMapping(value = "/enroll/update")
+    @ResponseBody
+    public JsonResult ajaxActivityEnrollUpdata(@RequestAttribute String token,ManageActivityEnroll enroll){
+        return activityService.updateActivityEnroll(token,enroll);
     }
 
     /**

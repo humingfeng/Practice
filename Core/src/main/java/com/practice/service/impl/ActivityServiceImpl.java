@@ -1,5 +1,6 @@
 package com.practice.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dto.ApplyDTO;
@@ -13,16 +14,16 @@ import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
-import com.practice.utils.CommonUtils;
-import com.practice.utils.JwtTokenUtil;
-import com.practice.utils.TimeUtils;
+import com.practice.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * @author Xushd  2017/12/25 20:46
@@ -52,6 +53,46 @@ public class ActivityServiceImpl implements ActivityService {
     private DictionaryService dictionaryService;
     @Resource
     private ManageActivitySuperviseMapper superviseMapper;
+    @Resource
+    private ManageActivityEnrollMapper enrollMapper;
+    @Resource
+    private ManageActivitySignMapper signMapper;
+
+
+
+    @Value("${ENDPOINT}")
+    private String ENDPOINT;
+
+    @Value("${ACCESSKEYID}")
+    private String ACCESSKEYID;
+
+    @Value("${ACCESSKEYSECRET}")
+    private String ACCESSKEYSECRET;
+
+    @Value("${BUCKETNAME}")
+    private String BUCKETNAME;
+
+    @Value("${IMGURL}")
+    private String IMGURL;
+
+    @Value("${PARENET_DIR}")
+    private String PARENET_DIR;
+
+    /**
+     * 获取OSS对象参数
+     *
+     * @return
+     */
+    private Map<String, String> getParam() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("endpoint", ENDPOINT);
+        param.put("accessKeyId", ACCESSKEYID);
+        param.put("accessKeySecret", ACCESSKEYSECRET);
+        param.put("bucketName", BUCKETNAME);
+
+        return param;
+    }
 
     /**
      * List activity type
@@ -849,6 +890,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         }
 
+
+
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
@@ -1361,5 +1404,200 @@ public class ActivityServiceImpl implements ActivityService {
         activityMapper.updateByPrimaryKeySelective(activity);
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get Enroll
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ManageActivityEnroll getActivityEnroll(Long activityId) {
+
+        ManageActivityEnrollExample example = new ManageActivityEnrollExample();
+
+        example.createCriteria().andActivityIdEqualTo(activityId);
+
+        List<ManageActivityEnroll> enrolls = enrollMapper.selectByExample(example);
+
+        if(enrolls.size()==0){
+
+            ManageActivityEnroll enroll = new ManageActivityEnroll();
+
+            enroll.setActivityId(activityId);
+
+            enroll.setUpdateTime(new Date());
+
+            enrollMapper.insertSelective(enroll);
+
+            return enroll;
+        }
+
+        return enrolls.get(0);
+    }
+
+    /**
+     * Update Enroll
+     *
+     *
+     * @param token
+     * @param enroll
+     * @return
+     */
+    @Override
+    public JsonResult updateActivityEnroll(String token, ManageActivityEnroll enroll) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        enroll.setUpdateTime(new Date());
+
+        enroll.setUpdateUser(tokeUser.getId());
+
+        enrollMapper.updateByPrimaryKeySelective(enroll);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get Sign
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ManageActivitySign getActivitySign(Long activityId) {
+
+        ManageActivitySignExample example = new ManageActivitySignExample();
+
+        example.createCriteria().andActivityIdEqualTo(activityId);
+
+        List<ManageActivitySign> manageActivitySigns = signMapper.selectByExample(example);
+
+        if(manageActivitySigns.size()==0){
+
+            ManageActivitySign sign = new ManageActivitySign();
+
+            sign.setActivityId(activityId);
+
+            sign.setUpdateTime(new Date());
+
+            signMapper.insertSelective(sign);
+
+            return sign;
+        }
+
+        return manageActivitySigns.get(0);
+    }
+
+    /**
+     * Update Sign
+     *
+     * @param token
+     * @param sign
+     * @return
+     */
+    @Override
+    public JsonResult updateActivitySign(String token, ManageActivitySign sign) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        sign.setUpdateTime(new Date());
+
+        sign.setUpdateUser(tokeUser.getId());
+
+        signMapper.updateByPrimaryKeySelective(sign);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Create Sign in ercode
+     *
+     * @param activityId
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult createActivitySignInErcode(Long activityId, Long id) {
+
+        OutputStream out = new ByteArrayOutputStream();
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("activityId",activityId);
+        jsonObject.put("id",id);
+
+        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
+
+        ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
+
+        ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
+
+        Map<String, String> param = this.getParam();
+
+        param.put("key",PARENET_DIR+"ercode/");
+
+        String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
+
+        ManageActivitySign sign = new ManageActivitySign();
+
+        String url = IMGURL + PARENET_DIR + "ercode/" + newFileName;
+
+        sign.setId(id);
+
+        sign.setSignInErcode(url);
+
+        signMapper.updateByPrimaryKeySelective(sign);
+
+        return JsonResult.success(OperateEnum.FILE_UPLOAD_SUCCESS.getStateInfo(), url);
+
+    }
+
+
+    /**
+     * Create Sign out ercode
+     *
+     * @param activityId
+     * @param id
+     * @param diff
+     * @return
+     */
+    @Override
+    public JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff) {
+
+        OutputStream out = new ByteArrayOutputStream();
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("activityId",activityId);
+        jsonObject.put("id",id);
+        jsonObject.put("diff",diff);
+
+        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
+
+        ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
+
+        ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
+
+        Map<String, String> param = this.getParam();
+
+        param.put("key",PARENET_DIR+"ercode/");
+
+        String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
+
+        ManageActivitySign sign = new ManageActivitySign();
+
+        String url = IMGURL + PARENET_DIR + "ercode/" + newFileName;
+
+        sign.setId(id);
+
+        sign.setSignOutErcode(url);
+
+        sign.setSignOutTime(Long.valueOf(diff));
+
+        signMapper.updateByPrimaryKeySelective(sign);
+
+        return JsonResult.success(OperateEnum.FILE_UPLOAD_SUCCESS.getStateInfo(), url);
     }
 }

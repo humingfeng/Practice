@@ -81,6 +81,9 @@
 
         <!--<table schema="" tableName="manage_activity_supervise"/>-->
 
+        <!--<table schema="" tableName="manage_activity_enroll"/>-->
+        <table schema="" tableName="manage_activity_sign"/>
+
 
 
     </context>

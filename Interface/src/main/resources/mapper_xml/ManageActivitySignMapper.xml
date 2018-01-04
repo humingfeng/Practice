@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.practice.mapper.ManageActivitySignMapper">
+  <resultMap id="BaseResultMap" type="com.practice.po.ManageActivitySign">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="sign_in" jdbcType="INTEGER" property="signIn" />
+    <result column="sign_in_ercode" jdbcType="VARCHAR" property="signInErcode" />
+    <result column="sign_out" jdbcType="INTEGER" property="signOut" />
+    <result column="sign_out_ercode" jdbcType="VARCHAR" property="signOutErcode" />
+    <result column="sign_out_time" jdbcType="BIGINT" property="signOutTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, activity_id, sign_in, sign_in_ercode, sign_out, sign_out_ercode, sign_out_time, 
+    update_time, update_user
+  </sql>
+  <select id="selectByExample" parameterType="com.practice.po.ManageActivitySignExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manage_activity_sign
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_activity_sign
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from manage_activity_sign
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.practice.po.ManageActivitySignExample">
+    delete from manage_activity_sign
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.practice.po.ManageActivitySign">
+    insert into manage_activity_sign (id, activity_id, sign_in, 
+      sign_in_ercode, sign_out, sign_out_ercode, 
+      sign_out_time, update_time, update_user
+      )
+    values (#{id,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{signIn,jdbcType=INTEGER}, 
+      #{signInErcode,jdbcType=VARCHAR}, #{signOut,jdbcType=INTEGER}, #{signOutErcode,jdbcType=VARCHAR}, 
+      #{signOutTime,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.practice.po.ManageActivitySign">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into manage_activity_sign
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="signIn != null">
+        sign_in,
+      </if>
+      <if test="signInErcode != null">
+        sign_in_ercode,
+      </if>
+      <if test="signOut != null">
+        sign_out,
+      </if>
+      <if test="signOutErcode != null">
+        sign_out_ercode,
+      </if>
+      <if test="signOutTime != null">
+        sign_out_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="signIn != null">
+        #{signIn,jdbcType=INTEGER},
+      </if>
+      <if test="signInErcode != null">
+        #{signInErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="signOut != null">
+        #{signOut,jdbcType=INTEGER},
+      </if>
+      <if test="signOutErcode != null">
+        #{signOutErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="signOutTime != null">
+        #{signOutTime,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.practice.po.ManageActivitySignExample" resultType="java.lang.Long">
+    select count(*) from manage_activity_sign
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update manage_activity_sign
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.signIn != null">
+        sign_in = #{record.signIn,jdbcType=INTEGER},
+      </if>
+      <if test="record.signInErcode != null">
+        sign_in_ercode = #{record.signInErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signOut != null">
+        sign_out = #{record.signOut,jdbcType=INTEGER},
+      </if>
+      <if test="record.signOutErcode != null">
+        sign_out_ercode = #{record.signOutErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signOutTime != null">
+        sign_out_time = #{record.signOutTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update manage_activity_sign
+    set id = #{record.id,jdbcType=BIGINT},
+      activity_id = #{record.activityId,jdbcType=BIGINT},
+      sign_in = #{record.signIn,jdbcType=INTEGER},
+      sign_in_ercode = #{record.signInErcode,jdbcType=VARCHAR},
+      sign_out = #{record.signOut,jdbcType=INTEGER},
+      sign_out_ercode = #{record.signOutErcode,jdbcType=VARCHAR},
+      sign_out_time = #{record.signOutTime,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.practice.po.ManageActivitySign">
+    update manage_activity_sign
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="signIn != null">
+        sign_in = #{signIn,jdbcType=INTEGER},
+      </if>
+      <if test="signInErcode != null">
+        sign_in_ercode = #{signInErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="signOut != null">
+        sign_out = #{signOut,jdbcType=INTEGER},
+      </if>
+      <if test="signOutErcode != null">
+        sign_out_ercode = #{signOutErcode,jdbcType=VARCHAR},
+      </if>
+      <if test="signOutTime != null">
+        sign_out_time = #{signOutTime,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageActivitySign">
+    update manage_activity_sign
+    set activity_id = #{activityId,jdbcType=BIGINT},
+      sign_in = #{signIn,jdbcType=INTEGER},
+      sign_in_ercode = #{signInErcode,jdbcType=VARCHAR},
+      sign_out = #{signOut,jdbcType=INTEGER},
+      sign_out_ercode = #{signOutErcode,jdbcType=VARCHAR},
+      sign_out_time = #{signOutTime,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

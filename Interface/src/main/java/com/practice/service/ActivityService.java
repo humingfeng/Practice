@@ -310,4 +310,52 @@ public interface ActivityService {
      * @return
      */
     JsonResult statusSupervise(Long activityId,int status);
+
+    /**
+     * Get Enroll
+     * @param activityId
+     * @return
+     */
+    ManageActivityEnroll getActivityEnroll(Long activityId);
+
+    /**
+     * Update Enroll
+     *
+     * @param token
+     * @param enroll
+     * @return
+     */
+    JsonResult updateActivityEnroll(String token, ManageActivityEnroll enroll);
+
+    /**
+     * Get Sign
+     * @param activityId
+     * @return
+     */
+    ManageActivitySign getActivitySign(Long activityId);
+
+    /**
+     * Update Sign
+     * @param token
+     * @param sign
+     * @return
+     */
+    JsonResult updateActivitySign(String token, ManageActivitySign sign);
+
+    /**
+     * Create Sign in ercode
+     * @param activityId
+     * @param id
+     * @return
+     */
+    JsonResult createActivitySignInErcode(Long activityId, Long id);
+
+    /**
+     * Create Sign out ercode
+     * @param activityId
+     * @param id
+     * @param diff
+     * @return
+     */
+    JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff);
 }

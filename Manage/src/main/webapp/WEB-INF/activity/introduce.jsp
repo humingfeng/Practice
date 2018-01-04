@@ -65,7 +65,6 @@
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit="return false" lay-filter="submit">立即提交</button>
-                    <button class="layui-btn layui-btn-warm do-action" data-type="backToList">返回</button>
                 </div>
             </div>
 
