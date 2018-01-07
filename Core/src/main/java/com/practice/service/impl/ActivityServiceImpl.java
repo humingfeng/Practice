@@ -57,7 +57,12 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityEnrollMapper enrollMapper;
     @Resource
     private ManageActivitySignMapper signMapper;
-
+    @Resource
+    private ManageActivityTaskMapper taskMapper;
+    @Resource
+    private ManageActivityTaskItemMapper taskItemMapper;
+    @Resource
+    private ManageActivityQuestionMapper questionMapper;
 
 
     @Value("${ENDPOINT}")
@@ -891,7 +896,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
 
-
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
@@ -1336,7 +1340,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = superviseMapper.countByExample(example);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error(OperateEnum.REPEAT);
         }
 
@@ -1393,7 +1397,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult statusSupervise(Long activityId,int status) {
+    public JsonResult statusSupervise(Long activityId, int status) {
 
         ManageActivity activity = new ManageActivity();
 
@@ -1421,7 +1425,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<ManageActivityEnroll> enrolls = enrollMapper.selectByExample(example);
 
-        if(enrolls.size()==0){
+        if (enrolls.size() == 0) {
 
             ManageActivityEnroll enroll = new ManageActivityEnroll();
 
@@ -1439,7 +1443,6 @@ public class ActivityServiceImpl implements ActivityService {
 
     /**
      * Update Enroll
-     *
      *
      * @param token
      * @param enroll
@@ -1474,7 +1477,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<ManageActivitySign> manageActivitySigns = signMapper.selectByExample(example);
 
-        if(manageActivitySigns.size()==0){
+        if (manageActivitySigns.size() == 0) {
 
             ManageActivitySign sign = new ManageActivitySign();
 
@@ -1525,8 +1528,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("activityId",activityId);
-        jsonObject.put("id",id);
+        jsonObject.put("activityId", activityId);
+        jsonObject.put("id", id);
 
         ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
 
@@ -1536,7 +1539,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Map<String, String> param = this.getParam();
 
-        param.put("key",PARENET_DIR+"ercode/");
+        param.put("key", PARENET_DIR + "ercode/");
 
         String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
 
@@ -1570,9 +1573,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("activityId",activityId);
-        jsonObject.put("id",id);
-        jsonObject.put("diff",diff);
+        jsonObject.put("activityId", activityId);
+        jsonObject.put("id", id);
+        jsonObject.put("diff", diff);
 
         ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
 
@@ -1582,7 +1585,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Map<String, String> param = this.getParam();
 
-        param.put("key",PARENET_DIR+"ercode/");
+        param.put("key", PARENET_DIR + "ercode/");
 
         String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
 
@@ -1599,5 +1602,355 @@ public class ActivityServiceImpl implements ActivityService {
         signMapper.updateByPrimaryKeySelective(sign);
 
         return JsonResult.success(OperateEnum.FILE_UPLOAD_SUCCESS.getStateInfo(), url);
+    }
+
+    /**
+     * List task
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listTask(Long activityId) {
+
+        ManageActivityTaskExample example = new ManageActivityTaskExample();
+
+        example.createCriteria().andActivityIdEqualTo(activityId);
+
+        List<ManageActivityTask> manageActivityTasks = taskMapper.selectByExample(example);
+
+        return JsonResult.success(manageActivityTasks);
+    }
+
+    /**
+     * Add task
+     *
+     * @param token
+     * @param task
+     * @return
+     */
+    @Override
+    public JsonResult addTask(String token, ManageActivityTask task) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        task.setId(null);
+
+        task.setUpdateTime(new Date());
+
+        task.setUpdateUser(tokeUser.getId());
+
+        taskMapper.insertSelective(task);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Update task
+     *
+     * @param token
+     * @param task
+     * @return
+     */
+    @Override
+    public JsonResult updateTask(String token, ManageActivityTask task) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        task.setUpdateTime(new Date());
+
+        task.setUpdateUser(tokeUser.getId());
+
+        taskMapper.updateByPrimaryKeySelective(task);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del task
+     *
+     * @param token
+     * @param activityId
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delTask(String token, Long activityId, Long id) {
+
+
+        ManageActivityTaskExample taskExample = new ManageActivityTaskExample();
+
+        taskExample.createCriteria().andActivityIdEqualTo(activityId);
+
+        long l = taskMapper.countByExample(taskExample);
+
+        if (l <= 1) {
+
+            return JsonResult.error("活动任务一个不设置，这样子不好");
+        }
+
+        //todo 判断是否有子任务
+
+        taskMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List task item
+     *
+     * @param activityId
+     * @param taskId
+     * @return
+     */
+    @Override
+    public JsonResult listTaskItem(Long activityId, Long taskId) {
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria()
+                .andActivityIdEqualTo(activityId)
+                .andTaskIdEqualTo(taskId);
+
+        List<ManageActivityTaskItem> manageActivityTaskItems = taskItemMapper.selectByExample(itemExample);
+
+        return JsonResult.success(manageActivityTaskItems);
+    }
+
+    /**
+     * Add task item
+     *
+     * @param token
+     * @param taskItem
+     * @return
+     */
+    @Override
+    public JsonResult addTaskItem(String token, ManageActivityTaskItem taskItem) {
+
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        taskItem.setId(null);
+
+        taskItem.setUpdateTime(new Date());
+
+        taskItem.setUpdateUser(tokeUser.getId());
+
+        taskItemMapper.insertSelective(taskItem);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Update task item
+     *
+     * @param token
+     * @param taskItem
+     * @return
+     */
+    @Override
+    public JsonResult updateTaskItem(String token, ManageActivityTaskItem taskItem) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        taskItem.setUpdateTime(new Date());
+
+        taskItem.setUpdateUser(tokeUser.getId());
+
+        taskItemMapper.updateByPrimaryKeySelective(taskItem);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+
+    }
+
+    /**
+     * Del task item
+     *
+     * @param taskId
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delTaskItem(Long taskId, Long id) {
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria()
+                .andTaskIdEqualTo(taskId);
+
+        long l = taskItemMapper.countByExample(itemExample);
+
+        if (l <= 1) {
+
+            return JsonResult.error("任务不能一个题目都没有");
+        }
+
+        taskItemMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+
+    /**
+     * List question
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public JsonResult listQuestion(PageSearchParam param) {
+
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
+
+        ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
+
+        ManageActivityQuestionExample.Criteria criteria = questionExample.createCriteria().andDelflagEqualTo(0);
+
+
+        String filed1 = "type", filed2 = "name";
+
+        if (param.getFiled(filed1) != null) {
+            criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(filed1)));
+        }
+
+        if(param.getFiled(filed2) !=null ){
+            criteria.andQuestionLike(CommonUtils.getLikeSql(param.getFiled(filed2)));
+        }
+
+        List<ManageActivityQuestion> manageActivityQuestions = questionMapper.selectByExample(questionExample);
+
+        for (ManageActivityQuestion manageActivityQuestion : manageActivityQuestions) {
+
+            manageActivityQuestion.setTypeName(dictionaryService.getDictionaryPO(manageActivityQuestion.getTypeId()).getName());
+        }
+
+        PageInfo<ManageActivityQuestion> manageActivityQuestionPageInfo = new PageInfo<>(manageActivityQuestions);
+
+        return JsonResult.success(manageActivityQuestionPageInfo);
+    }
+
+    /**
+     * Add question
+     *
+     * @param token
+     * @param question
+     * @return
+     */
+    @Override
+    public JsonResult addQuestion(String token, ManageActivityQuestion question) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
+
+        questionExample.createCriteria()
+                .andDelflagEqualTo(0)
+                .andQuestionEqualTo(question.getQuestion());
+
+        long l = questionMapper.countByExample(questionExample);
+
+        if(l>0){
+            return JsonResult.error(OperateEnum.REPEAT);
+        }
+
+        question.setId(null);
+
+        question.setStatus(1);
+
+        question.setDelflag(0);
+
+        question.setUpdateTime(new Date());
+
+        question.setUpdateUser(tokeUser.getId());
+
+        questionMapper.insertSelective(question);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Update question
+     *
+     * @param token
+     * @param question
+     * @return
+     */
+    @Override
+    public JsonResult updateQuestion(String token, ManageActivityQuestion question) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        if(StringUtils.isNotBlank(question.getQuestion())){
+
+            ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
+
+            questionExample.createCriteria()
+                    .andDelflagEqualTo(0)
+                    .andQuestionEqualTo(question.getQuestion())
+                    .andIdNotEqualTo(question.getId());
+
+            long l = questionMapper.countByExample(questionExample);
+
+            if(l>0){
+                return JsonResult.error(OperateEnum.REPEAT);
+            }
+
+
+        }
+
+        question.setUpdateTime(new Date());
+
+        question.setUpdateUser(tokeUser.getId());
+
+        questionMapper.updateByPrimaryKeySelective(question);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del question
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delQuestion(String token,Long id) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria().andQuestionIdEqualTo(id);
+
+        long l = taskItemMapper.countByExample(itemExample);
+
+        if(l>0){
+            return JsonResult.error("该问题已经被活动应用，暂不能删除");
+        }
+
+        ManageActivityQuestion question = new ManageActivityQuestion();
+
+        question.setId(id);
+
+        question.setDelflag(1);
+
+        question.setUpdateTime(new Date());
+
+        question.setUpdateUser(tokeUser.getId());
+
+        questionMapper.updateByPrimaryKeySelective(question);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get question
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult getQuestion(Long id) {
+        return JsonResult.success(questionMapper.selectByPrimaryKey(id));
     }
 }

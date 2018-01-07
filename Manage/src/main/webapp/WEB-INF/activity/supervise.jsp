@@ -138,7 +138,7 @@
                 }).finally(_=>{app.closeLoading(load)})
 
             }else{
-                layer.tips('请选择人员', '.layui-unselect', {
+                layer.tips('请选择人员', '.layui-form-select', {
                     tips: [1, '#FF5722']
                 });
             }

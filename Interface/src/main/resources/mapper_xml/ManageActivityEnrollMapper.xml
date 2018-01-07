@@ -8,6 +8,12 @@
     <result column="name" jdbcType="INTEGER" property="name" />
     <result column="parent_name" jdbcType="INTEGER" property="parentName" />
     <result column="id_num" jdbcType="INTEGER" property="idNum" />
+    <result column="birthday" jdbcType="INTEGER" property="birthday" />
+    <result column="nation" jdbcType="INTEGER" property="nation" />
+    <result column="passport" jdbcType="INTEGER" property="passport" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="height" jdbcType="INTEGER" property="height" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="BIGINT" property="updateUser" />
   </resultMap>
@@ -70,7 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, phone, name, parent_name, id_num, update_time, update_user
+    id, activity_id, phone, name, parent_name, id_num, birthday, nation, passport, weight, 
+    height, sex, update_time, update_user
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ManageActivityEnrollExample" resultMap="BaseResultMap">
     select
@@ -105,9 +112,13 @@
   <insert id="insert" parameterType="com.practice.po.ManageActivityEnroll">
     insert into manage_activity_enroll (id, activity_id, phone, 
       name, parent_name, id_num, 
+      birthday, nation, passport, 
+      weight, height, sex, 
       update_time, update_user)
     values (#{id,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{phone,jdbcType=INTEGER}, 
       #{name,jdbcType=INTEGER}, #{parentName,jdbcType=INTEGER}, #{idNum,jdbcType=INTEGER}, 
+      #{birthday,jdbcType=INTEGER}, #{nation,jdbcType=INTEGER}, #{passport,jdbcType=INTEGER}, 
+      #{weight,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{sex,jdbcType=INTEGER}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageActivityEnroll">
@@ -134,6 +145,24 @@
       <if test="idNum != null">
         id_num,
       </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="passport != null">
+        passport,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
       <if test="updateTime != null">
         update_time,
       </if>
@@ -159,6 +188,24 @@
       </if>
       <if test="idNum != null">
         #{idNum,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=INTEGER},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="passport != null">
+        #{passport,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
@@ -195,6 +242,24 @@
       <if test="record.idNum != null">
         id_num = #{record.idNum,jdbcType=INTEGER},
       </if>
+      <if test="record.birthday != null">
+        birthday = #{record.birthday,jdbcType=INTEGER},
+      </if>
+      <if test="record.nation != null">
+        nation = #{record.nation,jdbcType=INTEGER},
+      </if>
+      <if test="record.passport != null">
+        passport = #{record.passport,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=INTEGER},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=INTEGER},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
@@ -214,6 +279,12 @@
       name = #{record.name,jdbcType=INTEGER},
       parent_name = #{record.parentName,jdbcType=INTEGER},
       id_num = #{record.idNum,jdbcType=INTEGER},
+      birthday = #{record.birthday,jdbcType=INTEGER},
+      nation = #{record.nation,jdbcType=INTEGER},
+      passport = #{record.passport,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=INTEGER},
+      height = #{record.height,jdbcType=INTEGER},
+      sex = #{record.sex,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_user = #{record.updateUser,jdbcType=BIGINT}
     <if test="_parameter != null">
@@ -238,6 +309,24 @@
       <if test="idNum != null">
         id_num = #{idNum,jdbcType=INTEGER},
       </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=INTEGER},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="passport != null">
+        passport = #{passport,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
@@ -254,6 +343,12 @@
       name = #{name,jdbcType=INTEGER},
       parent_name = #{parentName,jdbcType=INTEGER},
       id_num = #{idNum,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=INTEGER},
+      nation = #{nation,jdbcType=INTEGER},
+      passport = #{passport,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}

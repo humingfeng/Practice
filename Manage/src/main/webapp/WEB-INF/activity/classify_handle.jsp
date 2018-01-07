@@ -48,7 +48,7 @@
         var $ = layui.$,form = layui.form,app = layui.app;
 
 
-        var id = $("#id").val();
+        var id = Number($("#id").val());
 
         var url = "/auth/activity/classify/add";
 

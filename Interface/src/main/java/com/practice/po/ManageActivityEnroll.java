@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/1/4 20:50
+ * @author Xushd  2018/1/7 14:25
  */
 public class ManageActivityEnroll implements Serializable{
     private Long id;
@@ -19,6 +19,18 @@ public class ManageActivityEnroll implements Serializable{
     private Integer parentName;
 
     private Integer idNum;
+
+    private Integer birthday;
+
+    private Integer nation;
+
+    private Integer passport;
+
+    private Integer weight;
+
+    private Integer height;
+
+    private Integer sex;
 
     private Date updateTime;
 
@@ -70,6 +82,54 @@ public class ManageActivityEnroll implements Serializable{
 
     public void setIdNum(Integer idNum) {
         this.idNum = idNum;
+    }
+
+    public Integer getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Integer birthday) {
+        this.birthday = birthday;
+    }
+
+    public Integer getNation() {
+        return nation;
+    }
+
+    public void setNation(Integer nation) {
+        this.nation = nation;
+    }
+
+    public Integer getPassport() {
+        return passport;
+    }
+
+    public void setPassport(Integer passport) {
+        this.passport = passport;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 
     public Date getUpdateTime() {

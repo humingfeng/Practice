@@ -2,7 +2,10 @@ package com.practice.utils;
 
 import org.apache.commons.codec.binary.Hex;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
@@ -57,5 +60,25 @@ public class CommonUtils {
             return m.replaceAll("");
         }
         return null;
+    }
+
+    /**
+     * 获取URL图片流
+     * @param urlString
+     * @return
+     */
+    public static InputStream createPicInputStream(String urlString){
+        InputStream is = null;
+        try {
+            // 构造URL
+            URL url = new URL(urlString);
+            // 打开连接
+            URLConnection con = url.openConnection();
+            // 输入流
+            is = con.getInputStream();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return is;
     }
 }

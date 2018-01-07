@@ -764,10 +764,65 @@ public class ActivityController {
     @RequestMapping(value = "/task/{activityId}")
     public String indexActivityTask(@PathVariable Long activityId,Model model) {
 
-
+        model.addAttribute("activityId",activityId);
 
         return "activity/task";
     }
+
+    /**
+     * Activity task list
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/task/list/{activityId}")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskList(@PathVariable Long activityId){
+
+        return activityService.listTask(activityId);
+    }
+
+    /**
+     * Activity task add
+     * @param token
+     * @param task
+     * @return
+     */
+    @RequestMapping(value = "/task/add")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskAdd(@RequestAttribute String token,ManageActivityTask task){
+
+        return activityService.addTask(token,task);
+    }
+
+    /**
+     * Activity task update
+     * @param token
+     * @param task
+     * @return
+     */
+    @RequestMapping(value = "/task/update")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskUpdate(@RequestAttribute String token,ManageActivityTask task){
+
+        return activityService.updateTask(token,task);
+    }
+
+    /**
+     * Activity task del
+     * @param activityId
+     * @param id
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/task/del/{activityId}/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskDelate(@PathVariable Long activityId,
+                                             @PathVariable Long id,
+                                             @RequestAttribute String token){
+
+        return activityService.delTask(token,activityId,id);
+    }
+
 
     /**
      * Activity enroll set
@@ -878,4 +933,85 @@ public class ActivityController {
 
         return activityService.delAttention(id);
     }
+
+
+
+
+    /**
+     * Activity question item
+     * @return
+     */
+    @RequestMapping(value = "/question")
+    public String indexActivityQuestion(Model model){
+
+
+        List<ManageDictionary> questionTypes = dictionaryService.listDictionaryByEnumFromCache(DicParentEnum.QUESTION_TYPE);
+
+        model.addAttribute("types",questionTypes);
+
+        return "activity/question";
+    }
+
+    /**
+     * Activity question list
+     * @return
+     */
+    @RequestMapping(value = "/question/list")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionList(PageSearchParam param){
+
+        return activityService.listQuestion(param);
+    }
+
+    /**
+     * Activity question obj
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/question/obj/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionObj(@PathVariable Long id){
+
+        return activityService.getQuestion(id);
+    }
+
+    /**
+     * Activity question add
+     * @param token
+     * @param question
+     * @return
+     */
+    @RequestMapping(value = "/question/add")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionAdd(@RequestAttribute String token,ManageActivityQuestion question){
+
+        return activityService.addQuestion(token,question);
+    }
+
+    /**
+     * Activity question update
+     * @param token
+     * @param question
+     * @return
+     */
+    @RequestMapping(value = "/question/update")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionUpdate(@RequestAttribute String token,ManageActivityQuestion question){
+
+        return activityService.updateQuestion(token,question);
+    }
+
+    /**
+     * Activity question del
+     * @param id
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/question/del/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionDel(@PathVariable Long id,@RequestAttribute String token){
+
+        return activityService.delQuestion(token,id);
+    }
+
 }

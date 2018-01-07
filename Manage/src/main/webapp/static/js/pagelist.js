@@ -197,6 +197,7 @@ layui.define(['app', 'form', 'laytpl', 'laypage'], exports => {
     Page.prototype.render = function(){
         //定义模版
         tpl = laytpl($("#tpl").html());
+
         this.initSearch();
         this.getList();
     }

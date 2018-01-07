@@ -47,9 +47,8 @@
                         </div>
                         <div class="layui-inline">
                             <a class="layui-btn" data-type="signIn" data-url="/auth/activity/sign/ercode_in/${activityId}/${sign.id}">生成</a>
-                            <c:if test="${sign.signInErcode!=null && sign.signInErcode!=''}">
-                                <a class="layui-btn layui-btn-warm" data-type="downIn">下载</a>
-                            </c:if>
+                            <a class="layui-btn layui-btn-warm" href="/download/ercode/${activityId}/1" id="signInD"
+                               <c:if test="${sign.signInErcode==null || sign.signInErcode==''}">style="display:none"</c:if> >下载</a>
 
                         </div>
                     </div>
@@ -75,9 +74,9 @@
                         </div>
                         <div class="layui-inline">
                             <a class="layui-btn" data-type="signOut" data-url="/auth/activity/sign/ercode_out/${activityId}/${sign.id}/" >生成</a>
-                            <c:if test="${sign.signOutErcode!=null && sign.signOutErcode!=''}">
-                                <a class="layui-btn layui-btn-warm" data-type="downOut" >下载</a>
-                            </c:if>
+                            <a class="layui-btn layui-btn-warm" href="/download/ercode/${activityId}/2" id="signOutD"
+                            <c:if test="${sign.signOutErcode==null || sign.signOutErcode==''}">style="display:none"</c:if> >下载</a>
+
                         </div>
                     </div>
                     <div class="layui-form-item ">
@@ -131,6 +130,8 @@
 
             var type = $(this).data("type"),url = $(this).data('url');
 
+
+
             if(type=='signOut'){
 
                 var reg = /^[1-9]+\d*$/;
@@ -144,14 +145,9 @@
                     return;
                 }
                 url = url + diff;
-            }else if(type == "downOut"){
-                console.log($("#signOut .layui-upload-img").attr("src"));
+            }else if(type=='signIn'){
 
-                return ;
-            }else if(type == "downIn"){
-
-                console.log();
-                imgDownLoad($("#signIn .layui-upload-img").attr("src"))
+            }else{
                 return;
             }
 
@@ -160,6 +156,7 @@
             app.get(url).then(d=>{
 
                 $("#"+type+" .layui-upload-img").attr("src",d.data);
+                $("#"+type+"D").show();
 
 
             },e=>{app.layerMessageE(e)}).finally(_=>{app.closeLoading(load)})

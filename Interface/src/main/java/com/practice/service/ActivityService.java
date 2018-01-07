@@ -358,4 +358,106 @@ public interface ActivityService {
      * @return
      */
     JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff);
+
+    /**
+     * List task
+     * @param activityId
+     * @return
+     */
+    JsonResult listTask(Long activityId);
+
+    /**
+     * Add task
+     * @param token
+     * @param task
+     * @return
+     */
+    JsonResult addTask(String token, ManageActivityTask task);
+
+    /**
+     * Update task
+     * @param token
+     * @param task
+     * @return
+     */
+    JsonResult updateTask(String token, ManageActivityTask task);
+
+    /**
+     * Del task
+     * @param token
+     * @param activityId
+     * @param id
+     * @return
+     */
+    JsonResult delTask(String token, Long activityId, Long id);
+
+    /**
+     * List task item
+     * @param activityId
+     * @param taskId
+     * @return
+     */
+    JsonResult listTaskItem(Long activityId, Long taskId);
+
+    /**
+     * Add task item
+     * @param token
+     * @param taskItem
+     * @return
+     */
+    JsonResult addTaskItem(String token, ManageActivityTaskItem taskItem);
+
+    /**
+     * Update task item
+     * @param token
+     * @param taskItem
+     * @return
+     */
+    JsonResult updateTaskItem(String token, ManageActivityTaskItem taskItem);
+
+    /**
+     * Del task item
+     * @param taskId
+     * @param id
+     * @return
+     */
+    JsonResult delTaskItem(Long taskId, Long id);
+
+    /**
+     * List question
+     * @param
+     * @return
+     */
+    JsonResult listQuestion(PageSearchParam param);
+
+    /**
+     * Add question
+     * @param token
+     * @param question
+     * @return
+     */
+    JsonResult addQuestion(String token, ManageActivityQuestion question);
+
+    /**
+     * Update question
+     * @param token
+     * @param question
+     * @return
+     */
+    JsonResult updateQuestion(String token, ManageActivityQuestion question);
+
+    /**
+     * Del question
+     * @param id
+     * @param token
+     * @return
+     */
+    JsonResult delQuestion(String token,Long id);
+
+    /**
+     * Get question
+     * @param id
+     * @return
+     */
+    JsonResult getQuestion(Long id);
 }
