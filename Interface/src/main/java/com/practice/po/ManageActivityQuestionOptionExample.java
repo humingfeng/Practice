@@ -225,6 +225,76 @@ public class ManageActivityQuestionOptionExample {
             return (Criteria) this;
         }
 
+        public Criteria andOptionMarkIsNull() {
+            addCriterion("option_mark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkIsNotNull() {
+            addCriterion("option_mark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkEqualTo(String value) {
+            addCriterion("option_mark =", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkNotEqualTo(String value) {
+            addCriterion("option_mark <>", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkGreaterThan(String value) {
+            addCriterion("option_mark >", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkGreaterThanOrEqualTo(String value) {
+            addCriterion("option_mark >=", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkLessThan(String value) {
+            addCriterion("option_mark <", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkLessThanOrEqualTo(String value) {
+            addCriterion("option_mark <=", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkLike(String value) {
+            addCriterion("option_mark like", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkNotLike(String value) {
+            addCriterion("option_mark not like", value, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkIn(List<String> values) {
+            addCriterion("option_mark in", values, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkNotIn(List<String> values) {
+            addCriterion("option_mark not in", values, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkBetween(String value1, String value2) {
+            addCriterion("option_mark between", value1, value2, "optionMark");
+            return (Criteria) this;
+        }
+
+        public Criteria andOptionMarkNotBetween(String value1, String value2) {
+            addCriterion("option_mark not between", value1, value2, "optionMark");
+            return (Criteria) this;
+        }
+
         public Criteria andTextIsNull() {
             addCriterion("text is null");
             return (Criteria) this;

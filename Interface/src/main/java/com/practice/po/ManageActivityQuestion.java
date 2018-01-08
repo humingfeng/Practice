@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author Xushd  2018/1/7 23:13
  */
-public class ManageActivityQuestion implements Serializable{
+public class ManageActivityQuestion implements Serializable {
 
     private String typeName;
 
@@ -28,6 +28,8 @@ public class ManageActivityQuestion implements Serializable{
     private String answerText;
 
     private Long answerId;
+
+    private Integer classify;
 
     private Integer status;
 
@@ -75,6 +77,14 @@ public class ManageActivityQuestion implements Serializable{
 
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
+    }
+
+    public Integer getClassify() {
+        return classify;
+    }
+
+    public void setClassify(Integer classify) {
+        this.classify = classify;
     }
 
     public Integer getStatus() {

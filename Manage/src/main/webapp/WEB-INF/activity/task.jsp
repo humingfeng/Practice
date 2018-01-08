@@ -163,7 +163,7 @@
                 var index = layui.layer.open({
                     title: title,
                     type: 2, area: ['400px', '500px'],anim:2,
-                    content: '/auth/activity/task/item/'+data[index].activityId+'/'+data[index].id,
+                    content: '/auth/activity/task/set/item/'+data[index].activityId+'/'+data[index].id,
                     success: function (layero, index) {
                         setTimeout(function () {
                             layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

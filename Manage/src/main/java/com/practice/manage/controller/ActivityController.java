@@ -2,6 +2,7 @@ package com.practice.manage.controller;
 
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
+import com.practice.dto.QuestionDTO;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
@@ -823,6 +824,24 @@ public class ActivityController {
         return activityService.delTask(token,activityId,id);
     }
 
+    /**
+     * Activity task set
+     * @param activityId
+     * @param taskId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/task/set/item/{activityId}/{taskId}")
+    public String indexActivityTaskSet(@PathVariable Long activityId,
+                                       @PathVariable Long taskId,
+                                       Model model){
+        model.addAttribute("activityId",activityId);
+        model.addAttribute("taskId",taskId);
+
+        return "activity/task_item_set";
+    }
+
+    //TODO 活动任务 题目设置
 
     /**
      * Activity enroll set
@@ -983,7 +1002,7 @@ public class ActivityController {
      */
     @RequestMapping(value = "/question/add")
     @ResponseBody
-    public JsonResult ajaxActivityQuestionAdd(@RequestAttribute String token,ManageActivityQuestion question){
+    public JsonResult ajaxActivityQuestionAdd(@RequestAttribute String token,QuestionDTO question){
 
         return activityService.addQuestion(token,question);
     }
@@ -996,9 +1015,25 @@ public class ActivityController {
      */
     @RequestMapping(value = "/question/update")
     @ResponseBody
-    public JsonResult ajaxActivityQuestionUpdate(@RequestAttribute String token,ManageActivityQuestion question){
+    public JsonResult ajaxActivityQuestionUpdate(@RequestAttribute String token,QuestionDTO question){
 
         return activityService.updateQuestion(token,question);
+    }
+
+    /**
+     * Activity question update status
+     * @param id
+     * @param status
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/question/status/{id}/{status}")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionStatus(@PathVariable Long id,
+                                                 @PathVariable int status,
+                                                 @RequestAttribute String token){
+
+        return activityService.updateQuestionStatus(id,status,token);
     }
 
     /**

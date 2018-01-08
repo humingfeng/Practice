@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.practice.po.ManageActivityQuestionOption">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="question_id" jdbcType="BIGINT" property="questionId" />
+    <result column="option_mark" jdbcType="CHAR" property="optionMark" />
     <result column="text" jdbcType="VARCHAR" property="text" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="BIGINT" property="updateUser" />
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, question_id, text, update_time, update_user
+    id, question_id, option_mark, text, update_time, update_user
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ManageActivityQuestionOptionExample" resultMap="BaseResultMap">
     select
@@ -100,12 +101,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.practice.po.ManageActivityQuestionOption">
-    insert into manage_activity_question_option (id, question_id, text, 
-      update_time, update_user)
-    values (#{id,jdbcType=BIGINT}, #{questionId,jdbcType=BIGINT}, #{text,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+    insert into manage_activity_question_option (id, question_id, option_mark, 
+      text, update_time, update_user
+      )
+    values (#{id,jdbcType=BIGINT}, #{questionId,jdbcType=BIGINT}, #{optionMark,jdbcType=CHAR}, 
+      #{text,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageActivityQuestionOption">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into manage_activity_question_option
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -113,6 +119,9 @@
       </if>
       <if test="questionId != null">
         question_id,
+      </if>
+      <if test="optionMark != null">
+        option_mark,
       </if>
       <if test="text != null">
         text,
@@ -130,6 +139,9 @@
       </if>
       <if test="questionId != null">
         #{questionId,jdbcType=BIGINT},
+      </if>
+      <if test="optionMark != null">
+        #{optionMark,jdbcType=CHAR},
       </if>
       <if test="text != null">
         #{text,jdbcType=VARCHAR},
@@ -157,6 +169,9 @@
       <if test="record.questionId != null">
         question_id = #{record.questionId,jdbcType=BIGINT},
       </if>
+      <if test="record.optionMark != null">
+        option_mark = #{record.optionMark,jdbcType=CHAR},
+      </if>
       <if test="record.text != null">
         text = #{record.text,jdbcType=VARCHAR},
       </if>
@@ -175,6 +190,7 @@
     update manage_activity_question_option
     set id = #{record.id,jdbcType=BIGINT},
       question_id = #{record.questionId,jdbcType=BIGINT},
+      option_mark = #{record.optionMark,jdbcType=CHAR},
       text = #{record.text,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_user = #{record.updateUser,jdbcType=BIGINT}
@@ -187,6 +203,9 @@
     <set>
       <if test="questionId != null">
         question_id = #{questionId,jdbcType=BIGINT},
+      </if>
+      <if test="optionMark != null">
+        option_mark = #{optionMark,jdbcType=CHAR},
       </if>
       <if test="text != null">
         text = #{text,jdbcType=VARCHAR},
@@ -203,6 +222,7 @@
   <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageActivityQuestionOption">
     update manage_activity_question_option
     set question_id = #{questionId,jdbcType=BIGINT},
+      option_mark = #{optionMark,jdbcType=CHAR},
       text = #{text,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=BIGINT}

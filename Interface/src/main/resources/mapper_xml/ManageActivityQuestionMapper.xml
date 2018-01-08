@@ -7,6 +7,7 @@
     <result column="question" jdbcType="VARCHAR" property="question" />
     <result column="answer_text" jdbcType="VARCHAR" property="answerText" />
     <result column="answer_id" jdbcType="BIGINT" property="answerId" />
+    <result column="classify" jdbcType="INTEGER" property="classify" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -71,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, type_id, question, answer_text, answer_id, status, delflag, update_time, update_user
+    id, type_id, question, answer_text, answer_id, classify, status, delflag, update_time, 
+    update_user
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ManageActivityQuestionExample" resultMap="BaseResultMap">
     select
@@ -105,15 +107,18 @@
   </delete>
   <insert id="insert" parameterType="com.practice.po.ManageActivityQuestion">
     insert into manage_activity_question (id, type_id, question, 
-      answer_text, answer_id, status, 
-      delflag, update_time, update_user
-      )
+      answer_text, answer_id, classify, 
+      status, delflag, update_time, 
+      update_user)
     values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{question,jdbcType=VARCHAR}, 
-      #{answerText,jdbcType=VARCHAR}, #{answerId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
-      #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}
-      )
+      #{answerText,jdbcType=VARCHAR}, #{answerId,jdbcType=BIGINT}, #{classify,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageActivityQuestion">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into manage_activity_question
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -130,6 +135,9 @@
       </if>
       <if test="answerId != null">
         answer_id,
+      </if>
+      <if test="classify != null">
+        classify,
       </if>
       <if test="status != null">
         status,
@@ -159,6 +167,9 @@
       </if>
       <if test="answerId != null">
         #{answerId,jdbcType=BIGINT},
+      </if>
+      <if test="classify != null">
+        #{classify,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -198,6 +209,9 @@
       <if test="record.answerId != null">
         answer_id = #{record.answerId,jdbcType=BIGINT},
       </if>
+      <if test="record.classify != null">
+        classify = #{record.classify,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -222,6 +236,7 @@
       question = #{record.question,jdbcType=VARCHAR},
       answer_text = #{record.answerText,jdbcType=VARCHAR},
       answer_id = #{record.answerId,jdbcType=BIGINT},
+      classify = #{record.classify,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -245,6 +260,9 @@
       <if test="answerId != null">
         answer_id = #{answerId,jdbcType=BIGINT},
       </if>
+      <if test="classify != null">
+        classify = #{classify,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -266,6 +284,7 @@
       question = #{question,jdbcType=VARCHAR},
       answer_text = #{answerText,jdbcType=VARCHAR},
       answer_id = #{answerId,jdbcType=BIGINT},
+      classify = #{classify,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

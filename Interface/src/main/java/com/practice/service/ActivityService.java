@@ -1,6 +1,7 @@
 package com.practice.service;
 
 import com.practice.dto.PageSearchParam;
+import com.practice.dto.QuestionDTO;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 
@@ -436,7 +437,7 @@ public interface ActivityService {
      * @param question
      * @return
      */
-    JsonResult addQuestion(String token, ManageActivityQuestion question);
+    JsonResult addQuestion(String token, QuestionDTO question);
 
     /**
      * Update question
@@ -444,7 +445,7 @@ public interface ActivityService {
      * @param question
      * @return
      */
-    JsonResult updateQuestion(String token, ManageActivityQuestion question);
+    JsonResult updateQuestion(String token, QuestionDTO question);
 
     /**
      * Del question
@@ -460,4 +461,13 @@ public interface ActivityService {
      * @return
      */
     JsonResult getQuestion(Long id);
+
+    /**
+     * Update question status
+     * @param id
+     * @param status
+     * @param token
+     * @return
+     */
+    JsonResult updateQuestionStatus(Long id, int status, String token);
 }

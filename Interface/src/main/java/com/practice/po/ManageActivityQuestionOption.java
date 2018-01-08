@@ -5,12 +5,14 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/1/7 22:18
+ * @author Xushd  2018/1/8 22:08
  */
 public class ManageActivityQuestionOption implements Serializable{
     private Long id;
 
     private Long questionId;
+
+    private String optionMark;
 
     private String text;
 
@@ -32,6 +34,14 @@ public class ManageActivityQuestionOption implements Serializable{
 
     public void setQuestionId(Long questionId) {
         this.questionId = questionId;
+    }
+
+    public String getOptionMark() {
+        return optionMark;
+    }
+
+    public void setOptionMark(String optionMark) {
+        this.optionMark = optionMark == null ? null : optionMark.trim();
     }
 
     public String getText() {

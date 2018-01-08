@@ -56,11 +56,10 @@
             </colgroup>
             <thead>
             <tr>
-                <th></th>
+                <th>ID</th>
                 <th>题目类型</th>
                 <th>题目内容</th>
                 <th>任务分值</th>
-                <th>题目限制</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -72,18 +71,23 @@
                     <td>
                         {{ item.id }}
                     </td>
-                    <td align="center">
+                    <td>
                         {{ item.typeName }}
                     </td>
                     <td>{{ item.question}}</td>
-                    <td align="center">{{ item.score}}</td>
-                    <td align="center">{{ item.limitNum}}</td>
-                    <td>{{# if (item.status) { }}
-                        <a class="iconfont icon-keyong do-action-page" data-type="update"
-                           data-url="/auth/activity/question/update" data-index="{{index}}" ></a>
+                    <td align="center">
+                        {{# if(item.classify == 1){ }}
+                        <span class="layui-badge layui-bg-blue">客观题</span>
                         {{# } else { }}
-                        <a class="iconfont icon-bukeyong do-action-page" data-type="update"
-                           data-url="/auth/activity/question/update" data-index="{{index}}"></a>
+                        <span class="layui-badge ">主观题</span>
+                        {{# } }}
+                    </td>
+                    <td>{{# if (item.status) { }}
+                        <a class="iconfont icon-keyong do-action-page" data-type="status"
+                           data-url="/auth/activity/question/status/{{item.id}}/{{item.status?0:1}}" data-index="{{index}}" ></a>
+                        {{# } else { }}
+                        <a class="iconfont icon-bukeyong do-action-page" data-type="status"
+                           data-url="/auth/activity/question/status/{{item.id}}/{{item.status?0:1}}" data-index="{{index}}"></a>
                         {{# } }}
                     </td>
                     <td>

@@ -88,7 +88,7 @@
 
         <!--<table schema="" tableName="manage_activity_task_item"/>-->
 
-        <!--<table schema="" tableName="manage_activity_question"/>-->
+        <table schema="" tableName="manage_activity_question"/>
 
         <!--<table schema="" tableName="manage_activity_question_option"/>-->
 

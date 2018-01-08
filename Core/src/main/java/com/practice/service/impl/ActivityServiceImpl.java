@@ -3,10 +3,7 @@ package com.practice.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.practice.dto.ApplyDTO;
-import com.practice.dto.KeyValueDTO;
-import com.practice.dto.PageSearchParam;
-import com.practice.dto.TokenUserDTO;
+import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
@@ -63,6 +60,8 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityTaskItemMapper taskItemMapper;
     @Resource
     private ManageActivityQuestionMapper questionMapper;
+    @Resource
+    private ManageActivityQuestionOptionMapper questionOptionMapper;
 
 
     @Value("${ENDPOINT}")
@@ -1837,7 +1836,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult addQuestion(String token, ManageActivityQuestion question) {
+    public JsonResult addQuestion(String token, QuestionDTO question) {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
@@ -1853,17 +1852,68 @@ public class ActivityServiceImpl implements ActivityService {
             return JsonResult.error(OperateEnum.REPEAT);
         }
 
-        question.setId(null);
+        ManageActivityQuestion activityQuestion = new ManageActivityQuestion();
 
-        question.setStatus(1);
+        activityQuestion.setId(null);
 
-        question.setDelflag(0);
+        activityQuestion.setTypeId(question.getTypeId());
 
-        question.setUpdateTime(new Date());
+        activityQuestion.setQuestion(question.getQuestion());
 
-        question.setUpdateUser(tokeUser.getId());
+        activityQuestion.setAnswerText(question.getAnswerText());
 
-        questionMapper.insertSelective(question);
+        activityQuestion.setClassify(question.getClassify());
+
+        activityQuestion.setStatus(1);
+
+        activityQuestion.setDelflag(0);
+
+        activityQuestion.setUpdateTime(new Date());
+
+        activityQuestion.setUpdateUser(tokeUser.getId());
+
+        questionMapper.insertSelective(activityQuestion);
+
+
+        if(StringUtils.isNotBlank(question.getOptions())){
+
+            String options = question.getOptions();
+
+            List<QuestionItemDTO> questionItemDTOS = JsonUtils.jsonToList(options, QuestionItemDTO.class);
+
+            for (QuestionItemDTO questionItemDTO : questionItemDTOS) {
+
+                ManageActivityQuestionOption option = new ManageActivityQuestionOption();
+
+                option.setQuestionId(activityQuestion.getId());
+
+                option.setText(questionItemDTO.getText());
+
+                option.setOptionMark(questionItemDTO.getOptionMark());
+
+                option.setId(null);
+
+                option.setUpdateTime(new Date());
+
+                option.setUpdateUser(tokeUser.getId());
+
+                questionOptionMapper.insertSelective(option);
+
+                if(questionItemDTO.getCorrect()==1){
+                    activityQuestion.setAnswerId(option.getId());
+                }
+
+            }
+
+            ManageActivityQuestion question1 = new ManageActivityQuestion();
+
+            question1.setId(activityQuestion.getId());
+
+            question1.setAnswerId(activityQuestion.getAnswerId());
+
+            questionMapper.updateByPrimaryKeySelective(question1);
+
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -1876,7 +1926,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult updateQuestion(String token, ManageActivityQuestion question) {
+    public JsonResult updateQuestion(String token, QuestionDTO question) {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
@@ -1894,15 +1944,111 @@ public class ActivityServiceImpl implements ActivityService {
             if(l>0){
                 return JsonResult.error(OperateEnum.REPEAT);
             }
-
-
         }
 
-        question.setUpdateTime(new Date());
+        ManageActivityQuestion activityQuestion = new ManageActivityQuestion();
 
-        question.setUpdateUser(tokeUser.getId());
+        activityQuestion.setId(question.getId());
 
-        questionMapper.updateByPrimaryKeySelective(question);
+        activityQuestion.setTypeId(question.getTypeId());
+
+        activityQuestion.setUpdateUser(tokeUser.getId());
+
+        activityQuestion.setUpdateTime(new Date());
+
+        activityQuestion.setQuestion(question.getQuestion());
+
+        activityQuestion.setClassify(question.getClassify());
+
+        if(question.getClassify()==1){
+
+            String options = question.getOptions();
+
+            List<QuestionItemDTO> questionItemDTOS = JsonUtils.jsonToList(options, QuestionItemDTO.class);
+
+
+            ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
+
+            optionExample.createCriteria().andQuestionIdEqualTo(question.getId());
+
+            List<ManageActivityQuestionOption> questionOptions = questionOptionMapper.selectByExample(optionExample);
+
+
+            List<Long> hasId = new ArrayList<>();
+
+            for (QuestionItemDTO questionItemDTO : questionItemDTOS) {
+
+                ManageActivityQuestionOption option = new ManageActivityQuestionOption();
+
+                if(questionItemDTO.getId()!=0){
+
+                    hasId.add(questionItemDTO.getId());
+
+                    option.setId(questionItemDTO.getId());
+
+                    option.setOptionMark(questionItemDTO.getOptionMark());
+
+                    option.setText(questionItemDTO.getText());
+
+                    option.setUpdateUser(tokeUser.getId());
+
+                    option.setUpdateTime(new Date());
+
+                    questionOptionMapper.updateByPrimaryKeySelective(option);
+
+                    if(questionItemDTO.getCorrect()==1){
+                        activityQuestion.setAnswerId(questionItemDTO.getId());
+                    }
+
+                }else{
+
+                    option.setQuestionId(activityQuestion.getId());
+
+                    option.setText(questionItemDTO.getText());
+
+                    option.setOptionMark(questionItemDTO.getOptionMark());
+
+                    option.setId(null);
+
+                    option.setUpdateTime(new Date());
+
+                    option.setUpdateUser(tokeUser.getId());
+
+                    questionOptionMapper.insertSelective(option);
+
+                    if(questionItemDTO.getCorrect()==1){
+                        activityQuestion.setAnswerId(option.getId());
+                    }
+                }
+            }
+
+            questionMapper.updateByPrimaryKeySelective(activityQuestion);
+
+
+
+            for (ManageActivityQuestionOption questionOption : questionOptions) {
+
+                if(!hasId.contains(questionOption.getId())){
+                    questionOptionMapper.deleteByPrimaryKey(questionOption.getId());
+                }
+            }
+
+        }else{
+
+            ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
+
+            optionExample.createCriteria()
+                    .andQuestionIdEqualTo(question.getId());
+
+            questionOptionMapper.deleteByExample(optionExample);
+
+            activityQuestion.setAnswerText(question.getAnswerText());
+
+            activityQuestion.setAnswerId(null);
+
+            questionMapper.updateByPrimaryKeySelective(activityQuestion);
+
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -1951,6 +2097,97 @@ public class ActivityServiceImpl implements ActivityService {
      */
     @Override
     public JsonResult getQuestion(Long id) {
-        return JsonResult.success(questionMapper.selectByPrimaryKey(id));
+        ManageActivityQuestion question = questionMapper.selectByPrimaryKey(id);
+
+        Integer classify = question.getClassify();
+
+        QuestionDTO questionDTO = new QuestionDTO();
+
+        questionDTO.setId(question.getId());
+
+        questionDTO.setClassify(question.getClassify());
+
+        questionDTO.setTypeId(question.getTypeId());
+
+        questionDTO.setQuestion(question.getQuestion());
+
+        if(classify==1){
+
+            ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
+
+            optionExample.createCriteria().andQuestionIdEqualTo(id);
+
+            List<ManageActivityQuestionOption> questionOptions = questionOptionMapper.selectByExample(optionExample);
+
+            List<QuestionItemDTO> list = new ArrayList<>();
+
+            for (ManageActivityQuestionOption questionOption : questionOptions) {
+
+                QuestionItemDTO questionItemDTO = new QuestionItemDTO();
+
+                questionItemDTO.setId(questionOption.getId());
+
+                if(questionOption.getId().equals(question.getAnswerId())){
+                    questionItemDTO.setCorrect(1);
+                }else{
+                    questionItemDTO.setCorrect(0);
+                }
+
+                questionItemDTO.setOptionMark(questionOption.getOptionMark());
+
+                questionItemDTO.setText(questionOption.getText());
+
+                list.add(questionItemDTO);
+            }
+
+            questionDTO.setList(list);
+
+        }else{
+
+            questionDTO.setAnswerText(question.getAnswerText());
+        }
+
+        return JsonResult.success(questionDTO);
+
+    }
+
+    /**
+     * Update question status
+     *
+     * @param id
+     * @param status
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult updateQuestionStatus(Long id, int status, String token) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria().andQuestionIdEqualTo(id);
+
+        long l = taskItemMapper.countByExample(itemExample);
+
+        if(l>0){
+            return JsonResult.error("该问题已经被活动应用，暂不能更改状态");
+        }
+
+
+        ManageActivityQuestion activityQuestion = new ManageActivityQuestion();
+
+        activityQuestion.setId(id);
+
+        activityQuestion.setStatus(status);
+
+        activityQuestion.setUpdateUser(tokeUser.getId());
+
+        activityQuestion.setUpdateTime(new Date());
+
+        questionMapper.updateByPrimaryKeySelective(activityQuestion);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
     }
 }
