@@ -477,4 +477,32 @@ public interface ActivityService {
      * @return
      */
     JsonResult listQuestionUsable(PageSearchParam param);
+
+    /**
+     * Add task question
+     * @param activityId
+     * @param taskId
+     * @param checkeds
+     * @param token
+     * @return
+     */
+    JsonResult addTaskQuestion(String token,Long activityId, Long taskId, String checkeds);
+
+    /**
+     * List task question
+     * @param activityId
+     * @param taskId
+     * @return
+     */
+    JsonResult listActivityTaskQuestion(Long activityId, Long taskId);
+
+    /**
+     * Del task question
+     * @param token
+     * @param activityId
+     * @param taskId
+     * @param id
+     * @return
+     */
+    JsonResult delTaskQuestion(String token, Long activityId, Long taskId, Long id);
 }

@@ -27,4 +27,6 @@ public interface ManageActivityTaskItemMapper {
     int updateByPrimaryKeySelective(ManageActivityTaskItem record);
 
     int updateByPrimaryKey(ManageActivityTaskItem record);
+
+    List<Long> selectQuestionIds(@Param("activityId") Long activityId, @Param("taskId") Long taskId);
 }

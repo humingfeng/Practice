@@ -225,4 +225,8 @@
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectQuestionIds" resultType="java.lang.Long">
+    SELECT question_id FROM `manage_activity_task_item`
+    WHERE activity_id = #{activityId,jdbcType=BIGINT} and task_id = #{taskId,jdbcType=BIGINT};
+  </select>
 </mapper>

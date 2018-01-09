@@ -10,7 +10,7 @@
 <html>
 <%@include file="../head.jsp" %>
 <body class="childrenBody">
-<fieldset class="layui-elem-field">
+<fieldset class="layui-elem-field" style="min-height: 900px;">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">活动任务设置</blockquote>
     <a class="layui-btn layui-btn-normal add"><i class="iconfont icon-add"></i>新增任务</a>
 
@@ -33,7 +33,7 @@
                             <a class="layui-btn layui-btn-xs" data-type="edit" data-index="{{ index }}">修改</a>
                         </div>
                         <div class="layui-inline">
-                            <a class="layui-btn layui-btn-xs layui-btn-warm" data-type="set" data-index="{{ index }}">设置</a>
+                            <a class="layui-btn layui-btn-xs layui-btn-warm" data-type="set" data-index="{{ index }}">设置题目</a>
                         </div>
                         <div class="layui-inline">
                             <a class="layui-btn layui-btn-xs layui-btn-danger" data-url="/auth/activity/task/del/{{item.activityId}}/{{item.id}}" data-type="del" data-index="{{index}}" >删除</a>
@@ -159,11 +159,11 @@
                     },e=>{app.layerMessageE(e)}).finally(_d=>{app.closeLoading(load)})
                 });
             }else{
-                var title = data[index].title+'设置';
+                var title = data[index].title+'题目列表';
                 var index = layui.layer.open({
                     title: title,
-                    type: 2, area: ['400px', '500px'],anim:2,
-                    content: '/auth/activity/task/set/item/'+data[index].activityId+'/'+data[index].id,
+                    type: 2, area: ['400px', '500px'],offset: 't',
+                    content: '/auth/activity/task/question/'+data[index].activityId+'/'+data[index].id,
                     success: function (layero, index) {
                         setTimeout(function () {
                             layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

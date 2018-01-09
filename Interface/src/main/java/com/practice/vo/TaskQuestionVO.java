@@ -3,11 +3,15 @@ package com.practice.vo;
 import java.io.Serializable;
 
 /**
- * @author Xushd on 2018/1/9 16:41
+ * @author Xushd  2018/1/9 22:26
  */
-public class QuestionVO implements Serializable {
+public class TaskQuestionVO implements Serializable{
 
     private Long id;
+
+    private Long activityId;
+
+    private Long taskId;
 
     private String question;
 
@@ -15,9 +19,10 @@ public class QuestionVO implements Serializable {
 
     private String classify;
 
-    public QuestionVO() {
-    }
+    private Long questionId;
 
+    public TaskQuestionVO() {
+    }
 
     public Long getId() {
         return id;
@@ -25,6 +30,22 @@ public class QuestionVO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
     public String getQuestion() {
@@ -51,13 +72,11 @@ public class QuestionVO implements Serializable {
         this.classify = classify;
     }
 
-    @Override
-    public String toString() {
-        return "QuestionVO{" +
-                "id=" + id +
-                ", question='" + question + '\'' +
-                ", type='" + type + '\'' +
-                ", classify='" + classify + '\'' +
-                '}';
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 }

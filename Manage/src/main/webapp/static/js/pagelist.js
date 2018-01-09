@@ -158,7 +158,8 @@ layui.define(['app', 'form', 'laytpl', 'laypage'], exports => {
                     this.pageInit(url,d.data);
                 }else{
                     this.tplrender(d.data);
-                }               
+                }
+
             },e=>{
                 app.layerAlertE(e);
             })

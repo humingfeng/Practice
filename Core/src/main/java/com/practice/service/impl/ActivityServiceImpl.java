@@ -13,7 +13,9 @@ import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
 import com.practice.utils.*;
 import com.practice.vo.QuestionVO;
+import com.practice.vo.TaskQuestionVO;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.zookeeper.Op;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -2244,5 +2246,119 @@ public class ActivityServiceImpl implements ActivityService {
         PageResult<QuestionVO> questionVOPageResult = new PageResult<>(pageInfo, list);
 
         return JsonResult.success(questionVOPageResult);
+    }
+
+    /**
+     * List task question
+     *
+     * @param activityId
+     * @param taskId
+     * @return
+     */
+    @Override
+    public JsonResult listActivityTaskQuestion(Long activityId, Long taskId) {
+
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria().andTaskIdEqualTo(taskId).andActivityIdEqualTo(activityId);
+
+        List<ManageActivityTaskItem> manageActivityTaskItems = taskItemMapper.selectByExample(itemExample);
+
+        List<TaskQuestionVO> list = new ArrayList<>();
+
+        for (ManageActivityTaskItem manageActivityTaskItem : manageActivityTaskItems) {
+
+            ManageActivityQuestion question = questionMapper.selectByPrimaryKey(manageActivityTaskItem.getQuestionId());
+
+            TaskQuestionVO questionVO = new TaskQuestionVO();
+
+            questionVO.setQuestionId(question.getId());
+
+            questionVO.setActivityId(activityId);
+
+            questionVO.setTaskId(taskId);
+
+            questionVO.setClassify(question.getClassify()==1?"客观题":"主观题");
+
+            questionVO.setType(dictionaryService.getDictionaryPO(question.getTypeId()).getName());
+
+            questionVO.setQuestion(question.getQuestion());
+
+            questionVO.setId(manageActivityTaskItem.getId());
+
+            list.add(questionVO);
+        }
+
+
+        return JsonResult.success(list);
+    }
+
+    /**
+     * Del task question
+     *
+     * @param token
+     * @param activityId
+     * @param taskId
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult delTaskQuestion(String token, Long activityId, Long taskId, Long id) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        List<Long> longs = taskItemMapper.selectQuestionIds(activityId, taskId);
+
+        if(longs.size()<=1){
+            return JsonResult.error("任务不能一个问题都没有");
+        }
+
+        taskItemMapper.deleteByPrimaryKey(id);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Add task question
+     *
+     * @param activityId
+     * @param taskId
+     * @param checkeds
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult addTaskQuestion(String token,Long activityId, Long taskId, String checkeds) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        List<Long> ids = taskItemMapper.selectQuestionIds(activityId,taskId);
+
+        String[] questions = checkeds.split(",");
+
+        for (String questionId : questions) {
+
+            if(!ids.contains(Long.valueOf(questionId))){
+                ManageActivityTaskItem manageActivityTaskItem = new ManageActivityTaskItem();
+
+                manageActivityTaskItem.setId(null);
+
+                manageActivityTaskItem.setActivityId(activityId);
+
+                manageActivityTaskItem.setQuestionId(Long.valueOf(questionId));
+
+                manageActivityTaskItem.setTaskId(taskId);
+
+                manageActivityTaskItem.setUpdateUser(tokeUser.getId());
+
+                manageActivityTaskItem.setUpdateTime(new Date());
+
+                taskItemMapper.insertSelective(manageActivityTaskItem);
+            }
+
+        }
+
+        return JsonResult.success(OperateEnum.SUCCESS);
     }
 }

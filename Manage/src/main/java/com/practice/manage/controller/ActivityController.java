@@ -1,6 +1,5 @@
 package com.practice.manage.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
@@ -13,6 +12,7 @@ import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
 import com.practice.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -825,6 +825,37 @@ public class ActivityController {
         return activityService.delTask(token,activityId,id);
     }
 
+
+
+    /**
+     * Activity task question index
+     * @param activityId
+     * @param taskId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/task/question/{activityId}/{taskId}")
+    public String indexActivityTaskQuestion(@PathVariable Long activityId,
+                                            @PathVariable Long taskId,
+                                            Model model){
+        model.addAttribute("activityId",activityId);
+        model.addAttribute("taskId",taskId);
+        return "activity/task_question";
+    }
+
+    /**
+     * Activity task question list
+     * @param activityId
+     * @param taskId
+     * @return
+     */
+    @RequestMapping(value = "/task/question/{activityId}/{taskId}/list")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskQuestionList(@PathVariable Long activityId,
+                                                   @PathVariable Long taskId){
+        return activityService.listActivityTaskQuestion(activityId,taskId);
+    }
+
     /**
      * Activity task set
      * @param activityId
@@ -832,16 +863,53 @@ public class ActivityController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/task/set/item/{activityId}/{taskId}")
+    @RequestMapping(value = "/task/question/add/{activityId}/{taskId}")
     public String indexActivityTaskSet(@PathVariable Long activityId,
                                        @PathVariable Long taskId,
                                        Model model){
+
         model.addAttribute("activityId",activityId);
         model.addAttribute("taskId",taskId);
 
-        return "activity/task_item_set";
+        List<ManageDictionary> dicOptions = dictionaryService.listDictionaryByEnumFromCache(DicParentEnum.QUESTION_TYPE);
+
+        model.addAttribute("options",dicOptions);
+
+        return "activity/task_question_choose";
     }
 
+    /**
+     * Activity task question add
+     * @param activityId
+     * @param taskId
+     * @param checkeds
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/task/question/add/{activityId}/{taskId}/save")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskQuestionAdd(@PathVariable Long activityId,
+                                                  @PathVariable Long taskId,
+                                                  @RequestAttribute String token,
+                                                  String checkeds){
+        return activityService.addTaskQuestion(token,activityId,taskId,checkeds);
+    }
+
+    /**
+     * Activity task question del
+     * @param activityId
+     * @param taskId
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/task/question/del/{activityId}/{taskId}/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityTaskQuestionDel(@PathVariable Long activityId,
+                                                  @PathVariable Long taskId,
+                                                  @PathVariable Long id,
+                                                  @RequestAttribute String token){
+        return activityService.delTaskQuestion(token,activityId,taskId,id);
+    }
 
 
     /**
