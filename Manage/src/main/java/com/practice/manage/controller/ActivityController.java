@@ -1,5 +1,6 @@
 package com.practice.manage.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
@@ -841,7 +842,7 @@ public class ActivityController {
         return "activity/task_item_set";
     }
 
-    //TODO 活动任务 题目设置
+
 
     /**
      * Activity enroll set
@@ -1047,6 +1048,18 @@ public class ActivityController {
     public JsonResult ajaxActivityQuestionDel(@PathVariable Long id,@RequestAttribute String token){
 
         return activityService.delQuestion(token,id);
+    }
+
+    /**
+     * Activity question usable
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/question/usable/list")
+    @ResponseBody
+    public JsonResult ajaxActivityQuestionUsableList(PageSearchParam param){
+
+        return activityService.listQuestionUsable(param);
     }
 
 }

@@ -12,6 +12,7 @@ import com.practice.service.ActivityService;
 import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
 import com.practice.utils.*;
+import com.practice.vo.QuestionVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -2189,5 +2190,59 @@ public class ActivityServiceImpl implements ActivityService {
         questionMapper.updateByPrimaryKeySelective(activityQuestion);
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List question usable
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JsonResult listQuestionUsable(PageSearchParam param) {
+
+        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+
+
+        ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
+
+        ManageActivityQuestionExample.Criteria criteria = questionExample.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(1);
+
+        String key1 = "type",key2 = "name";
+
+        if(param.getFiled(key1)!=null){
+            criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(key1)));
+        }
+
+        if(param.getFiled(key2)!=null){
+            criteria.andQuestionLike(CommonUtils.getLikeSql(param.getFiled(key2)));
+        }
+
+        questionExample.setOrderByClause("update_time desc");
+
+        List<ManageActivityQuestion> manageActivityQuestions = questionMapper.selectByExample(questionExample);
+
+        PageInfo<ManageActivityQuestion> pageInfo = new PageInfo<>(manageActivityQuestions);
+
+        List<QuestionVO> list = new ArrayList<>();
+
+        for (ManageActivityQuestion manageActivityQuestion : manageActivityQuestions) {
+            QuestionVO questionVO = new QuestionVO();
+
+            questionVO.setId(manageActivityQuestion.getId());
+
+            questionVO.setClassify(manageActivityQuestion.getClassify()==1?"客观题":"主观题");
+
+            questionVO.setType(dictionaryService.getDictionaryPO(manageActivityQuestion.getTypeId()).getName());
+
+            questionVO.setQuestion(manageActivityQuestion.getQuestion());
+
+            list.add(questionVO);
+
+        }
+
+        PageResult<QuestionVO> questionVOPageResult = new PageResult<>(pageInfo, list);
+
+        return JsonResult.success(questionVOPageResult);
     }
 }

@@ -470,4 +470,11 @@ public interface ActivityService {
      * @return
      */
     JsonResult updateQuestionStatus(Long id, int status, String token);
+
+    /**
+     * List question usable
+     * @param param
+     * @return
+     */
+    JsonResult listQuestionUsable(PageSearchParam param);
 }
