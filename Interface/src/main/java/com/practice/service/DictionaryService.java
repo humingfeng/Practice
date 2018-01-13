@@ -62,4 +62,6 @@ public interface DictionaryService {
      * @return
      */
     ManageDictionary getDictionaryPO(Long id);
+
+
 }

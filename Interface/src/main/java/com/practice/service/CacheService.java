@@ -61,6 +61,13 @@ public interface CacheService {
     ManageDictionary getDictionaryById(Long id);
 
     /**
+     * Set dictionary by id
+     * @param id
+     * @param dictionary
+     */
+    void setDicionaryById(Long id, ManageDictionary dictionary);
+
+    /**
      * Set manage permission
      * @param permissionList
      * @param id
@@ -154,4 +161,6 @@ public interface CacheService {
      * @param areaDTO
      */
     void setArea(Long aid,AreaDTO areaDTO);
+
+
 }

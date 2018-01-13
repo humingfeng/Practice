@@ -2,14 +2,15 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.EduMapper;
+import com.practice.mapper.ManageStudentMapper;
+import com.practice.mapper.ManageTeacherMapper;
 import com.practice.mapper.SchoolMapper;
-import com.practice.po.Edu;
-import com.practice.po.School;
-import com.practice.po.SchoolExample;
+import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.SchoolService;
 import com.practice.service.AreaService;
@@ -19,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +37,10 @@ public class SchoolServiceImpl implements SchoolService {
     private SchoolMapper schoolMapper;
     @Resource
     private AreaService areaService;
+    @Resource
+    private ManageTeacherMapper teacherMapper;
+    @Resource
+    private ManageStudentMapper studentMapper;
 
     /**
      * List school
@@ -95,6 +101,17 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public JsonResult getSchool(Long id) {
         return JsonResult.success(schoolMapper.selectByPrimaryKey(id));
+    }
+
+    /**
+     * Get school PO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public School getSchoolPO(Long id) {
+        return schoolMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -195,7 +212,25 @@ public class SchoolServiceImpl implements SchoolService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        //TODO 学校中有学生不可删除
+        ManageTeacherExample teacherExample = new ManageTeacherExample();
+
+        teacherExample.createCriteria().andDelflagEqualTo(0).andSchoolIdEqualTo(id);
+
+        long teachers = teacherMapper.countByExample(teacherExample);
+
+        if(teachers>0){
+            return JsonResult.error("该学校已存在教师，不可删除");
+        }
+
+        ManageStudentExample studentExample = new ManageStudentExample();
+
+        studentExample.createCriteria().andSchoolIdEqualTo(id).andDelflagEqualTo(0);
+
+        long students = studentMapper.countByExample(studentExample);
+
+        if(students>0){
+            return JsonResult.error("该学校已存在学生，不可删除");
+        }
 
         School school = new School();
 
@@ -210,5 +245,29 @@ public class SchoolServiceImpl implements SchoolService {
         schoolMapper.updateByPrimaryKey(school);
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List school usable
+     *
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> listSchoolUsable() {
+
+        SchoolExample schoolExample = new SchoolExample();
+
+        schoolExample.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(1);
+
+        List<School> schools = schoolMapper.selectByExample(schoolExample);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (School school : schools) {
+
+            list.add(new KeyValueDTO(school.getId(),school.getName()));
+        }
+
+        return list;
     }
 }

@@ -1,8 +1,11 @@
 package com.practice.service;
 
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.po.School;
 import com.practice.result.JsonResult;
+
+import java.util.List;
 
 /**
  * School service interface
@@ -23,6 +26,13 @@ public interface SchoolService {
      * @return
      */
     JsonResult getSchool(Long id);
+
+    /**
+     * Get school PO
+     * @param id
+     * @return
+     */
+    School getSchoolPO(Long id);
 
     /**
      * Add school
@@ -47,4 +57,11 @@ public interface SchoolService {
      * @return
      */
     JsonResult deleteSchool(String token, Long id);
+
+    /**
+     * List school usable
+     * @return
+     */
+    List<KeyValueDTO> listSchoolUsable();
+
 }

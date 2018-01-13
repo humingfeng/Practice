@@ -10,6 +10,7 @@ import org.joda.time.format.DateTimeFormatter;
 import javax.swing.plaf.nimbus.State;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * show 时间工具类
@@ -19,12 +20,13 @@ import java.util.Date;
  */
 public class TimeUtils {
 
-    private static final String format_default = "yyyy-MM-dd HH:mm:ss";
-    private static final String format_default_short = "yyyy-MM-dd";
+    private static final String FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
+    private static final String FORMAT_DEFAULT_SHORT = "yyyy-MM-dd";
 
-    private static final DateTimeFormatter format = DateTimeFormat.forPattern(format_default);
-    private static final DateTimeFormatter format_short = DateTimeFormat.forPattern(format_default_short);
+    private static final DateTimeFormatter FORMAT = DateTimeFormat.forPattern(FORMAT_DEFAULT);
+    private static final DateTimeFormatter FORMAT_SHORT = DateTimeFormat.forPattern(FORMAT_DEFAULT_SHORT);
 
+    private static final Pattern TIME_PATTERN = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))?$");
     /**
      * 获取当期时间 "yyyy-MM-dd HH:mm:ss"
      *
@@ -32,7 +34,7 @@ public class TimeUtils {
      */
     public static String getNowTime() {
         DateTime dateTime = new DateTime();
-        return dateTime.toString(format_default);
+        return dateTime.toString(FORMAT_DEFAULT);
     }
 
     /**
@@ -42,7 +44,7 @@ public class TimeUtils {
      */
     public static String getNowTimeShort() {
         DateTime dateTime = new DateTime();
-        return dateTime.toString(format_short);
+        return dateTime.toString(FORMAT_SHORT);
     }
 
     /**
@@ -61,7 +63,7 @@ public class TimeUtils {
      * @return
      */
     public static String getDateString(Date date) {
-        SimpleDateFormat format3 = new SimpleDateFormat(format_default);
+        SimpleDateFormat format3 = new SimpleDateFormat(FORMAT_DEFAULT);
         return format3.format(date);
     }
 
@@ -71,7 +73,7 @@ public class TimeUtils {
      * @return
      */
     public static String getDateStringShort(Date date) {
-        SimpleDateFormat format3 = new SimpleDateFormat(format_default_short);
+        SimpleDateFormat format3 = new SimpleDateFormat(FORMAT_DEFAULT_SHORT);
         return format3.format(date);
     }
 
@@ -82,7 +84,7 @@ public class TimeUtils {
      * @return
      */
     public static Date getDateFromStringShort(String time) {
-        DateTime dateTime = DateTime.parse(time, format_short);
+        DateTime dateTime = DateTime.parse(time, FORMAT_SHORT);
         return dateTime.toDate();
     }
 
@@ -92,8 +94,18 @@ public class TimeUtils {
      * @return
      */
     public static Date getDateFromString(String time) {
-        DateTime dateTime = DateTime.parse(time, format);
+        DateTime dateTime = DateTime.parse(time, FORMAT);
         return dateTime.toDate();
+    }
+
+    /**
+     * 判断日期字符串是否合法
+     * @param dataStr
+     * @return
+     */
+    public static boolean isDataFormat(String dataStr){
+
+        return TIME_PATTERN.matcher(dataStr).matches();
     }
 
 //    /**

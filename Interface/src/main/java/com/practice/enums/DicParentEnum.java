@@ -16,6 +16,9 @@ public enum DicParentEnum {
     ORGANIZE_TYPE(2L, "组织类型", "ORGANIZE_TYPE"),
     ATTENTION_TYPE(46L, "注意事项类型", "ATTENTION_TYPE"),
     QUESTION_TYPE(50L, "题目类型", "QUESTION_TYPE"),
+    CLASS_TYPE(57L, "班级", "CLASS_TYPE"),
+    NATION_TYPE(78L, "民族", "NATION_TYPE"),
+    TEACHER_TYPE(150L, "教师职务", "TEACHER_TYPE"),
     PERIOD(3L, "学段", "PERIOD");
 
     private Long id;

@@ -260,3 +260,10 @@ input:disabled{
 .layui-upload-img{
 	cursor: pointer;
 }
+.tips_verify .layui-layer-tips .layui-layer-content{
+	background: rgb(255, 87, 34)!important;
+}
+.tips_verify .layui-layer-tips .layui-layer-TipsT{
+	border-right-color: rgb(255, 87, 34)!important;
+
+}

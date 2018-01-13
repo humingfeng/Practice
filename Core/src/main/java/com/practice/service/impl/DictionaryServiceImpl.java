@@ -184,6 +184,12 @@ public class DictionaryServiceImpl implements DictionaryService {
      */
     @Override
     public ManageDictionary getDictionaryPO(Long id) {
-        return dictionaryMapper.selectByPrimaryKey(id);
+
+        ManageDictionary dictionary = cacheService.getDictionaryById(id);
+        if(dictionary==null){
+            dictionary = dictionaryMapper.selectByPrimaryKey(id);
+            cacheService.setDicionaryById(id,dictionary);
+        }
+        return dictionary;
     }
 }

@@ -114,6 +114,19 @@ public class CacheServiceImpl implements CacheService {
     }
 
     /**
+     * Set dictionary by id
+     *
+     * @param id
+     * @param dictionary
+     */
+    @Override
+    public void setDicionaryById(Long id, ManageDictionary dictionary) {
+
+        jedisClient.hset(ConstantEnum.CACHE_DICTIONARY.getStrValue(),"KEY:"+id,JsonUtils.objectToJson(dictionary));
+
+    }
+
+    /**
      * Set manage permission
      *
      * @param permissionList

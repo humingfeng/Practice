@@ -41,6 +41,8 @@
 
     <dubbo:reference id="basesService" interface="com.practice.service.BasesService"/>
 
+    <dubbo:reference id="personnelService" interface="com.practice.service.PersonnelService"/>
+
 
 
 

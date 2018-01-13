@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.practice.mapper.ManageStudentMapper">
+  <resultMap id="BaseResultMap" type="com.practice.po.ManageStudent">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="school_id" jdbcType="BIGINT" property="schoolId" />
+    <result column="period_id" jdbcType="BIGINT" property="periodId" />
+    <result column="class_id" jdbcType="BIGINT" property="classId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="enu_num" jdbcType="CHAR" property="enuNum" />
+    <result column="id_num" jdbcType="CHAR" property="idNum" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="nation" jdbcType="BIGINT" property="nation" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="delflag" jdbcType="INTEGER" property="delflag" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, school_id, period_id, class_id, name, sex, enu_num, id_num, birthday, nation, 
+    status, delflag, update_time, update_user
+  </sql>
+  <select id="selectByExample" parameterType="com.practice.po.ManageStudentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manage_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_student
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from manage_student
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.practice.po.ManageStudentExample">
+    delete from manage_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.practice.po.ManageStudent">
+    insert into manage_student (id, school_id, period_id, 
+      class_id, name, sex, 
+      enu_num, id_num, birthday, 
+      nation, status, delflag, 
+      update_time, update_user)
+    values (#{id,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT}, #{periodId,jdbcType=BIGINT}, 
+      #{classId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{enuNum,jdbcType=CHAR}, #{idNum,jdbcType=CHAR}, #{birthday,jdbcType=VARCHAR}, 
+      #{nation,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.practice.po.ManageStudent">
+    insert into manage_student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="schoolId != null">
+        school_id,
+      </if>
+      <if test="periodId != null">
+        period_id,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="enuNum != null">
+        enu_num,
+      </if>
+      <if test="idNum != null">
+        id_num,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="delflag != null">
+        delflag,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="periodId != null">
+        #{periodId,jdbcType=BIGINT},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="enuNum != null">
+        #{enuNum,jdbcType=CHAR},
+      </if>
+      <if test="idNum != null">
+        #{idNum,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null">
+        #{delflag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.practice.po.ManageStudentExample" resultType="java.lang.Long">
+    select count(*) from manage_student
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update manage_student
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.schoolId != null">
+        school_id = #{record.schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="record.periodId != null">
+        period_id = #{record.periodId,jdbcType=BIGINT},
+      </if>
+      <if test="record.classId != null">
+        class_id = #{record.classId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.enuNum != null">
+        enu_num = #{record.enuNum,jdbcType=CHAR},
+      </if>
+      <if test="record.idNum != null">
+        id_num = #{record.idNum,jdbcType=CHAR},
+      </if>
+      <if test="record.birthday != null">
+        birthday = #{record.birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nation != null">
+        nation = #{record.nation,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.delflag != null">
+        delflag = #{record.delflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update manage_student
+    set id = #{record.id,jdbcType=BIGINT},
+      school_id = #{record.schoolId,jdbcType=BIGINT},
+      period_id = #{record.periodId,jdbcType=BIGINT},
+      class_id = #{record.classId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=INTEGER},
+      enu_num = #{record.enuNum,jdbcType=CHAR},
+      id_num = #{record.idNum,jdbcType=CHAR},
+      birthday = #{record.birthday,jdbcType=VARCHAR},
+      nation = #{record.nation,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      delflag = #{record.delflag,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.practice.po.ManageStudent">
+    update manage_student
+    <set>
+      <if test="schoolId != null">
+        school_id = #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="periodId != null">
+        period_id = #{periodId,jdbcType=BIGINT},
+      </if>
+      <if test="classId != null">
+        class_id = #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="enuNum != null">
+        enu_num = #{enuNum,jdbcType=CHAR},
+      </if>
+      <if test="idNum != null">
+        id_num = #{idNum,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null">
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageStudent">
+    update manage_student
+    set school_id = #{schoolId,jdbcType=BIGINT},
+      period_id = #{periodId,jdbcType=BIGINT},
+      class_id = #{classId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      enu_num = #{enuNum,jdbcType=CHAR},
+      id_num = #{idNum,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      delflag = #{delflag,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

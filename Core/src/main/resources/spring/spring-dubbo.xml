@@ -71,4 +71,9 @@
     <bean id="basesService" class="com.practice.service.impl.BasesServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.BasesService" ref="basesService"></dubbo:service>
 
+    <!--personnelService-->
+    <bean id="personnelService" class="com.practice.service.impl.PersonnelServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.PersonnelService" ref="personnelService"></dubbo:service>
+
+
 </beans>

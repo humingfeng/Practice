@@ -1,5 +1,6 @@
 package com.practice.manage.controller;
 
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.po.Edu;
 import com.practice.po.ManageBase;
@@ -9,6 +10,7 @@ import com.practice.service.BasesService;
 import com.practice.service.EduService;
 import com.practice.service.SchoolService;
 import com.practice.service.AreaService;
+import com.practice.utils.JsonUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Base info controller
@@ -176,6 +179,17 @@ public class BaseInfoController {
     @ResponseBody
     public JsonResult ajaxSchoolDelete(@RequestAttribute String token,@PathVariable Long id){
         return schoolService.deleteSchool(token,id);
+    }
+
+    /**
+     * School list usable
+     * @return
+     */
+    @RequestMapping(value = "/auth/baseinfo/school/usable/list")
+    @ResponseBody
+    public JsonResult ajaxSchoolUsableList(){
+        List<KeyValueDTO> keyValueDTOS = schoolService.listSchoolUsable();
+        return JsonResult.success(keyValueDTOS);
     }
 
 
