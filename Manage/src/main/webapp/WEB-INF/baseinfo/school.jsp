@@ -17,7 +17,7 @@
 <body class="childrenBody">
 <!--title-->
 <blockquote class="layui-elem-quote">
-    <h2>教育局管理</h2>
+    <h2>学校管理</h2>
 </blockquote>
 
 <div class="row" style="overflow: inherit">

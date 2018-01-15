@@ -77,7 +77,7 @@
                         $("#classifyId").empty();
                         $("#classifyId").append("<option value=''>请选择</option>");
                         layui.each(d.data,function(index,item){
-                            $("#classifyId").append("<option value='"+item.id+"' >"+item.name+"</option>");
+                            $("#classifyId").append("<option value='"+item.id+"' >"+item.value+"</option>");
                         })
                         $("#form").initForm(data);
                         form.render('select');

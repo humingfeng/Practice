@@ -67,6 +67,12 @@
             <version>1.8.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>se.jiderhamn.classloader-leak-prevention</groupId>
+            <artifactId>classloader-leak-prevention-servlet</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -80,6 +86,22 @@
                     <port>8085</port>
                     <path>/</path>
                 </configuration>
+            </plugin>
+            <!--远程部署-->
+            <plugin>
+
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+
+                <configuration>
+                    <url>http://182.92.117.168:8085/manager/text</url>
+                    <username>admin</username>
+                    <password>529529@Xushd</password>
+                    <update>true</update>
+                    <path>/ROOT</path>
+                </configuration>
+
             </plugin>
         </plugins>
     </build>

@@ -505,4 +505,73 @@ public interface ActivityService {
      * @return
      */
     JsonResult delTaskQuestion(String token, Long activityId, Long taskId, Long id);
+
+    /**
+     * Check over activity
+     * @param id
+     * @return
+     */
+    JsonResult checkOverActivity(Long id);
+
+    /**
+     * To verfiy activity
+     * @param token
+     * @param id
+     * @return
+     */
+    JsonResult toVerfiy(String token, Long id);
+
+    /**
+     * List activity verity
+     * @param param
+     * @return
+     */
+    JsonResult listVerifyActivity(PageSearchParam param);
+
+    /**
+     * Pass activity
+     * @param id
+     * @return
+     */
+    JsonResult passActivity(Long id);
+
+    /**
+     * Reject activity
+     * @param id
+     * @param reason
+     * @return
+     */
+    JsonResult rejectActivity(Long id, String reason);
+
+    /**
+     * Get activity view
+     * @param id
+     * @return
+     */
+    JsonResult getActivityView(Long id);
+
+    /**
+     * Update activity sign status
+     * @param token
+     * @param activityId
+     * @param status
+     * @return
+     */
+    JsonResult updateActivitySingStatus(String token, Long activityId, int status);
+
+    /**
+     * Offline activity
+     * @param token
+     * @param id
+     * @return
+     */
+    JsonResult offline(String token, Long id);
+
+    /**
+     * List enroll record
+     * @param param
+     * @param activityId
+     * @return
+     */
+    JsonResult listEnrollRecordList(PageSearchParam param, Long activityId);
 }

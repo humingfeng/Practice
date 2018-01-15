@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="App" />
         <module name="Core" />
         <module name="Interface" />
         <module name="Manage" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="App" target="1.8" />
       <module name="Core" target="1.8" />
       <module name="Interface" target="1.8" />
       <module name="Manage" target="1.8" />

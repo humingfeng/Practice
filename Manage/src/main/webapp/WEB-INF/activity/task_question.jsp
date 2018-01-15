@@ -41,7 +41,7 @@
                     <td>{{ item.type }}</td>
                     <td>
                         <div class="layui-inline">
-                            <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="deleteUrl"
+                            <a class="layui-btn layui-btn-xs layui-btn-danger del"
                                data-url="/auth/activity/task/question/del/{{item.activityId}}/{{item.taskId}}/{{item.id}}"
                                data-name="这个题目么？" data-index="{{index}}">
                                 <i class="iconfont icon-shanchu"></i>
@@ -95,6 +95,19 @@
                 }
             })
             layui.layer.full(index);
+        })
+
+        $('body').on('click','.del',function(){
+            var url = $(this).data('url'),name = $(this).data('name')||'该条信息',index= $(this).data('index');
+            if (url) {
+                app.layerDel('确定删除 '+name +'?',_=>{
+                    var ls = app.showLoading();
+                    app.get(url).then(d=>{
+                        app.layerMessageS(d.message);
+                        initData()
+                    },e=>{app.layerMessageE(e)}).finally(d=>{app.closeLoading(ls)});
+                })
+            }
         })
 
 

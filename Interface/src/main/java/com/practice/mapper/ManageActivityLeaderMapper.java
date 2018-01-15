@@ -27,4 +27,6 @@ public interface ManageActivityLeaderMapper {
     int updateByPrimaryKeySelective(ManageActivityLeader record);
 
     int updateByPrimaryKey(ManageActivityLeader record);
+
+    List<ManageActivityLeader> selectByActivityId(@Param("activityId") Long activityId);
 }

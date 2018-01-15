@@ -276,4 +276,11 @@
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByActivityId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_activity_sign
+    where activity_id = #{activityId,jdbcType=BIGINT}
+  </select>
 </mapper>

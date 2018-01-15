@@ -104,6 +104,7 @@
                     </div>
                     <div class="layui-form-mid layui-word-aux">开启签到，可使用二维码扫描签到签退</div>
                 </div>
+
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">活动人数</label>

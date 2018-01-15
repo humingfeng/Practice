@@ -27,4 +27,6 @@ public interface ManageActivityIntroduceMapper {
     int updateByPrimaryKeySelective(ManageActivityIntroduce record);
 
     int updateByPrimaryKey(ManageActivityIntroduce record);
+
+    List<ManageActivityIntroduce> selectByActivityId(@Param("activityId") Long activityId);
 }

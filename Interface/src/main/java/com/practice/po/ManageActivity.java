@@ -115,6 +115,8 @@ public class ManageActivity implements Serializable {
 
     private Integer delflag;
 
+    private String reason;
+
     private Long updateUser;
 
     private Date updateTime;
@@ -333,6 +335,14 @@ public class ManageActivity implements Serializable {
 
     public void setDelflag(Integer delflag) {
         this.delflag = delflag;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason == null ? null : reason.trim();
     }
 
     public Long getUpdateUser() {

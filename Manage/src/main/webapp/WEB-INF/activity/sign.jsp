@@ -16,10 +16,19 @@
     .layui-form-pane .layui-input-block {
         margin-left: 129px;
     }
+    .layui-layer-shade {
+         top: 90px!important;
+    }
+
 </style>
 <body class="childrenBody">
 <fieldset class="layui-elem-field">
-    <blockquote class="layui-elem-quote layui-quote-nm qute-blue">活动签到设置</blockquote>
+    <blockquote class="layui-elem-quote layui-quote-nm qute-blue">
+        活动签到设置
+        <div class="layui-form layui-inline" style="margin-left: 20px;">
+            <input type="checkbox" title="开启" <c:if test="${status!=2}">checked</c:if>  lay-filter="close"/>
+        </div>
+    </blockquote>
 
     <div class="layui-form layui-form-pane" id="form">
         <input type="hidden" id="activityId" value="${activityId}">
@@ -31,7 +40,7 @@
                 <div class="layui-form-item " pane>
                     <label class="layui-form-label " >签到</label>
                     <div class="layui-input-block ">
-                        <input type="checkbox" name="signIn" title="开启" <c:if test="${sign.signIn==1}">checked </c:if>>
+                        <input type="checkbox" name="signIn" title="开启" <c:if test="${sign.signIn==1}">checked </c:if> lay-filter="close2">
                     </div>
                 </div>
                 <div <c:if test="${sign.signIn==0}">style="display: none" </c:if> id="signIn">
@@ -58,7 +67,7 @@
                 <div class="layui-form-item " pane>
                     <label class="layui-form-label " >签退</label>
                     <div class="layui-input-block ">
-                        <input type="checkbox" name="signOut" title="开启" <c:if test="${sign.signOut==1}">checked </c:if>>
+                        <input type="checkbox" name="signOut" title="开启" <c:if test="${sign.signOut==1}">checked </c:if> lay-filter="close2">
                     </div>
                 </div>
                 <div <c:if test="${sign.signOut==0}">style="display: none" </c:if> id="signOut">
@@ -91,7 +100,7 @@
         </div>
 
     </div>
-    <iframe id="img" style="display:none"></iframe>
+    <div class="layui-layer-shade" style="<c:if test="${status!=0}"> display: none;</c:if> z-index: 19891014; background-color: rgb(0, 0, 0); opacity: 0.3;"></div>
 </fieldset>
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript">
@@ -107,7 +116,8 @@
 
         var id = $("#id").val(),load;
 
-        form.on("checkbox",function(data){
+        form.on("checkbox(close2)",function(data){
+
             var status = 0,name = data.elem.name,param={id:id};
 
             if(data.elem.checked){
@@ -160,6 +170,22 @@
 
 
             },e=>{app.layerMessageE(e)}).finally(_=>{app.closeLoading(load)})
+        })
+
+        form.on('checkbox(close)', function(data){
+            var status = 2;
+            if(data.elem.checked){
+                status =1;
+            }
+            app.get('/auth/activity/sign/status/${activityId}/'+status).then(d=>{
+                if(status==2){
+                    $(".layui-layer-shade").show();
+                }
+                if(status==1){
+                    $(".layui-layer-shade").hide();
+                }
+            },e=>{})
+
         })
 
     });

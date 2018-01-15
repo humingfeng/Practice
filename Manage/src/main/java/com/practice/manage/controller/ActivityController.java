@@ -410,36 +410,21 @@ public class ActivityController {
     @RequestMapping(value = "/manage/set/{id}")
     public String indexActivitySet(Model model, @PathVariable Long id, String index) {
 
-        ManageActivity manageActivity = activityService.getActivityManagePO(id);
 
         List<KeyValueDTO> tabList = new ArrayList<>();
 
-        int checkStatus = 3;
 
-        if (manageActivity.getCheckIntroduce() == checkStatus) {
-            tabList.add(new KeyValueDTO("活动介绍", "/auth/activity/introduce/" + id));
-        }
-        if (manageActivity.getCheckApply() == checkStatus) {
-            tabList.add(new KeyValueDTO("适用学段", "/auth/activity/apply/" + id));
-        }
-        if (manageActivity.getCheckLeader() == checkStatus) {
-            tabList.add(new KeyValueDTO("负责人", "/auth/activity/leader/" + id));
-        }
-        if (manageActivity.getCheckSign() == checkStatus) {
-            tabList.add(new KeyValueDTO("签到", "/auth/activity/sign/" + id));
-        }
-        if (manageActivity.getCheckSupervise() == checkStatus) {
-            tabList.add(new KeyValueDTO("监督人员", "/auth/activity/supervise/" + id));
-        }
-        if (manageActivity.getCheckTask() == checkStatus) {
-            tabList.add(new KeyValueDTO("任务设置", "/auth/activity/task/" + id));
-        }
-        if (manageActivity.getCheckEnroll() == checkStatus) {
-            tabList.add(new KeyValueDTO("报名设置", "/auth/activity/enroll/" + id));
-        }
-        if (manageActivity.getCheckEvaluate() == checkStatus) {
+
+        tabList.add(new KeyValueDTO("活动介绍", "/auth/activity/introduce/" + id));
+        tabList.add(new KeyValueDTO("适用学段", "/auth/activity/apply/" + id));
+        tabList.add(new KeyValueDTO("负责人", "/auth/activity/leader/" + id));
+        tabList.add(new KeyValueDTO("签到", "/auth/activity/sign/" + id));
+        tabList.add(new KeyValueDTO("监督人员", "/auth/activity/supervise/" + id));
+        tabList.add(new KeyValueDTO("任务设置", "/auth/activity/task/" + id));
+        tabList.add(new KeyValueDTO("报名设置", "/auth/activity/enroll/" + id));
+/*        if (manageActivity.getCheckEvaluate() == checkStatus) {
             tabList.add(new KeyValueDTO("评价设置", "/auth/activity/evaluate/" + id));
-        }
+        }*/
 
         tabList.add(new KeyValueDTO("注意事项", "/auth/activity/attention/" + id));
 
@@ -638,6 +623,10 @@ public class ActivityController {
 
         ManageActivitySign sign = activityService.getActivitySign(activityId);
 
+        ManageActivity activityManagePO = activityService.getActivityManagePO(activityId);
+
+        model.addAttribute("status",activityManagePO.getSign());
+
         model.addAttribute("sign",sign);
 
         model.addAttribute("activityId",activityId);
@@ -656,6 +645,20 @@ public class ActivityController {
     public JsonResult ajaxActivitySignUpdate(@RequestAttribute String token,ManageActivitySign sign){
 
         return activityService.updateActivitySign(token,sign);
+    }
+
+    /**
+     * Activity sign status update
+     * @param activityId
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/sign/status/{activityId}/{status}")
+    @ResponseBody
+    public JsonResult ajaxActivitySingStatus(@PathVariable Long activityId,
+                                             @PathVariable int status,
+                                             @RequestAttribute String token){
+        return activityService.updateActivitySingStatus(token,activityId,status);
     }
 
     /**
@@ -1130,4 +1133,51 @@ public class ActivityController {
         return activityService.listQuestionUsable(param);
     }
 
+    /**
+     * Actvity over check
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/over/check/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityCheck(@PathVariable Long id){
+
+        return activityService.checkOverActivity(id);
+    }
+
+    /**
+     * Activity to verify
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/to/verify/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityToVerify(@PathVariable Long id,
+                                           @RequestAttribute String token){
+
+        return activityService.toVerfiy(token,id);
+    }
+
+    /**
+     * Activity offline
+     * @return
+     */
+    @RequestMapping(value = "/offline/{id}")
+    @ResponseBody
+    public JsonResult ajaxActivityOffline(@RequestAttribute String token,@PathVariable Long id){
+        return activityService.offline(token,id);
+    }
+
+
+    /**
+     * Activity enroll record list
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/enroll/record/list/{activityId}")
+    @ResponseBody
+    public JsonResult ajaxActivityEnrollList(PageSearchParam param,@PathVariable Long activityId){
+
+        return activityService.listEnrollRecordList(param,activityId);
+    }
 }

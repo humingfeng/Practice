@@ -27,4 +27,6 @@ public interface ManageActivityEnrollMapper {
     int updateByPrimaryKeySelective(ManageActivityEnroll record);
 
     int updateByPrimaryKey(ManageActivityEnroll record);
+
+    List<ManageActivityEnroll> selectByActivityId(@Param("activityId") Long activityId);
 }

@@ -27,4 +27,6 @@ public interface ManageActivityApplyMapper {
     int updateByPrimaryKeySelective(ManageActivityApply record);
 
     int updateByPrimaryKey(ManageActivityApply record);
+
+    List<ManageActivityApply> selectByActivityId(@Param("activityId")Long activityId);
 }

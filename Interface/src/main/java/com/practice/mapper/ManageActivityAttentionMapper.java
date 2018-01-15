@@ -27,4 +27,6 @@ public interface ManageActivityAttentionMapper {
     int updateByPrimaryKeySelective(ManageActivityAttention record);
 
     int updateByPrimaryKey(ManageActivityAttention record);
+
+    List<ManageActivityAttention> selectByActivityId(@Param("activityId") Long activityId);
 }

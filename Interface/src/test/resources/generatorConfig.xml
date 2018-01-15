@@ -92,8 +92,9 @@
 
         <!--<table schema="" tableName="manage_activity_question_option"/>-->
 
-        <table schema="" tableName="manage_teacher"/>
-        <table schema="" tableName="manage_student"/>
+        <!--<table schema="" tableName="manage_teacher"/>-->
+        <!--<table schema="" tableName="manage_student"/>-->
+        <table schema="" tableName="manage_activity_enroll_record"/>
 
 
 

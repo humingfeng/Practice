@@ -18,6 +18,9 @@
         </param-value>
     </context-param>
 
+    <listener>
+        <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventorListener</listener-class>
+    </listener>
 
     <!--log4j配置文件加载-->
     <context-param>

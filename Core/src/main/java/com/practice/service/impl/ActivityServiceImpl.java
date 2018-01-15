@@ -8,14 +8,12 @@ import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
-import com.practice.service.ActivityService;
-import com.practice.service.DictionaryService;
-import com.practice.service.UserService;
+import com.practice.service.*;
 import com.practice.utils.*;
+import com.practice.vo.ActivityVerifyVO;
 import com.practice.vo.QuestionVO;
 import com.practice.vo.TaskQuestionVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.zookeeper.Op;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +63,12 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityQuestionMapper questionMapper;
     @Resource
     private ManageActivityQuestionOptionMapper questionOptionMapper;
+    @Resource
+    private AreaService areaService;
+    @Resource
+    private ManageActivityEnrollRecordMapper enrollRecordMapper;
+    @Resource
+    private SchoolService schoolService;
 
 
     @Value("${ENDPOINT}")
@@ -1815,7 +1819,7 @@ public class ActivityServiceImpl implements ActivityService {
             criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(filed1)));
         }
 
-        if(param.getFiled(filed2) !=null ){
+        if (param.getFiled(filed2) != null) {
             criteria.andQuestionLike(CommonUtils.getLikeSql(param.getFiled(filed2)));
         }
 
@@ -1851,7 +1855,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = questionMapper.countByExample(questionExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error(OperateEnum.REPEAT);
         }
 
@@ -1878,7 +1882,7 @@ public class ActivityServiceImpl implements ActivityService {
         questionMapper.insertSelective(activityQuestion);
 
 
-        if(StringUtils.isNotBlank(question.getOptions())){
+        if (StringUtils.isNotBlank(question.getOptions())) {
 
             String options = question.getOptions();
 
@@ -1902,7 +1906,7 @@ public class ActivityServiceImpl implements ActivityService {
 
                 questionOptionMapper.insertSelective(option);
 
-                if(questionItemDTO.getCorrect()==1){
+                if (questionItemDTO.getCorrect() == 1) {
                     activityQuestion.setAnswerId(option.getId());
                 }
 
@@ -1933,7 +1937,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        if(StringUtils.isNotBlank(question.getQuestion())){
+        if (StringUtils.isNotBlank(question.getQuestion())) {
 
             ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
 
@@ -1944,7 +1948,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             long l = questionMapper.countByExample(questionExample);
 
-            if(l>0){
+            if (l > 0) {
                 return JsonResult.error(OperateEnum.REPEAT);
             }
         }
@@ -1963,7 +1967,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityQuestion.setClassify(question.getClassify());
 
-        if(question.getClassify()==1){
+        if (question.getClassify() == 1) {
 
             String options = question.getOptions();
 
@@ -1983,7 +1987,7 @@ public class ActivityServiceImpl implements ActivityService {
 
                 ManageActivityQuestionOption option = new ManageActivityQuestionOption();
 
-                if(questionItemDTO.getId()!=0){
+                if (questionItemDTO.getId() != 0) {
 
                     hasId.add(questionItemDTO.getId());
 
@@ -1999,11 +2003,11 @@ public class ActivityServiceImpl implements ActivityService {
 
                     questionOptionMapper.updateByPrimaryKeySelective(option);
 
-                    if(questionItemDTO.getCorrect()==1){
+                    if (questionItemDTO.getCorrect() == 1) {
                         activityQuestion.setAnswerId(questionItemDTO.getId());
                     }
 
-                }else{
+                } else {
 
                     option.setQuestionId(activityQuestion.getId());
 
@@ -2019,7 +2023,7 @@ public class ActivityServiceImpl implements ActivityService {
 
                     questionOptionMapper.insertSelective(option);
 
-                    if(questionItemDTO.getCorrect()==1){
+                    if (questionItemDTO.getCorrect() == 1) {
                         activityQuestion.setAnswerId(option.getId());
                     }
                 }
@@ -2028,15 +2032,14 @@ public class ActivityServiceImpl implements ActivityService {
             questionMapper.updateByPrimaryKeySelective(activityQuestion);
 
 
-
             for (ManageActivityQuestionOption questionOption : questionOptions) {
 
-                if(!hasId.contains(questionOption.getId())){
+                if (!hasId.contains(questionOption.getId())) {
                     questionOptionMapper.deleteByPrimaryKey(questionOption.getId());
                 }
             }
 
-        }else{
+        } else {
 
             ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
 
@@ -2063,7 +2066,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult delQuestion(String token,Long id) {
+    public JsonResult delQuestion(String token, Long id) {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
@@ -2073,7 +2076,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = taskItemMapper.countByExample(itemExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error("该问题已经被活动应用，暂不能删除");
         }
 
@@ -2114,7 +2117,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         questionDTO.setQuestion(question.getQuestion());
 
-        if(classify==1){
+        if (classify == 1) {
 
             ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
 
@@ -2130,9 +2133,9 @@ public class ActivityServiceImpl implements ActivityService {
 
                 questionItemDTO.setId(questionOption.getId());
 
-                if(questionOption.getId().equals(question.getAnswerId())){
+                if (questionOption.getId().equals(question.getAnswerId())) {
                     questionItemDTO.setCorrect(1);
-                }else{
+                } else {
                     questionItemDTO.setCorrect(0);
                 }
 
@@ -2145,7 +2148,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             questionDTO.setList(list);
 
-        }else{
+        } else {
 
             questionDTO.setAnswerText(question.getAnswerText());
         }
@@ -2174,7 +2177,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         long l = taskItemMapper.countByExample(itemExample);
 
-        if(l>0){
+        if (l > 0) {
             return JsonResult.error("该问题已经被活动应用，暂不能更改状态");
         }
 
@@ -2203,20 +2206,20 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listQuestionUsable(PageSearchParam param) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
 
         ManageActivityQuestionExample questionExample = new ManageActivityQuestionExample();
 
         ManageActivityQuestionExample.Criteria criteria = questionExample.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(1);
 
-        String key1 = "type",key2 = "name";
+        String key1 = "type", key2 = "name";
 
-        if(param.getFiled(key1)!=null){
+        if (param.getFiled(key1) != null) {
             criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(key1)));
         }
 
-        if(param.getFiled(key2)!=null){
+        if (param.getFiled(key2) != null) {
             criteria.andQuestionLike(CommonUtils.getLikeSql(param.getFiled(key2)));
         }
 
@@ -2233,7 +2236,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             questionVO.setId(manageActivityQuestion.getId());
 
-            questionVO.setClassify(manageActivityQuestion.getClassify()==1?"客观题":"主观题");
+            questionVO.setClassify(manageActivityQuestion.getClassify() == 1 ? "客观题" : "主观题");
 
             questionVO.setType(dictionaryService.getDictionaryPO(manageActivityQuestion.getTypeId()).getName());
 
@@ -2279,7 +2282,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             questionVO.setTaskId(taskId);
 
-            questionVO.setClassify(question.getClassify()==1?"客观题":"主观题");
+            questionVO.setClassify(question.getClassify() == 1 ? "客观题" : "主观题");
 
             questionVO.setType(dictionaryService.getDictionaryPO(question.getTypeId()).getName());
 
@@ -2310,7 +2313,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<Long> longs = taskItemMapper.selectQuestionIds(activityId, taskId);
 
-        if(longs.size()<=1){
+        if (longs.size() <= 1) {
             return JsonResult.error("任务不能一个问题都没有");
         }
 
@@ -2329,17 +2332,17 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public JsonResult addTaskQuestion(String token,Long activityId, Long taskId, String checkeds) {
+    public JsonResult addTaskQuestion(String token, Long activityId, Long taskId, String checkeds) {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        List<Long> ids = taskItemMapper.selectQuestionIds(activityId,taskId);
+        List<Long> ids = taskItemMapper.selectQuestionIds(activityId, taskId);
 
         String[] questions = checkeds.split(",");
 
         for (String questionId : questions) {
 
-            if(!ids.contains(Long.valueOf(questionId))){
+            if (!ids.contains(Long.valueOf(questionId))) {
                 ManageActivityTaskItem manageActivityTaskItem = new ManageActivityTaskItem();
 
                 manageActivityTaskItem.setId(null);
@@ -2360,5 +2363,666 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+
+    /**
+     * Update activity sign status
+     *
+     * @param token
+     * @param activityId
+     * @param status
+     * @return
+     */
+    @Override
+    public JsonResult updateActivitySingStatus(String token, Long activityId, int status) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivity manageActivity = new ManageActivity();
+
+        manageActivity.setId(activityId);
+
+        manageActivity.setSign(status);
+
+        if (status == 2) {
+            manageActivity.setCheckSign(0);
+        } else {
+            manageActivity.setCheckSign(3);
+        }
+
+        manageActivity.setUpdateUser(tokeUser.getId());
+
+        manageActivity.setUpdateTime(new Date());
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Check over activity
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult checkOverActivity(Long id) {
+
+        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
+
+        int checkStatus = 3, okStatus = 1;
+
+        ActivityCheckDTO activityCheckDTO = new ActivityCheckDTO();
+
+        String msg = "";
+
+        Date beginTime = manageActivity.getBeginTime();
+
+        Date endTime = manageActivity.getEndTime();
+
+        if (TimeUtils.lessThanNow(beginTime)) {
+
+            msg+= "活动开始时间小于当期时间";
+        }
+
+        if (TimeUtils.lessThanNow(endTime)) {
+            msg+= "活动结束时间小于当期时间";
+        }
+
+        if(manageActivity.getCloseType()==1){
+
+            Date closeTime = manageActivity.getCloseTime();
+
+            if(TimeUtils.Obj1LessObj2(beginTime,closeTime)){
+                msg+= "活动报名截至时间小于活动开始时间";
+            }
+
+        }
+
+
+
+        //introduce
+        if (manageActivity.getCheckIntroduce() == checkStatus) {
+            //3 完成 2 为完成 0 不需要检测
+            activityCheckDTO.setIntroduceStatus(3);
+            activityCheckDTO.setIntroduceMessage("完整");
+
+            List<ManageActivityIntroduce> introduces = introduceMapper.selectByActivityId(id);
+
+            if (introduces.size() == 0) {
+                activityCheckDTO.setIntroduceStatus(2);
+                activityCheckDTO.setIntroduceMessage("未设置活动介绍");
+
+                msg += activityCheckDTO.getIntroduceMessage();
+            }
+        }
+
+        if (manageActivity.getCheckIntroduce() == okStatus) {
+            activityCheckDTO.setIntroduceStatus(3);
+            activityCheckDTO.setIntroduceMessage("完整");
+        }
+
+        if (activityCheckDTO.getIntroduceStatus() == checkStatus) {
+            manageActivity.setCheckIntroduce(1);
+        }
+
+        //apply
+        if (manageActivity.getCheckApply() == checkStatus) {
+
+            activityCheckDTO.setApplyStatus(3);
+            activityCheckDTO.setApplyMessage("完整");
+
+            List<ManageActivityApply> applies = applyMapper.selectByActivityId(id);
+
+            if (applies.size() == 0) {
+                activityCheckDTO.setApplyStatus(2);
+                activityCheckDTO.setApplyMessage("未设置活动适用年段");
+
+                msg += activityCheckDTO.getApplyMessage();
+            }
+        }
+        if (manageActivity.getCheckApply() == okStatus) {
+            activityCheckDTO.setApplyStatus(3);
+            activityCheckDTO.setApplyMessage("完整");
+        }
+
+        if (activityCheckDTO.getApplyStatus() == checkStatus) {
+            manageActivity.setCheckApply(1);
+        }
+
+
+        //leader
+        if (manageActivity.getCheckLeader() == checkStatus) {
+
+            activityCheckDTO.setLeaderStatus(3);
+            activityCheckDTO.setLeaderMessage("完整");
+
+            List<ManageActivityLeader> leaders = leaderMapper.selectByActivityId(id);
+
+            if (leaders.size() == 0) {
+                activityCheckDTO.setLeaderStatus(2);
+                activityCheckDTO.setLeaderMessage("未设置活动负责人");
+
+                msg += activityCheckDTO.getLeaderMessage();
+            }
+
+            int i = 0;
+
+            for (ManageActivityLeader leader : leaders) {
+
+                if (leader.getMain() == 1) {
+                    i = 1;
+                    break;
+                }
+            }
+
+            if (i == 0) {
+                activityCheckDTO.setLeaderStatus(2);
+                activityCheckDTO.setLeaderMessage("未设置活动主负责人");
+
+                msg += activityCheckDTO.getLeaderMessage();
+            }
+
+
+        }
+
+        if (manageActivity.getCheckLeader() == okStatus) {
+            activityCheckDTO.setLeaderStatus(3);
+            activityCheckDTO.setLeaderMessage("完整");
+        }
+
+        if (activityCheckDTO.getLeaderStatus() == 3) {
+            manageActivity.setCheckLeader(1);
+        }
+
+        //sign
+        if (manageActivity.getCheckSign() == checkStatus) {
+
+            activityCheckDTO.setSignStatus(3);
+            activityCheckDTO.setSignMessage("完整");
+
+            List<ManageActivitySign> signs = signMapper.selectByActivityId(id);
+
+            if (signs.size() == 0) {
+                activityCheckDTO.setSignStatus(2);
+                activityCheckDTO.setSignMessage("未设置签到信息");
+
+                msg += activityCheckDTO.getSignMessage();
+            }
+
+            ManageActivitySign sign = signs.get(0);
+
+            if (sign.getSignIn() == 0 && sign.getSignOut() == 0) {
+                activityCheckDTO.setSignStatus(2);
+                activityCheckDTO.setSignMessage("未开启签到、签退");
+
+                msg += activityCheckDTO.getSignMessage();
+            }
+            if (sign.getSignIn() == 1 && StringUtils.isBlank(sign.getSignInErcode())) {
+                activityCheckDTO.setSignStatus(2);
+                activityCheckDTO.setSignMessage("开启签到但未设置签到二维码");
+
+                msg += activityCheckDTO.getSignMessage();
+            }
+            if (sign.getSignOut() == 1 && StringUtils.isBlank(sign.getSignOutErcode())) {
+                activityCheckDTO.setSignStatus(2);
+                activityCheckDTO.setSignMessage("开启签退但未设置签退二维码");
+
+                msg += activityCheckDTO.getSignMessage();
+            }
+
+
+        }
+
+        if (manageActivity.getCheckSign() == okStatus) {
+            activityCheckDTO.setSignStatus(3);
+            activityCheckDTO.setSignMessage("完整");
+        }
+        if (manageActivity.getCheckSign() == 0) {
+            activityCheckDTO.setSignStatus(0);
+            activityCheckDTO.setSignMessage("不需要检测");
+        }
+
+        if (activityCheckDTO.getSignStatus() == 3) {
+            manageActivity.setCheckSign(1);
+        }
+
+        //supervise
+        if (manageActivity.getCheckSupervise() == checkStatus) {
+
+            activityCheckDTO.setSuperviseStatus(3);
+            activityCheckDTO.setSuperviseMessage("完整");
+
+            List<ManageActivitySupervise> supervises = superviseMapper.selectByActivityId(id);
+
+            if (supervises.size() == 0) {
+                activityCheckDTO.setSuperviseStatus(2);
+                activityCheckDTO.setSuperviseMessage("未设置监督人员");
+
+                msg += activityCheckDTO.getSuperviseMessage();
+            }
+        }
+        if (manageActivity.getCheckSupervise() == okStatus) {
+            activityCheckDTO.setSuperviseStatus(3);
+            activityCheckDTO.setSuperviseMessage("完整");
+        }
+        if (manageActivity.getCheckSupervise() == 0) {
+            activityCheckDTO.setSuperviseStatus(0);
+            activityCheckDTO.setSuperviseMessage("不需要检测");
+        }
+
+        if (activityCheckDTO.getSuperviseStatus() == 3) {
+            manageActivity.setCheckSupervise(1);
+        }
+
+        //enroll
+        if (manageActivity.getCheckEnroll() == checkStatus) {
+
+
+            activityCheckDTO.setEnrollStatus(3);
+            activityCheckDTO.setEnrollMessage("完整");
+
+            List<ManageActivityEnroll> enrolls = enrollMapper.selectByActivityId(id);
+
+            if (enrolls.size() == 0) {
+                activityCheckDTO.setEnrollStatus(2);
+                activityCheckDTO.setEnrollMessage("未设置报名信息");
+
+                msg += activityCheckDTO.getEnrollMessage();
+            }
+
+            ManageActivityEnroll enroll = enrolls.get(0);
+
+            if (enroll.getName() == 0) {
+                activityCheckDTO.setEnrollStatus(2);
+                activityCheckDTO.setEnrollMessage("报名采集信息设置有误");
+
+                msg += activityCheckDTO.getEnrollMessage();
+            }
+
+        }
+
+        if (manageActivity.getCheckEnroll() == okStatus) {
+            activityCheckDTO.setEnrollStatus(3);
+            activityCheckDTO.setEnrollMessage("完整");
+        }
+
+        if (activityCheckDTO.getEnrollStatus() == checkStatus) {
+            manageActivity.setCheckEnroll(1);
+        }
+
+        //task
+        if (manageActivity.getCheckTask() == checkStatus) {
+
+            activityCheckDTO.setTaskStatus(3);
+            activityCheckDTO.setTaskMessage("完整");
+
+
+            List<ManageActivityTask> tasks = taskMapper.selectByActivityId(id);
+
+            if (tasks.size() == 0) {
+
+                activityCheckDTO.setTaskStatus(2);
+                activityCheckDTO.setTaskMessage("未设置活动任务");
+
+                msg += activityCheckDTO.getTaskMessage();
+            }
+
+        }
+
+        if (manageActivity.getCheckTask() == okStatus) {
+            activityCheckDTO.setTaskStatus(3);
+            activityCheckDTO.setTaskMessage("完整");
+        }
+
+        if (activityCheckDTO.getTaskStatus() == 3) {
+            manageActivity.setCheckTask(1);
+        }
+
+        if (StringUtils.isBlank(msg)) {
+            manageActivity.setStatus(8);
+        }
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+
+        return JsonResult.success(msg);
+    }
+
+    /**
+     * To verfiy activity
+     *
+     * @param token
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult toVerfiy(String token, Long id) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivity manageActivity = new ManageActivity();
+
+        manageActivity.setId(id);
+
+        manageActivity.setStatus(3);
+
+        manageActivity.setUpdateTime(new Date());
+
+        manageActivity.setUpdateUser(tokeUser.getId());
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List activity verity
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JsonResult listVerifyActivity(PageSearchParam param) {
+
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
+
+        ManageActivityExample example = new ManageActivityExample();
+
+        example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(3);
+
+        List<ManageActivity> manageActivities = activityMapper.selectByExample(example);
+
+        for (ManageActivity manageActivity : manageActivities) {
+
+            manageActivity.setType(typeMapper.selectByPrimaryKey(manageActivity.getTypeId()).getName());
+
+            manageActivity.setClassify(classifyMapper.selectByPrimaryKey(manageActivity.getClassifyId()).getName());
+
+            manageActivity.setTheme(themeMapper.selectByPrimaryKey(manageActivity.getThemeId()).getName());
+        }
+
+        PageInfo<ManageActivity> manageActivityPageInfo = new PageInfo<>(manageActivities);
+
+        return JsonResult.success(manageActivityPageInfo);
+    }
+
+    /**
+     * Pass activity
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult passActivity(Long id) {
+
+        ManageActivity manageActivity = new ManageActivity();
+
+        manageActivity.setId(id);
+
+        manageActivity.setStatus(6);
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Reject activity
+     *
+     * @param id
+     * @param reason
+     * @return
+     */
+    @Override
+    public JsonResult rejectActivity(Long id, String reason) {
+
+        ManageActivity manageActivity = new ManageActivity();
+
+        manageActivity.setId(id);
+
+        manageActivity.setStatus(7);
+
+        manageActivity.setReason(reason);
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get activity view
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult getActivityView(Long id) {
+
+        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
+
+
+        manageActivity.setType(typeMapper.selectByPrimaryKey(manageActivity.getTypeId()).getName());
+
+        manageActivity.setClassify(classifyMapper.selectByPrimaryKey(manageActivity.getClassifyId()).getName());
+
+        manageActivity.setTheme(themeMapper.selectByPrimaryKey(manageActivity.getThemeId()).getName());
+
+        if (manageActivity.getCloseType() == 1) {
+            manageActivity.setCloseTimeStr(TimeUtils.getDateStringShort(manageActivity.getCloseTime()));
+        }
+
+        Date beginTime = manageActivity.getBeginTime();
+
+        Date endTime = manageActivity.getEndTime();
+
+        manageActivity.setTimeStr(TimeUtils.getDateString(beginTime) + " - " + TimeUtils.getDateString(endTime));
+
+
+        ActivityVerifyVO verifyVO = new ActivityVerifyVO();
+
+        verifyVO.setBase(manageActivity);
+
+        List<ManageActivityIntroduce> introduces = introduceMapper.selectByActivityId(id);
+
+        ManageActivityIntroduce introduce = introduces.get(0);
+
+        introduce.setProName(areaService.getProvice(introduce.getPid()).getName());
+
+        introduce.setCityName(areaService.getCity(introduce.getCid()).getName());
+
+        introduce.setAreaName(areaService.getArea(introduce.getAid()).getName());
+
+        verifyVO.setIntroduce(introduce);
+
+        List<ManageActivityApply> applies = applyMapper.selectByActivityId(id);
+
+        for (ManageActivityApply apply : applies) {
+            apply.setGradeName(dictionaryService.getDictionaryPO(apply.getGradeId()).getName());
+        }
+
+        verifyVO.setActivityApplyList(applies);
+
+        List<ManageActivityLeader> leaders = leaderMapper.selectByActivityId(id);
+
+        for (ManageActivityLeader leader : leaders) {
+
+            leader.setUserName(userService.getUserPO(leader.getUserId()).getNickName());
+        }
+
+        verifyVO.setLeaderList(leaders);
+
+        List<ManageActivityAttention> attentions = attentionMapper.selectByActivityId(id);
+
+        for (ManageActivityAttention attention : attentions) {
+
+            attention.setTypeStr(dictionaryService.getDictionaryPO(attention.getType()).getName());
+        }
+
+        verifyVO.setAttentionList(attentions);
+
+        if (manageActivity.getCheckSupervise() == 0) {
+            verifyVO.setSuperviseList(null);
+        } else {
+
+            List<ManageActivitySupervise> supervises = superviseMapper.selectByActivityId(id);
+
+            for (ManageActivitySupervise supervise : supervises) {
+
+                supervise.setUserName(userService.getUserPO(supervise.getUserId()).getNickName());
+
+            }
+            verifyVO.setSuperviseList(supervises);
+
+        }
+
+        List<ManageActivityEnroll> enrolls = enrollMapper.selectByActivityId(id);
+
+        ManageActivityEnroll enroll = enrolls.get(0);
+
+        verifyVO.setEnroll(enroll);
+
+        if (manageActivity.getCheckSign() == 0) {
+            verifyVO.setSign(null);
+        } else {
+            List<ManageActivitySign> signs = signMapper.selectByActivityId(id);
+
+            verifyVO.setSign(signs.get(0));
+        }
+
+        List<TaskDTO> list = new ArrayList<>();
+
+        List<ManageActivityTask> tasks = taskMapper.selectByActivityId(id);
+
+        ManageActivityQuestionExample example = new ManageActivityQuestionExample();
+
+        for (ManageActivityTask task : tasks) {
+
+            TaskDTO taskDTO = new TaskDTO();
+
+            taskDTO.setTask(task);
+
+
+            List<Long> questionIds = taskItemMapper.selectQuestionIds(id, task.getId());
+
+            example.clear();
+
+            example.createCriteria().andIdIn(questionIds);
+
+            List<ManageActivityQuestion> manageActivityQuestions = questionMapper.selectByExample(example);
+
+            taskDTO.setQuestionList(manageActivityQuestions);
+
+            list.add(taskDTO);
+
+
+        }
+
+        verifyVO.setTaskList(list);
+
+
+        return JsonResult.success(verifyVO);
+    }
+
+    /**
+     * Offline activity
+     *
+     * @param token
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult offline(String token, Long id) {
+
+        TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
+
+        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
+
+        Date beginTime = manageActivity.getBeginTime();
+
+        Date endTime = manageActivity.getEndTime();
+
+        if (!TimeUtils.greaterThanNow(beginTime)) {
+
+            return JsonResult.error("活动已开始");
+        }
+
+        if (TimeUtils.lessThanNow(endTime)) {
+            return JsonResult.error("活动已结束");
+        }
+
+
+        ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
+
+        recordExample.createCriteria().andActivityIdEqualTo(id).andStatusGreaterThanOrEqualTo(8);
+
+        long l = enrollRecordMapper.countByExample(recordExample);
+
+        if (l > 0) {
+            return JsonResult.error("已经有报名学生，不可下线");
+        }
+
+        manageActivity.setStatus(8);
+
+        manageActivity.setUpdateTime(new Date());
+
+        manageActivity.setUpdateUser(tokeUser.getId());
+
+        activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List enroll record
+     *
+     * @param param
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listEnrollRecordList(PageSearchParam param, Long activityId) {
+
+        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+
+        ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
+
+        ManageActivityEnrollRecordExample.Criteria criteria = recordExample.createCriteria().andActivityIdEqualTo(activityId).andStatusNotEqualTo(0);
+
+        String key1 = "schoolId",key2="name",key3="status";
+
+        if(param.getFiled(key1)!=null){
+            criteria.andSchoolIdEqualTo(Long.valueOf(param.getFiled(key1)));
+        }
+        if(param.getFiled(key2)!=null){
+            criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key2)));
+        }
+        if(param.getFiled(key3)!=null){
+            criteria.andStatusEqualTo(Integer.valueOf(param.getFiled(key3)));
+        }
+
+        List<ManageActivityEnrollRecord> manageActivityEnrollRecords = enrollRecordMapper.selectByExample(recordExample);
+
+        for (ManageActivityEnrollRecord record : manageActivityEnrollRecords) {
+
+            record.setSchoolName(schoolService.getSchoolPO(record.getSchoolId()).getName());
+
+            record.setPeriodName(dictionaryService.getDictionaryPO(record.getPeriodId()).getName());
+
+            record.setClassName(dictionaryService.getDictionaryPO(record.getClassId()).getName());
+
+            if(record.getNation()!=null){
+                record.setNationName(dictionaryService.getDictionaryPO(record.getNation()).getName());
+            }
+
+            record.setTimeStr(TimeUtils.getDateString(record.getUpdateTime()));
+        }
+
+
+        PageInfo<ManageActivityEnrollRecord> pageInfo = new PageInfo<>(manageActivityEnrollRecords);
+
+
+        return JsonResult.success(pageInfo);
     }
 }

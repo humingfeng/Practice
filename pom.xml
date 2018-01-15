@@ -11,6 +11,7 @@
         <module>Core</module>
         <module>Interface</module>
         <module>Manage</module>
+        <module>App</module>
     </modules>
 
 

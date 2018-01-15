@@ -48,7 +48,7 @@
                 <a class="layui-btn search_btn" lay-submit="return false" lay-filter="search">查询</a>
                 <a class="layui-btn layui-btn-normal newsAdd_btn do-action"
                    data-type="handle" data-url="/auth/activity/manage/base/handle"
-                   data-name="活动新增"><i class="iconfont icon-add"></i>活动新增</a>
+                   data-name="活动创建"><i class="iconfont icon-add"></i>活动创建</a>
             </div>
         </div>
     </form>
@@ -80,6 +80,12 @@
                     {{# if (item.status==9) { }}
                     <span class="layui-badge layui-bg-orange">创建中</span>
                     {{# } }}
+                    {{# if (item.status==8) { }}
+                    <span class="layui-badge">待提交</span>
+                    {{# } }}
+                    {{# if (item.status==7) { }}
+                    <span class="layui-badge layui-bg-danger">审核不通过</span>
+                    {{# } }}
                     {{# if (item.status==3) { }}
                     <span class="layui-badge layui-bg-gray">审核中</span>
                     {{# } }}
@@ -94,27 +100,68 @@
                     {{# } }}
                 </td>
                 <td>
+                    {{# if(item.status==8 || item.status==9 || item.status==7){ }}
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-xs do-action"
+                        <a class="layui-btn layui-btn-xs do-action layui-btn-normal"
                            data-type="handle" data-url="/auth/activity/manage/base/handle?id={{item.id}}" data-name="基本信息">
-                            <i class="iconfont icon-bianji"></i>
                             基本
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <a class="layui-btn layui-btn-xs do-action"
-                           data-type="handle" data-url="/auth/activity/manage/set/{{item.id}}" data-name="基本信息">
-                            <i class="iconfont icon-bianji"></i>
+                        <a class="layui-btn layui-btn-xs  do-action layui-btn-normal"
+                           data-type="handle" data-url="/auth/activity/manage/set/{{item.id}}" data-name="活动设置">
                             设置
                         </a>
                     </div>
+                    {{# } }}
+                    {{# if(item.status==8){ }}
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs sub" data-id="{{item.id}}">
+                            提交审核
+                        </a>
+                    </div>
+                    {{# } }}
+                    {{# if(item.status==9 || item.status==7){ }}
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs layui-btn-warm check" data-id="{{item.id}}">
+                            检查
+                        </a>
+                    </div>
+                    {{# } }}
+                    {{# if(item.status==9 || item.status == 8 || item.status==7){ }}
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs layui-btn-danger do-action-page" data-type="deleteUrl"
                            data-url="/auth/activity/type/delete/{{item.id}}" data-name="{{item.name}},删除会影响拥有该类型的活动" data-index="{{index}}">
-                            <i class="iconfont icon-shanchu"></i>
                             删除
                         </a>
                     </div>
+                    {{# } }}
+                    {{# if (item.status==7) { }}
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs reason" data-reason="{{item.reason}}">
+                            原因
+                        </a>
+                    </div>
+                    {{# } }}
+                    {{# if (item.status==6) { }}
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs  do-action layui-btn-normal"
+                           data-type="handle" data-url="/auth/jump/activity/activity_view?id={{item.id}}" data-name="活动预览">
+                            预览
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs  do-action"
+                           data-type="handle" data-url="/auth/jump/activity/enroll_list?id={{item.id}}" data-name="报名列表">
+                            报名列表
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs layui-btn-danger offline" data-id="{{item.id}}">
+                            下线
+                        </a>
+                    </div>
+                    {{# } }}
                 </td>
             </tr>
             {{#  }); }}
@@ -148,6 +195,53 @@
                 form.render('select');
             },e=>{}).finally(_=>{app.closeLoading(load)});
         });
+
+
+        $("body").on("click",'.check',function(){
+            var id = $(this).data("id");
+            load = app.showLoading();
+            app.get('/auth/activity/over/check/'+id).then(d=>{
+                if(d.message){
+                    app.layerMessageE(d.message)
+                }else{
+                    app.layerMessageS("完整");
+                    page.getList();
+                }
+            },e=>{}).finally(_=>{app.closeLoading(load)})
+        });
+
+        $("body").on('click','.sub',function(){
+           var id = $(this).data('id');
+
+            app.layerConfirm('确定提交审核吗?',_=>{
+                app.get('/auth/activity/to/verify/'+id).then(r=>{
+
+                    app.layerMessageS(r.message);
+                    page.getList();
+                },e=>{
+                    app.layerMessageE(e);
+                })
+            })
+        });
+
+        $('body').on('click','.reason',function(){
+            var reason = $(this).data('reason');
+
+            layer.tips(reason, this, {
+                tips: [1, '#FF5722']
+            });
+        })
+        $('body').on('click','.offline',function(){
+             var id = $(this).data('id');
+
+             app.layerConfirm('确定非要下线么，下线后可以修改活动信息，但需要再次审核！',function(){
+
+                 app.get('/auth/activity/offline/'+id).then(d=>{
+                     app.layerMessageS(d.message);
+                     page.getList();
+                 },e=>{app.layerMessageE(e)});
+             })
+        })
 
         form.on('select(classifyId)', function(data){
             var classifyId = data.value;

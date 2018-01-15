@@ -27,4 +27,6 @@ public interface ManageActivitySignMapper {
     int updateByPrimaryKeySelective(ManageActivitySign record);
 
     int updateByPrimaryKey(ManageActivitySign record);
+
+    List<ManageActivitySign> selectByActivityId(@Param("activityId") Long activityId);
 }

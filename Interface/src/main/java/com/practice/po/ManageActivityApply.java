@@ -3,10 +3,26 @@ package com.practice.po;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ *
+ * @author Xushd  2018/1/13 22:43
+ */
 public class ManageActivityApply implements Serializable{
+
+    private String gradeName;
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
+    }
+
     private Long id;
 
     private Long activityId;
+
 
     private Long gradeId;
 

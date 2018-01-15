@@ -27,4 +27,6 @@ public interface ManageActivitySuperviseMapper {
     int updateByPrimaryKeySelective(ManageActivitySupervise record);
 
     int updateByPrimaryKey(ManageActivitySupervise record);
+
+    List<ManageActivitySupervise> selectByActivityId(@Param("activityId") Long activityId);
 }

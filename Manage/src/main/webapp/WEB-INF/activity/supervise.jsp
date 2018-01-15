@@ -9,6 +9,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <%@include file="../head.jsp"%>
+<style>
+    .layui-layer-shade {
+        top: 90px!important;
+    }
+</style>
 <body class="childrenBody">
 <fieldset class="layui-elem-field">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">活动监督人设置
@@ -93,6 +98,7 @@
 
 
         form.on('checkbox(close)', function(data){
+
             var status = 0;
             if(data.elem.checked){
                 status =3;
@@ -100,6 +106,9 @@
             app.get('/auth/activity/supervise/status/${activityId}/'+status).then(d=>{
                 if(status==0){
                     $(".layui-layer-shade").show();
+                }
+                if(status==3){
+                    $(".layui-layer-shade").hide();
                 }
             },e=>{})
 

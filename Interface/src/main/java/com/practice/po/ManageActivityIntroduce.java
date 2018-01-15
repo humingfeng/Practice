@@ -8,6 +8,38 @@ import java.util.Date;
  * @author Xushd  2018/1/2 23:05
  */
 public class ManageActivityIntroduce implements Serializable {
+
+
+    private String proName;
+
+    private String cityName;
+
+    private String areaName;
+
+    public String getProName() {
+        return proName;
+    }
+
+    public void setProName(String proName) {
+        this.proName = proName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
     private Long id;
 
     private Long activityId;

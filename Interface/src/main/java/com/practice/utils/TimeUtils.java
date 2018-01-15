@@ -108,6 +108,52 @@ public class TimeUtils {
         return TIME_PATTERN.matcher(dataStr).matches();
     }
 
+    /**
+     * 时间是否大于系统当前时间
+     * @param time
+     * @return
+     */
+    public static boolean greaterThanNow(Date time){
+        DateTime dateTime = new DateTime(time);
+        if(dateTime.getMillis() > new DateTime().getMillis()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 时间是否小于系统当前时间
+     * @param time
+     * @return
+     */
+    public static boolean lessThanNow(Date time){
+        DateTime dateTime = new DateTime(time);
+        if(dateTime.getMillis() < new DateTime().getMillis()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 两个时间大小判断
+     * @param obj1
+     * @param obj2
+     * @return
+     */
+    public static boolean Obj1LessObj2(Date obj1,Date obj2){
+
+        DateTime dateTime1 = new DateTime(obj1);
+        DateTime dateTime2 = new DateTime(obj2);
+
+        if(dateTime1.getMillis() < dateTime2.getMillis()){
+            return true;
+        }
+
+        return false;
+
+    }
+
+
 //    /**
 //     * 获取当前日期字符串 yyyyMMdd
 //     * @return
