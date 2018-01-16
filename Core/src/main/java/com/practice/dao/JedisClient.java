@@ -5,16 +5,51 @@ package com.practice.dao;
  */
 public interface JedisClient {
 
+    /**
+     * Get
+     * @param key
+     * @return
+     */
     String get(String key);
 
+    /**
+     * Set
+     * @param key
+     * @param value
+     * @return
+     */
     String set(String key, String value);
 
+    /**
+     * Hget
+     * @param hkey
+     * @param key
+     * @return
+     */
     String hget(String hkey, String key);
 
+    /**
+     * Hset
+     * @param hkey
+     * @param key
+     * @param value
+     * @return
+     */
     Long hset(String hkey, String key, String value);
 
+    /**
+     * Del
+     * @param key
+     * @return
+     */
     Long del(String key);
 
+    /**
+     * Hdel
+     * @param hkey
+     * @param key
+     * @return
+     */
     Long hdel(String hkey, String key);
 
     /**
@@ -39,5 +74,11 @@ public interface JedisClient {
      */
     Long ttl(String key);
 
+    /**
+     * is exit
+     * @param key
+     * @return
+     */
+    Boolean isExit(String key);
 
 }

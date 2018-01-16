@@ -315,4 +315,38 @@ public class CacheServiceImpl implements CacheService {
     public void setArea(Long aid, AreaDTO areaDTO) {
         jedisClient.hset(ConstantEnum.CACHE_AREA.getStrValue(), "KEY:" + aid,JsonUtils.objectToJson(areaDTO));
     }
+
+    /**
+     * Set phone verify code
+     *
+     * @param phone
+     * @param verifyCode
+     */
+    @Override
+    public void setPhoneVerifyCode(String phone, String verifyCode) {
+        jedisClient.set(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone,verifyCode);
+        jedisClient.expire(ConstantEnum.CACHE_MANGE_USER_PERMISSION.getStrValue()+":KEY:"+phone,60*5);
+    }
+
+    /**
+     * is exit phone verify code
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public boolean isExistPhoneVerifyCode(String phone) {
+        return jedisClient.isExit(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone);
+    }
+
+    /**
+     * Get phone verify code
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public String getPhoneVerifyCode(String phone) {
+        return jedisClient.get(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone);
+    }
 }

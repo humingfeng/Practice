@@ -2,6 +2,7 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.DicParentEnum;
@@ -17,6 +18,7 @@ import com.practice.utils.JwtTokenUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -191,5 +193,27 @@ public class DictionaryServiceImpl implements DictionaryService {
             cacheService.setDicionaryById(id,dictionary);
         }
         return dictionary;
+    }
+
+    /**
+     * List dictionary
+     *
+     * @param dicParentEnum
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> listDicByEnumFromCache(DicParentEnum dicParentEnum) {
+        List<ManageDictionary> manageDictionaries = this.listDictionaryByEnumFromCache(dicParentEnum);
+        String key1= "34|35|36|37|38|39",key2="40|41|42",key3="43|44|45";
+        List<KeyValueDTO> list = new ArrayList<>();
+        for (ManageDictionary manageDictionary : manageDictionaries) {
+            if(manageDictionary.getParam().equals(key1)
+                    ||manageDictionary.getParam().equals(key2)
+                    ||manageDictionary.getParam().equals(key3)){
+                continue;
+            }
+            list.add(new KeyValueDTO(manageDictionary.getId(),manageDictionary.getName()));
+        }
+        return list;
     }
 }

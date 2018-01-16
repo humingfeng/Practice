@@ -75,5 +75,8 @@
     <bean id="personnelService" class="com.practice.service.impl.PersonnelServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.PersonnelService" ref="personnelService"></dubbo:service>
 
+    <!--smsService-->
+    <bean id="smsService" class="com.practice.service.impl.SmsServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.SmsService" ref="smsService"></dubbo:service>
 
 </beans>

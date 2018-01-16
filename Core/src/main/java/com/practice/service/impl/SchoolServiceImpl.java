@@ -270,4 +270,36 @@ public class SchoolServiceImpl implements SchoolService {
 
         return list;
     }
+
+    /**
+     * List school usable by pid and cid and aid
+     *
+     * @param pid
+     * @param cid
+     * @param aid
+     * @return
+     */
+    @Override
+    public JsonResult listSchoolUsable(Long pid, Long cid, Long aid) {
+
+        SchoolExample schoolExample = new SchoolExample();
+
+        schoolExample.createCriteria()
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1)
+                .andProviceIdEqualTo(pid)
+                .andCityIdEqualTo(cid)
+                .andAreaIdEqualTo(aid);
+
+        List<School> schools = schoolMapper.selectByExample(schoolExample);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (School school : schools) {
+
+            list.add(new KeyValueDTO(school.getId(),school.getName()));
+        }
+
+        return JsonResult.success(list);
+    }
 }

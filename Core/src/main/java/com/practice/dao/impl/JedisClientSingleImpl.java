@@ -90,7 +90,17 @@ public class JedisClientSingleImpl implements JedisClient {
         return ret;
     }
 
-
-
-
+    /**
+     * is exit
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public Boolean isExit(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Boolean exists = jedis.exists(key);
+        jedis.close();
+        return exists;
+    }
 }

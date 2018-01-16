@@ -2,10 +2,7 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.practice.dto.PageSearchParam;
-import com.practice.dto.StudentExcelDTO;
-import com.practice.dto.TeacherExcelDTO;
-import com.practice.dto.TokenUserDTO;
+import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManageStudentMapper;
 import com.practice.mapper.ManageTeacherMapper;
@@ -587,5 +584,35 @@ public class PersonnelServiceImpl implements PersonnelService {
         }
 
         return JsonResult.success("成功导入"+count+"条数据");
+    }
+
+    /**
+     * Verify student
+     *
+     * @param verifyStudentDTO
+     * @return
+     */
+    @Override
+    public JsonResult verifyStudent(VerifyStudentDTO verifyStudentDTO) {
+
+
+        ManageStudentExample studentExample = new ManageStudentExample();
+
+        studentExample.createCriteria()
+                .andSchoolIdEqualTo(verifyStudentDTO.getSid())
+                .andPeriodIdEqualTo(verifyStudentDTO.getPeriodId())
+                .andClassIdEqualTo(verifyStudentDTO.getClassId())
+                .andNameEqualTo(verifyStudentDTO.getName())
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        List<ManageStudent> manageStudents = studentMapper.selectByExample(studentExample);
+
+        if(manageStudents.size()==0){
+            return JsonResult.error("无此学生，请核对信息");
+        }else{
+            return JsonResult.success(manageStudents.get(0).getId());
+        }
+
     }
 }
