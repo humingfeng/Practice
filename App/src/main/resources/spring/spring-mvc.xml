@@ -47,7 +47,7 @@
     <!--     配置拦截器-->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/auth/**"/>
+            <mvc:mapping path="/app/auth/**"/>
             <bean class="com.practice.app.interceptor.AppInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

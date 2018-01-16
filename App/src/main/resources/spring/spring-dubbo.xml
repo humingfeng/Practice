@@ -17,6 +17,18 @@
     <dubbo:consumer timeout="30000" />
 
     <!-- 调用的接口 -->
+    <dubbo:reference id="loginService" interface="com.practice.service.LoginService"/>
 
+    <dubbo:reference id="userService" interface="com.practice.service.UserService"/>
+
+    <dubbo:reference id="schoolService" interface="com.practice.service.SchoolService"/>
+
+    <dubbo:reference id="areaService" interface="com.practice.service.AreaService"/>
+
+    <dubbo:reference id="dictionaryService" interface="com.practice.service.DictionaryService"/>
+
+    <dubbo:reference id="personnelService" interface="com.practice.service.PersonnelService"/>
+
+    <dubbo:reference id="smsService" interface="com.practice.service.SmsService"/>
 
 </beans>

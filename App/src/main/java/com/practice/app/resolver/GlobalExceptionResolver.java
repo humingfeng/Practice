@@ -2,6 +2,7 @@ package com.practice.app.resolver;
 
 
 import com.practice.enums.AuthEnum;
+import com.practice.enums.OperateEnum;
 import com.practice.exception.PermissonException;
 import com.practice.result.JsonResult;
 import com.practice.utils.ExceptionUtil;
@@ -38,7 +39,7 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
 
         } else {
 
-            result = JsonUtils.objectToJson(JsonResult.error(ExceptionUtil.getStackTrace(ex)));
+            result = JsonUtils.objectToJson(JsonResult.error(OperateEnum.SERVICE_ERROR));
             LOGGER.error("Error:{}", ex);
         }
 

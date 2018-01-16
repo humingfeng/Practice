@@ -20,7 +20,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String token = request.getHeader("manage-token");
+        String token = request.getHeader("X-AppKey");
         if(StringUtils.isNotBlank(token) && JwtTokenUtil.isJwtTimeOut(token)){
             request.setAttribute("token",token);
             return true;
