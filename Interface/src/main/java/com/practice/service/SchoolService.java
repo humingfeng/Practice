@@ -64,4 +64,12 @@ public interface SchoolService {
      */
     List<KeyValueDTO> listSchoolUsable();
 
+    /**
+     * List school usable by pid and cid and aid
+     * @param pid
+     * @param cid
+     * @param aid
+     * @return
+     */
+    JsonResult listSchoolUsable(Long pid, Long cid, Long aid);
 }

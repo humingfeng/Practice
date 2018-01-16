@@ -1,6 +1,7 @@
 package com.practice.service;
 
 import com.practice.dto.PageSearchParam;
+import com.practice.dto.VerifyStudentDTO;
 import com.practice.po.ManageStudent;
 import com.practice.po.ManageTeacher;
 import com.practice.result.JsonResult;
@@ -117,4 +118,11 @@ public interface PersonnelService {
      * @return
      */
     JsonResult addStudentList(String token, String schoolId, String periodId, String classId, String rows);
+
+    /**
+     * Verify student
+     * @param verifyStudentDTO
+     * @return
+     */
+    JsonResult verifyStudent(VerifyStudentDTO verifyStudentDTO);
 }

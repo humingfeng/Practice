@@ -23,6 +23,11 @@ public enum ConstantEnum {
     CACHE_AREA("CACHE_AREA"),
 
     /**
+     * phone verify code
+     */
+    PHONE_VERIFY_CODE("PHONE_VERIFY_CODE"),
+
+    /**
      * default head img
      */
     DEFAULT_HEADIMG_MAN("http://static.uping.wang/default/defalut_man.jpg"),

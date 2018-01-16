@@ -163,4 +163,24 @@ public interface CacheService {
     void setArea(Long aid,AreaDTO areaDTO);
 
 
+    /**
+     * Set phone verify code
+     * @param phone
+     * @param verifyCode
+     */
+    void setPhoneVerifyCode(String phone, String verifyCode);
+
+    /**
+     * is exit phone verify code
+     * @param phone
+     * @return
+     */
+    boolean isExistPhoneVerifyCode(String phone);
+
+    /**
+     * Get phone verify code
+     * @param phone
+     * @return
+     */
+    String getPhoneVerifyCode(String phone);
 }

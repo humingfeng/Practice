@@ -1,5 +1,6 @@
 package com.practice.service;
 
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageDictionary;
@@ -63,5 +64,10 @@ public interface DictionaryService {
      */
     ManageDictionary getDictionaryPO(Long id);
 
-
+    /**
+     * List dictionary
+     * @param dicParentEnum
+     * @return
+     */
+    List<KeyValueDTO> listDicByEnumFromCache(DicParentEnum dicParentEnum);
 }
