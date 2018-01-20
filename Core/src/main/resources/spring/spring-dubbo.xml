@@ -79,4 +79,12 @@
     <bean id="smsService" class="com.practice.service.impl.SmsServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.SmsService" ref="smsService"></dubbo:service>
 
+    <!--paramService-->
+    <bean id="paramService" class="com.practice.service.impl.ParamServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.ParamService" ref="paramService"></dubbo:service>
+
+    <!--runService-->
+    <bean id="runService" class="com.practice.service.impl.RunServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.RunService" ref="runService"></dubbo:service>
+
 </beans>

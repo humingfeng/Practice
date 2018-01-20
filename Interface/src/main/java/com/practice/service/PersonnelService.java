@@ -1,9 +1,11 @@
 package com.practice.service;
 
 import com.practice.dto.PageSearchParam;
+import com.practice.dto.ParentDTO;
 import com.practice.dto.VerifyStudentDTO;
 import com.practice.po.ManageStudent;
 import com.practice.po.ManageTeacher;
+import com.practice.po.Parent;
 import com.practice.result.JsonResult;
 
 /**
@@ -125,4 +127,48 @@ public interface PersonnelService {
      * @return
      */
     JsonResult verifyStudent(VerifyStudentDTO verifyStudentDTO);
+
+    /**
+     * Register parent
+     * @param parent
+     * @return
+     */
+    JsonResult registerParent(Parent parent);
+
+    /**
+     * Is phone parent exit
+     * @return
+     * @param phone
+     */
+    boolean isParentPhoneExit(String phone);
+
+    /**
+     * Get parent by phone
+     * @param phone
+     * @return
+     */
+    JsonResult getParentByPhone(String phone);
+
+    /**
+     * Reset parent pass
+     * @param id
+     * @param pass
+     * @return
+     */
+    JsonResult resetParentPass(Long id, String pass);
+
+    /**
+     * Parent login check
+     * @param phone
+     * @param pass
+     * @return
+     */
+    JsonResult checkParentLogin(String phone, String pass);
+
+    /**
+     * Get parent DTO
+     * @param id
+     * @return
+     */
+    ParentDTO getParentDTO(Long id);
 }

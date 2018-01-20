@@ -3,21 +3,18 @@ package com.practice.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dto.*;
+import com.practice.enums.AuthEnum;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManageStudentMapper;
 import com.practice.mapper.ManageTeacherMapper;
-import com.practice.po.ManageStudent;
-import com.practice.po.ManageStudentExample;
-import com.practice.po.ManageTeacher;
-import com.practice.po.ManageTeacherExample;
+import com.practice.mapper.ParentMapper;
+import com.practice.po.*;
 import com.practice.result.JsonResult;
+import com.practice.service.CacheService;
 import com.practice.service.DictionaryService;
 import com.practice.service.PersonnelService;
 import com.practice.service.SchoolService;
-import com.practice.utils.CommonUtils;
-import com.practice.utils.JsonUtils;
-import com.practice.utils.JwtTokenUtil;
-import com.practice.utils.TimeUtils;
+import com.practice.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +34,13 @@ public class PersonnelServiceImpl implements PersonnelService {
     @Resource
     private ManageStudentMapper studentMapper;
     @Resource
+    private ParentMapper parentMapper;
+    @Resource
     private DictionaryService dictionaryService;
     @Resource
     private SchoolService schoolService;
+    @Resource
+    private CacheService cacheService;
 
     /**
      * List Teacher
@@ -611,8 +612,240 @@ public class PersonnelServiceImpl implements PersonnelService {
         if(manageStudents.size()==0){
             return JsonResult.error("无此学生，请核对信息");
         }else{
-            return JsonResult.success(manageStudents.get(0).getId());
+
+            StudentDTO studentDTO = new StudentDTO();
+            ManageStudent student = manageStudents.get(0);
+
+            studentDTO.setStudentId(student.getId());
+
+            studentDTO.setSchoolId(student.getSchoolId());
+
+            studentDTO.setSchoolName(schoolService.getSchoolPO(student.getSchoolId()).getName());
+
+            studentDTO.setClassId(student.getClassId());
+
+            studentDTO.setPeriodName(dictionaryService.getDictionaryPO(student.getPeriodId()).getName());
+
+            studentDTO.setPeriodId(student.getPeriodId());
+
+            studentDTO.setClassName(dictionaryService.getDictionaryPO(student.getClassId()).getName());
+
+            studentDTO.setClassId(student.getClassId());
+
+            studentDTO.setStudentName(student.getName());
+
+            return JsonResult.success(studentDTO);
         }
 
+    }
+
+    /**
+     * Register parent
+     *
+     * @param parent
+     * @return
+     */
+    @Override
+    public JsonResult registerParent(Parent parent) {
+
+        ParentExample parentExample = new ParentExample();
+
+        parentExample.createCriteria()
+                .andStudentIdEqualTo(parent.getStudentId())
+                .andRelationIdEqualTo(parent.getRelationId())
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        long l = parentMapper.countByExample(parentExample);
+
+        if(l>0){
+            return JsonResult.error("该学生的该亲属已经注册");
+        }
+
+        parentExample.clear();
+
+        parentExample.createCriteria()
+                .andPhoneEqualTo(parent.getPhone())
+                .andCurrentEqualTo(1)
+                .andStatusEqualTo(1)
+                .andDelflagEqualTo(0);
+
+        l = parentMapper.countByExample(parentExample);
+
+        if(l>0){
+            return JsonResult.error("该手机号已经绑定其他学生");
+        }
+
+        parent.setId(null);
+
+        parent.setStatus(1);
+
+        parent.setDelflag(0);
+
+        parent.setUpdateTime(new Date());
+
+        parent.setCreateTime(new Date());
+
+        parent.setCurrent(1);
+
+        parent.setPassword(CommonUtils.sha256(parent.getPassword()));
+
+        parentMapper.insertSelective(parent);
+
+        return JsonResult.success("注册成功");
+    }
+
+    /**
+     * Is phone parent exit
+     *
+     * @return
+     * @param phone
+     */
+    @Override
+    public boolean isParentPhoneExit(String phone) {
+
+        if(!ValidatorUtils.isMobile(phone)){
+            return false;
+        }
+        ParentExample parentExample = new ParentExample();
+
+        parentExample.createCriteria()
+                .andPhoneEqualTo(Long.valueOf(phone))
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        long l = parentMapper.countByExample(parentExample);
+
+        if(l>0){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get parent by phone
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public JsonResult getParentByPhone(String phone) {
+        if(!ValidatorUtils.isMobile(phone)){
+            return JsonResult.error(OperateEnum.PHONE_ERROR);
+        }
+        ParentExample parentExample = new ParentExample();
+
+        parentExample.createCriteria()
+                .andPhoneEqualTo(Long.valueOf(phone))
+                .andCurrentEqualTo(1)
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        List<Parent> parents = parentMapper.selectByExample(parentExample);
+
+        if(parents.size()==0){
+            return JsonResult.error("该手机号从未注册");
+        }
+
+        ParentDTO parentDTO = this.getParentDTO(parents.get(0).getId());
+
+        return JsonResult.success(parentDTO);
+    }
+
+    /**
+     * Reset parent pass
+     *
+     * @param id
+     * @param pass
+     * @return
+     */
+    @Override
+    public JsonResult resetParentPass(Long id, String pass) {
+
+        Parent parent = new Parent();
+
+        parent.setPassword(CommonUtils.sha256(pass));
+
+        parent.setId(id);
+
+        parent.setUpdateTime(new Date());
+
+        parentMapper.updateByPrimaryKeySelective(parent);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Parent login check
+     *
+     * @param phone
+     * @param pass
+     * @return
+     */
+    @Override
+    public JsonResult checkParentLogin(String phone, String pass) {
+
+        if(!ValidatorUtils.isMobile(phone)){
+            return JsonResult.error(OperateEnum.PHONE_ERROR);
+        }
+
+        ParentExample parentExample = new ParentExample();
+
+        parentExample.createCriteria()
+                .andPhoneEqualTo(Long.valueOf(phone))
+                .andCurrentEqualTo(1)
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        List<Parent> parents = parentMapper.selectByExample(parentExample);
+
+        if(parents.size()==0){
+            return JsonResult.error(AuthEnum.USER_NO_EXIST);
+        }
+
+        Parent parent = parents.get(0);
+
+        if(!StringUtils.equals(CommonUtils.sha256(pass),parent.getPassword())){
+            return JsonResult.error(AuthEnum.PASS_ERROR);
+        }
+
+        ParentDTO parentDTO = this.getParentDTO(parent.getId());
+
+        cacheService.setParent(parentDTO);
+
+        return JsonResult.success(parentDTO);
+    }
+
+    /**
+     * Get parent DTO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ParentDTO getParentDTO(Long id) {
+
+        Parent parent = parentMapper.selectByPrimaryKey(id);
+
+        ParentDTO parentDTO = new ParentDTO();
+
+        parentDTO.setId(parent.getId());
+
+        parentDTO.setName(parent.getName());
+
+        parentDTO.setStudentId(parent.getStudentId());
+
+        parentDTO.setPhone(parent.getPhone());
+
+        parentDTO.setHeadImg(parent.getHeadImg());
+
+        parentDTO.setRelationId(parent.getRelationId());
+
+        parentDTO.setRelationName(dictionaryService.getDictionaryPO(parent.getRelationId()).getName());
+
+        parentDTO.setStudentName(studentMapper.selectByPrimaryKey(parent.getStudentId()).getName());
+
+        return parentDTO;
     }
 }

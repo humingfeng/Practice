@@ -23,6 +23,19 @@ public enum ConstantEnum {
     CACHE_AREA("CACHE_AREA"),
 
     /**
+     * Parent keys
+     */
+    PARENT_DTO("PARENT_DTO"),
+    /**
+     * App Slider
+     */
+    APP_SLIDER("APP_SLIDER"),
+
+    /**
+     * System param
+     */
+    SYSTEM_PARAM("SYSTEM_PARAM"),
+    /**
      * phone verify code
      */
     PHONE_VERIFY_CODE("PHONE_VERIFY_CODE"),

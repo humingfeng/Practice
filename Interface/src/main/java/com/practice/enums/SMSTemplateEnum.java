@@ -7,7 +7,8 @@ public enum SMSTemplateEnum {
     /**
      * Sms template
      */
-    REGISTER("SMS_121907712","register");
+    REGISTER("SMS_121907712","register"),
+    FORGET("SMS_122286243","forget");
 
     private String code;
     private String sign;

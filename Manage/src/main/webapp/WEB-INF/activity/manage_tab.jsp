@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@include file="../head.jsp"%>
+<jsp:include page="/head"></jsp:include>
 <body class="childrenBody">
 <div class="layui-container" style="margin-left: 0px;">
     <input type="hidden" id="index" value="${index}">
@@ -42,7 +42,7 @@
 
 
 
-        var childFrame = "<iframe src='"+url+"' data-id='"+index+"' id='frame_"+index+"'></frame>"
+        var childFrame = "<iframe src='"+url+"' data-id='"+index+"' id='frame_"+index+"'></iframe>"
 
         $(curItem).append($(childFrame)).addClass("layui-show").data("status",1);
 

@@ -124,5 +124,6 @@ layui.define(["jquery"], function (exports) {
         }));
 
     })(jQuery);
+
     exports('cookie', null);
 });

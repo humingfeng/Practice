@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%@include file="head.jsp"%>
+<jsp:include page="/head"></jsp:include>
 <style>
     .layui-body{overflow:hidden; border-top:5px solid #1AA094;border-left:2px solid #1AA094;}
     .layui-tab-content{ height:100%; padding:0; }
@@ -40,7 +40,7 @@
                     <a href="javascript:;" class="mobileAddTab" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>设置</cite></a>
                 </li>
                 <li class="layui-nav-item" mobile>
-                    <a href="javascript:;" class="signOut"><i class="iconfont icon-loginout"></i> 退出</a>
+                    <a href="javascript:;" class="signOut"><i class="iconfont icon-exit"></i> 退出</a>
                 </li>
                 <%--<li class="layui-nav-item lockcms" pc>--%>
                     <%--<a href="javascript:;"><i class="iconfont icon-lock1"></i><cite>锁屏</cite></a>--%>
@@ -65,7 +65,7 @@
                         </dd>
                         <dd>
                             <a href="javascript:;" class="signOut">
-                                <i class="iconfont icon-loginout"></i>
+                                <i class="iconfont icon-exit"></i>
                                 <cite>退出</cite>
                             </a>
                         </dd>

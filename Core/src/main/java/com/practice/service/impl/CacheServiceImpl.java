@@ -1,13 +1,11 @@
 package com.practice.service.impl;
 
 import com.practice.dao.JedisClient;
-import com.practice.dto.AreaDTO;
-import com.practice.dto.CityDTO;
-import com.practice.dto.NavDTO;
-import com.practice.dto.ProvinceDTO;
+import com.practice.dto.*;
 import com.practice.enums.ConstantEnum;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageDictionary;
+import com.practice.po.SystemParam;
 import com.practice.service.CacheService;
 import com.practice.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -324,8 +322,8 @@ public class CacheServiceImpl implements CacheService {
      */
     @Override
     public void setPhoneVerifyCode(String phone, String verifyCode) {
-        jedisClient.set(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone,verifyCode);
-        jedisClient.expire(ConstantEnum.CACHE_MANGE_USER_PERMISSION.getStrValue()+":KEY:"+phone,60*5);
+        jedisClient.set(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+":KEY:"+phone,verifyCode);
+        jedisClient.expire(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+":KEY:"+phone,60*5);
     }
 
     /**
@@ -336,7 +334,7 @@ public class CacheServiceImpl implements CacheService {
      */
     @Override
     public boolean isExistPhoneVerifyCode(String phone) {
-        return jedisClient.isExit(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone);
+        return jedisClient.isExit(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+":KEY:"+phone);
     }
 
     /**
@@ -347,6 +345,84 @@ public class CacheServiceImpl implements CacheService {
      */
     @Override
     public String getPhoneVerifyCode(String phone) {
-        return jedisClient.get(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+"KEY:"+phone);
+        return jedisClient.get(ConstantEnum.PHONE_VERIFY_CODE.getStrValue()+":KEY:"+phone);
+    }
+
+    /**
+     * Set parent DTO
+     *
+     * @param parentDTO
+     */
+    @Override
+    public void setParent(ParentDTO parentDTO) {
+        jedisClient.hset(ConstantEnum.PARENT_DTO.getStrValue(),"KEY:"+parentDTO.getId(),JsonUtils.objectToJson(parentDTO));
+    }
+
+    /**
+     * Get parent DTO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ParentDTO getParent(Long id) {
+        String hget = jedisClient.hget(ConstantEnum.PARENT_DTO.getStrValue(), "KEY:" + id);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,ParentDTO.class);
+        }
+        return null;
+    }
+
+    /**
+     * Set system param
+     *
+     * @param systemParam
+     */
+    @Override
+    public void setSystemParam(KeyValueDTO systemParam) {
+        jedisClient.hset(ConstantEnum.SYSTEM_PARAM.getStrValue(),"KEY:"+systemParam.getId(),JsonUtils.objectToJson(systemParam));
+    }
+
+    /**
+     * Get system param
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public KeyValueDTO getSystemParam(Long id) {
+        String hget = jedisClient.hget(ConstantEnum.SYSTEM_PARAM.getStrValue(), "KEY:" + id);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,KeyValueDTO.class);
+        }
+        return null;
+    }
+
+    /**
+     * Get app slider
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public List<SliderItemDTO> getAppSlider(Integer type) {
+
+        String hget = jedisClient.hget(ConstantEnum.APP_SLIDER.getStrValue(), "KEY:" + type);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,SliderItemDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set app slider
+     *
+     * @param type
+     * @param list
+     */
+    @Override
+    public void setAppSlider(Integer type, List<SliderItemDTO> list) {
+        jedisClient.hset(ConstantEnum.APP_SLIDER.getStrValue(),"KEY:"+type,JsonUtils.objectToJson(list));
     }
 }

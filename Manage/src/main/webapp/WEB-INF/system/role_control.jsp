@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@include file="../head.jsp"%>
+<jsp:include page="/head"></jsp:include>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote layui-quote-nm qute-blue">角色权限菜单控制</blockquote>
 <input id="id" type="hidden" value="${id}">

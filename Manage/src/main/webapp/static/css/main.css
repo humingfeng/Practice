@@ -265,5 +265,124 @@ input:disabled{
 }
 .tips_verify .layui-layer-tips .layui-layer-TipsT{
 	border-right-color: rgb(255, 87, 34)!important;
+}
+.tips_verify .layui-layer-tips .layui-layer-TipsB{
+	border-right-color: rgb(255, 87, 34)!important;
+}
+.layui-table-page{
+	text-align: right;
+}
+.layui-table-tips-main{
+	min-height: fit-content;
+}
+.layui-table-tips-main img{
+	width: 100%;
+}
+.mt5{
+	margin-top: 5px;
+}
 
+/*drag*/
+.item_content ul {
+	list-style: none;
+}
+
+.item_content ul li {
+	width: 200px;
+	height: 150px;
+	float: left;
+	margin: 10px 0px 0px 10px;
+}
+
+.item_content {
+	width: 640px;
+	height: 490px;
+	margin: 10px 0px;
+	border: 2px solid #333333;
+}
+
+.item_content .item {
+	width: 200px;
+	height: 150px;
+	line-height: 150px;
+	text-align: center;
+	cursor: pointer;
+	background: #FFF;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+.item_content .item .delete{
+	position: absolute;
+	background: #ff5722;
+	width: 20px;
+	height: 20px;
+	right: 0px;
+	z-index: 198;
+	border-radius: 6px;
+	color: #FFF;
+	line-height: 20px;
+	font-size: 16px;
+}
+.item_content .item img {
+	width: 200px;
+	height: 150px;
+	border-radius: 6px;
+}
+
+.item_content .item .info{
+	height: 30px;
+	width: 100%;
+	background: rgba(0,0,0, 0.5);
+	position: absolute;
+	bottom: 0px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	color: #FFF;
+	line-height: 30px;
+}
+.item_content .item .tool a{
+	display: inline-block;
+	width: 50%;
+	float: left;
+	line-height: 30px;
+}
+
+.item_content .item .img_selector {
+	line-height: 20px;
+	z-index: 3;
+	display: block;
+	width: 79px;
+	line-height: 27px;
+	cursor: pointer;
+	text-align: center;
+	border:1px solid rgba(0,0,0,0.5);
+}
+.item_content .item .img_selector .seltext{
+	display: block;
+}
+.item_content .item .img_selector ul {
+	width: 158px;
+	border: 1px solid rgba(0,0,0,0.5);
+	z-index: 111;
+	left:0;
+	position: absolute;
+	background: #fff;
+	display: none;
+}
+.item_content .item .img_selector li{
+	width: 79px;
+	height:23px;
+	margin: 0;
+	font-size: 14px;
+}
+.item_content .item .img_selector li:hover{
+	background: #CCC;
+}
+.item_content .item .img_selector a {
+	color: #666 !important;
+	display: block;
+	line-height: 21px;
+	padding: 0 13px 0 6px;
+	white-space: nowrap;
+	text-decoration: none;
 }

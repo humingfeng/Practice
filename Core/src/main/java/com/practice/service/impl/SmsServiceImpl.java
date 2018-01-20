@@ -39,15 +39,17 @@ public class SmsServiceImpl implements SmsService {
             return JsonResult.error("验证码已发送，请勿重复发送");
         }
 
+        //TODO
         String verifyCode = IDUtils.getVerifyCode();
+        System.out.println(verifyCode);
 
-        if(AliSMSUtils.SendSmsByAli(phone, verifyCode, smsTemplateEnum)){
+//        if(AliSMSUtils.SendSmsByAli(phone, verifyCode, smsTemplateEnum)){
 
             cacheService.setPhoneVerifyCode(phone,verifyCode);
             return JsonResult.success("发送成功，请注意查收");
-        }
+//        }
 
-        return JsonResult.error("短信服务器欠费了，马上去充值别急！");
+//        return JsonResult.error("短信服务器欠费了，马上去充值别急！");
     }
 
     /**

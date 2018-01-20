@@ -4,10 +4,8 @@ import com.practice.dto.KeyValueDTO;
 import com.practice.enums.DicParentEnum;
 import com.practice.enums.SMSTemplateEnum;
 import com.practice.result.JsonResult;
-import com.practice.service.AreaService;
-import com.practice.service.DictionaryService;
-import com.practice.service.SchoolService;
-import com.practice.service.SmsService;
+import com.practice.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +27,8 @@ public class BaseInfoController {
     private SchoolService  schoolService;
     @Resource
     private DictionaryService dictionaryService;
+    @Resource
+    private PersonnelService personnelService;
     @Resource
     private SmsService smsService;
 
@@ -60,6 +60,8 @@ public class BaseInfoController {
     public JsonResult areaList(@PathVariable Long cid){
         return areaService.listAreaByCid(cid);
     }
+
+
 
     /**
      * List school by pid and cid and aid
@@ -96,6 +98,16 @@ public class BaseInfoController {
     }
 
     /**
+     * List relations
+     * @return
+     */
+    @RequestMapping(value = "/relations/list")
+    public JsonResult relationsList(){
+        List<KeyValueDTO> keyValueDTOS = dictionaryService.listDicByEnumFromCache(DicParentEnum.RELATIONS);
+        return JsonResult.success(keyValueDTOS);
+    }
+
+    /**
      * Send sms
      * @param phone
      * @param type
@@ -103,9 +115,22 @@ public class BaseInfoController {
      */
     @RequestMapping(value = "/send/sms",method = RequestMethod.POST)
     public JsonResult sendSMS(String phone,String type){
+
+        if(StringUtils.equals(type,SMSTemplateEnum.FORGET.getSign())){
+            if(!personnelService.isParentPhoneExit(phone)){
+                return JsonResult.error("该手机从未注册过，请仔细检查！");
+            }
+        }
+
         return smsService.sendSms(phone, SMSTemplateEnum.stateOf(type));
     }
 
+    /**
+     * Phone code verify
+     * @param phone
+     * @param code
+     * @return
+     */
     @RequestMapping(value = "/verify/phone/code")
     public JsonResult vieryfPhoneVerifyCode(String phone,String code){
         return smsService.verifyPhoneCode(phone,code);

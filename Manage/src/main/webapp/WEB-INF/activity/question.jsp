@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@include file="../head.jsp" %>
+<jsp:include page="/head"></jsp:include>
 <body class="childrenBody">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">活动题目管理</blockquote>
 

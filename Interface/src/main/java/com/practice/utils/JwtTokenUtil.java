@@ -1,6 +1,7 @@
 package com.practice.utils;
 
 
+import com.practice.dto.TokenParentDTO;
 import com.practice.dto.TokenUserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -25,6 +26,7 @@ public class JwtTokenUtil {
     public static final String JWT_ID = "jwt";
     public static final String JWT_SECRET = "7786df7fc3a34e26a61c034d5ec8245d";
     public static final int JWT_TTL = 30*60*1000;
+    public static final int JWT_TTL_PARENT = 7*24*60*60*1000;
     public static final String PROFILES = "Xushd";
 
     /**
@@ -93,12 +95,12 @@ public class JwtTokenUtil {
 
     /**
      * 获取 jwt token 中的用户信息
-     * @param jwt
+     * @param token
      * @return
      */
-    public static TokenUserDTO getTokeUser(String jwt) {
+    public static TokenUserDTO getTokeUser(String token) {
         try {
-            Claims claims = parseJWT(jwt);
+            Claims claims = parseJWT(token);
 
             if(claims!=null){
                 String subject = claims.getSubject();
@@ -113,5 +115,46 @@ public class JwtTokenUtil {
         return null;
     }
 
+    /**
+     * Get parentDTO by token
+     * @param token
+     * @return
+     */
+    public static TokenParentDTO getTokenParent(String token){
+        try {
+            Claims claims = parseJWT(token);
 
+            if(claims!=null){
+                String subject = claims.getSubject();
+
+                return JsonUtils.jsonToPojo(subject,TokenParentDTO.class);
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+    /**
+     * Create parent token
+     * @param subject
+     * @return
+     */
+    public static String createParentJWT(String subject) {
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256 ;
+        long nowMillis = System. currentTimeMillis();
+        Date now = new Date(nowMillis);
+        SecretKey key = generalKey();
+        JwtBuilder builder = Jwts. builder()
+                .setId(JWT_ID)
+                .setIssuedAt(now)
+                .setSubject(subject)
+                .signWith(signatureAlgorithm, key);
+        long expMillis = nowMillis + JWT_TTL_PARENT;
+        Date exp = new Date( expMillis);
+        builder.setExpiration( exp);
+        return builder.compact();
+
+    }
 }

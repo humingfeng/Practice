@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@include file="../head.jsp"%>
+<jsp:include page="/head"></jsp:include>
 <body class="childrenBody">
 <fieldset class="layui-elem-field"  style="width: 710px">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">教育局新增</blockquote>
@@ -29,7 +29,7 @@
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="areaId" id="areaId" lay-verify="required">
+                        <select name="areaId" id="areaId" >
                             <option value="">请选择县/区</option>
                         </select>
                     </div>

@@ -21,6 +21,7 @@ public enum OperateEnum {
     LOGIN_TIME_OUT(500,"登录信息错误，请重新登录"),
     USE_STATUS_ERROR(500,"当前登录用户状态不可修改"),
     REPEAT(500,"数据重复，请仔细核查"),
+    PHONE_ERROR(500,"手机号格式错误，请仔细核查"),
     FILE_UPLOAD_SUCCESS(200,"上传成功");
 
     private int state;

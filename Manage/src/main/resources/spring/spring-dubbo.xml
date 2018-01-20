@@ -43,6 +43,10 @@
 
     <dubbo:reference id="personnelService" interface="com.practice.service.PersonnelService"/>
 
+    <dubbo:reference id="paramService" interface="com.practice.service.ParamService"/>
+
+    <dubbo:reference id="runService" interface="com.practice.service.RunService"/>
+
 
 
 

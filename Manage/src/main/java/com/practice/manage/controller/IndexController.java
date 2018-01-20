@@ -1,5 +1,8 @@
 package com.practice.manage.controller;
 
+import com.practice.dto.KeyValueDTO;
+import com.practice.enums.SystemParamEnum;
+import com.practice.service.ParamService;
 import com.practice.service.VersionService;
 import com.practice.vo.SystemInfoVO;
 import com.practice.dto.TokenUserDTO;
@@ -27,6 +30,8 @@ public class IndexController {
 
     @Resource
     private VersionService versionService;
+    @Resource
+    private ParamService paramService;
 
     @RequestMapping(value = "/")
     public String index(@CookieValue(required = false,value = "manage_token") String token,Model model) {
@@ -56,6 +61,18 @@ public class IndexController {
 
         return "404";
     }
+
+    @RequestMapping(value = "/head")
+    public String indexHead(Model model){
+
+
+        KeyValueDTO paramICON = paramService.getParamByEnum(SystemParamEnum.ICONFONT_CSS);
+
+        model.addAttribute("iconfoncss",paramICON.getValue());
+
+        return "head";
+    }
+
 
     /**
      * Welcome

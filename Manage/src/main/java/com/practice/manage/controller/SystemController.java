@@ -34,6 +34,8 @@ public class SystemController {
     private MenuService menuService;
     @Resource
     private VersionService versionService;
+    @Resource
+    private ParamService paramService;
     /**
      * User index
      * @return
@@ -589,5 +591,82 @@ public class SystemController {
         return roleService.saveRoleNavAndPermission(token,id,navs,pers);
     }
 
+    /**
+     * Param index
+     * @return
+     */
+    @RequestMapping(value = "/param")
+    public String indexParam(){
+
+        return "system/param";
+    }
+
+    /**
+     * Param list
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/param/list")
+    @ResponseBody
+    public JsonResult ajaxParamList(PageSearchParam param){
+        return paramService.listParam(param);
+    }
+
+    /**
+     * Param save
+     * @param param
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/param/add")
+    @ResponseBody
+    public JsonResult ajaxParamSave(SystemParam param,@RequestAttribute String token){
+        return paramService.saveParam(param,token);
+    }
+
+    /**
+     * Param update
+     * @param param
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/param/update")
+    @ResponseBody
+    public JsonResult ajaxParamUpdate(SystemParam param,@RequestAttribute String token){
+        return paramService.updateParam(param,token);
+    }
+
+    /**
+     * Param del
+     * @param id
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/param/del/{id}")
+    @ResponseBody
+    public JsonResult ajaxParamDel(@PathVariable Long id,@RequestAttribute String token){
+        return paramService.delParam(id,token);
+    }
+
+    /**
+     * Param sync cache
+     * @return
+     */
+    @RequestMapping(value = "/param/sync/cache")
+    @ResponseBody
+    public JsonResult ajaxParamSyncCache(){
+        return paramService.syncParamCache();
+    }
+
+    /**
+     * Param get
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/param/{id}")
+    @ResponseBody
+    public JsonResult ajaxParmObj(@PathVariable Long id){
+        return paramService.getParam(id);
+    }
 
 }

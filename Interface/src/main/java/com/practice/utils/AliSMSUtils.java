@@ -23,8 +23,8 @@ public class AliSMSUtils {
 
     static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
-    static final String ACCESSKEYID = "LTAIybEZNaAyEegx";
-    static final String ACCESSKEYSECRET = "Fwn9Nt4X81B6b5Sgi6qO4Dji3My2OF";
+    static final String ACCESSKEYID = "L24oBHtsNBzeZ0fB";
+    static final String ACCESSKEYSECRET = "vW1lWzkeMIg7TkGYWG8GjnfA0Pltol";
 
     public static boolean SendSmsByAli(String phone,String code,SMSTemplateEnum smsTemplateEnum){
 
@@ -43,7 +43,7 @@ public class AliSMSUtils {
             //必填:待发送手机号
             request.setPhoneNumbers(phone);
             //必填:短信签名-可在短信控制台中找到
-            request.setSignName(smsTemplateEnum.getSign());
+            request.setSignName("优评网");
             //必填:短信模板-可在短信控制台中找到
             request.setTemplateCode(smsTemplateEnum.getCode());
             request.setTemplateParam("{\"code\":\""+code+"\"}");

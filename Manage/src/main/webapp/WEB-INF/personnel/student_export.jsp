@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@include file="../head.jsp"%>
+<jsp:include page="/head"></jsp:include>
 <body class="childrenBody tips_verify">
 <fieldset class="layui-elem-field"  style="width: 800px">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">

@@ -1,13 +1,17 @@
 package com.practice.service.impl;
 
 import com.practice.dto.NavDTO;
+import com.practice.dto.ParentDTO;
+import com.practice.dto.TokenParentDTO;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.AuthEnum;
 import com.practice.mapper.ManageUserMapper;
 import com.practice.po.ManageUser;
 import com.practice.po.ManageUserExample;
 import com.practice.result.JsonResult;
+import com.practice.service.CacheService;
 import com.practice.service.LoginService;
+import com.practice.service.PersonnelService;
 import com.practice.service.UserService;
 import com.practice.utils.ExceptionUtil;
 import com.practice.utils.JsonUtils;
@@ -33,6 +37,10 @@ public class LoginServiceImpl implements LoginService {
     private ManageUserMapper manageUserMapper;
     @Resource
     private UserService userService;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private PersonnelService personnelService;
 
     /**
      * Manage Login Check
@@ -86,6 +94,32 @@ public class LoginServiceImpl implements LoginService {
 
         }
 
+
+    }
+
+    /**
+     * Get Parent Token
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult getParentToken(Long id) {
+
+        ParentDTO parent = cacheService.getParent(id);
+
+        if(parent==null){
+            try{
+                parent = personnelService.getParentDTO(id);
+                cacheService.setParent(parent);
+            }catch (Exception e){
+                return JsonResult.error(AuthEnum.TIME_OUT);
+            }
+        }
+
+        TokenParentDTO tokenParentDTO = new TokenParentDTO(parent.getId(), parent.getPhone(), parent.getName(), parent.getStudentId());
+
+        return JsonResult.success(JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParentDTO)));
 
     }
 }

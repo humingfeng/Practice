@@ -1,11 +1,9 @@
 package com.practice.service;
 
-import com.practice.dto.AreaDTO;
-import com.practice.dto.CityDTO;
-import com.practice.dto.NavDTO;
-import com.practice.dto.ProvinceDTO;
+import com.practice.dto.*;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageDictionary;
+import com.practice.po.SystemParam;
 
 import java.util.List;
 
@@ -183,4 +181,43 @@ public interface CacheService {
      * @return
      */
     String getPhoneVerifyCode(String phone);
+
+    /**
+     * Set parent DTO
+     * @param parentDTO
+     */
+    void setParent(ParentDTO parentDTO);
+
+    /**
+     * Get parent DTO
+     * @param id
+     * @return
+     */
+    ParentDTO getParent(Long id);
+
+    /**
+     * Set system param
+     * @param systemParam
+     */
+    void setSystemParam(KeyValueDTO systemParam);
+
+    /**
+     * Get system param
+     * @param id
+     * @return
+     */
+    KeyValueDTO getSystemParam(Long id);
+
+    /**
+     * Get app slider
+     * @param type
+     * @return
+     */
+    List<SliderItemDTO> getAppSlider(Integer type);
+
+    /**
+     * Set app slider
+     * @param type
+     */
+    void setAppSlider(Integer type,List<SliderItemDTO> list);
 }

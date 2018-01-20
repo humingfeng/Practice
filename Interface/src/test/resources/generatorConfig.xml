@@ -94,7 +94,14 @@
 
         <!--<table schema="" tableName="manage_teacher"/>-->
         <!--<table schema="" tableName="manage_student"/>-->
-        <table schema="" tableName="manage_activity_enroll_record"/>
+        <!--<table schema="" tableName="manage_activity_enroll_record"/>-->
+
+        <!--<table schema="" tableName="parent"/>-->
+        <!--<table schema="" tableName="system_param"/>-->
+
+        <!--<table schema="" tableName="app_slider"/>-->
+
+        <!--<table schema="" tableName="app_slider_content"/>-->
 
 
 

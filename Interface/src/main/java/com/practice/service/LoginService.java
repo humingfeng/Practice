@@ -15,4 +15,11 @@ public interface LoginService {
      * @return
      */
     JsonResult manageLoginCheck(String account,String password);
+
+    /**
+     * Get Parent Token
+     * @param id
+     * @return
+     */
+    JsonResult getParentToken(Long id);
 }
