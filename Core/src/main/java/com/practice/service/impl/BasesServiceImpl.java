@@ -6,9 +6,9 @@ import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.OperateEnum;
+import com.practice.mapper.ManageActivityMapper;
 import com.practice.mapper.ManageBaseMapper;
-import com.practice.po.ManageBase;
-import com.practice.po.ManageBaseExample;
+import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.AreaService;
 import com.practice.service.BasesService;
@@ -32,6 +32,8 @@ public class BasesServiceImpl implements BasesService {
     private ManageBaseMapper baseMapper;
     @Resource
     private AreaService areaService;
+    @Resource
+    private ManageActivityMapper activityMapper;
 
 
     /**
@@ -176,7 +178,17 @@ public class BasesServiceImpl implements BasesService {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
-        //TODO  判断 当前基地 是否有活动
+
+
+        ManageActivityExample activityExample = new ManageActivityExample();
+
+        activityExample.createCriteria().andBaseIdEqualTo(id).andDelflagEqualTo(0);
+
+        long l = activityMapper.countByExample(activityExample);
+
+        if(l>0){
+            return JsonResult.error("该基地已应用到活动中，不可删除");
+        }
 
 
         ManageBase manageBase = new ManageBase();
@@ -228,5 +240,16 @@ public class BasesServiceImpl implements BasesService {
     @Override
     public JsonResult getBases(Long id) {
         return JsonResult.success(baseMapper.selectByPrimaryKey(id));
+    }
+
+    /**
+     * Get base PO
+     *
+     * @param baseId
+     * @return
+     */
+    @Override
+    public ManageBase getBasesPO(Long baseId) {
+        return baseMapper.selectByPrimaryKey(baseId);
     }
 }

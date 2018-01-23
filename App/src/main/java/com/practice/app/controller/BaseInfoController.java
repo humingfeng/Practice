@@ -31,6 +31,8 @@ public class BaseInfoController {
     private PersonnelService personnelService;
     @Resource
     private SmsService smsService;
+    @Resource
+    private RunService runService;
 
     /**
      * List province
@@ -137,5 +139,24 @@ public class BaseInfoController {
     }
 
 
+    /**
+     * List slider by tag
+     * @param tag
+     * @return
+     */
+    @RequestMapping(value = "/slider/list/{tag}")
+    public JsonResult getSliderByType(@PathVariable Integer tag){
+        return runService.listSliderCache(tag);
+    }
+
+    /**
+     * Get slider content
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/slider/content/{id}")
+    public JsonResult getSliderContent(@PathVariable Long id){
+        return runService.getAppSliderContent(id);
+    }
 }
 

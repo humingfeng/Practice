@@ -83,8 +83,7 @@
 
 
         form.on("submit(submit)",data=>{
-
-            if(!editor.txt.text()){
+            if(!editor.txt.html()){
                 $('.w-e-text-container').css("border-color","#FF5722");
                 app.layerMessageE("请输入活动介绍");
                 return false;

@@ -220,4 +220,17 @@ public interface CacheService {
      * @param type
      */
     void setAppSlider(Integer type,List<SliderItemDTO> list);
+
+    /**
+     * Set activity solr item
+     * @param activitySolrItemDTO
+     */
+    void setActvitySolrItemDTO(ActivitySolrItemDTO activitySolrItemDTO);
+
+    /**
+     * Get activity solr item
+     * @param activityId
+     * @return
+     */
+    ActivitySolrItemDTO getActvitySolrItemDTO(Long activityId);
 }

@@ -290,4 +290,18 @@ public class RunServiceImpl implements RunService {
 
         return JsonResult.success(appSliders);
     }
+
+    /**
+     * List app slider form cache
+     *
+     * @param tag
+     * @return
+     */
+    @Override
+    public JsonResult listSliderCache(Integer tag) {
+
+        List<SliderItemDTO> appSlider = cacheService.getAppSlider(tag);
+
+        return JsonResult.success(appSlider);
+    }
 }

@@ -13,7 +13,8 @@
             classpath:spring/spring-dao.xml
             classpath:spring/spring-service.xml
             classpath:spring/spring-jedis.xml
-            <!--classpath:spring/spring-activemq.xml-->
+            classpath:spring/spring-solr.xml
+            classpath:spring/spring-activemq.xml
             classpath:spring/spring-dubbo.xml
         </param-value>
     </context-param>

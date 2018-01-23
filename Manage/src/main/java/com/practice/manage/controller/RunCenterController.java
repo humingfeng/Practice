@@ -87,7 +87,7 @@ public class RunCenterController {
      * @param token
      * @return
      */
-    @RequestMapping(value = "/slider/app/del")
+    @RequestMapping(value = "/slider/app/del/{id}")
     @ResponseBody
     public JsonResult ajaxAppSliderDel(@PathVariable Long id,@RequestAttribute String token){
         return runService.delAppSlider(id,token);

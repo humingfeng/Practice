@@ -31,4 +31,6 @@
 
     <dubbo:reference id="smsService" interface="com.practice.service.SmsService"/>
 
+    <dubbo:reference id="runService" interface="com.practice.service.RunService"/>
+
 </beans>

@@ -138,7 +138,7 @@
                     var url = $(this).find(".info").data('url');
                     var name = $(this).find(".info").text();
                     var img = $(this).find("img").attr('src');
-                    var type = $(this).find("img").data('type');
+                    var type = $(this).find(".info").data('type');
                     var index = $(this).attr('index');
                     imgArry.push({id:id,name:name,img:img,url:url,type:type,index:index});
                 })

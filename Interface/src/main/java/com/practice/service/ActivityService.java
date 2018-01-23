@@ -1,5 +1,6 @@
 package com.practice.service;
 
+import com.practice.dto.ActivitySolrItemDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
 import com.practice.po.*;
@@ -574,4 +575,17 @@ public interface ActivityService {
      * @return
      */
     JsonResult listEnrollRecordList(PageSearchParam param, Long activityId);
+
+    /**
+     * Get activitySolrItemDTO
+     * @param activityId
+     * @return
+     */
+    ActivitySolrItemDTO getActivitySolrItemDTO(Long activityId);
+
+    /**
+     * execute activity add to solr
+     * @param text
+     */
+    void executeActivityToSolr(String text);
 }

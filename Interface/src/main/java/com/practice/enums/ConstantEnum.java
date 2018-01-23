@@ -21,6 +21,7 @@ public enum ConstantEnum {
     CACHE_PROVINCE("CACHE_PROVINCE"),
     CACHE_CITY("CACHE_CITY"),
     CACHE_AREA("CACHE_AREA"),
+    ACTIVITY_SOLR_ITEM("ACTIVITY_SOLR_ITEM"),
 
     /**
      * Parent keys
@@ -39,6 +40,7 @@ public enum ConstantEnum {
      * phone verify code
      */
     PHONE_VERIFY_CODE("PHONE_VERIFY_CODE"),
+
 
     /**
      * default head img

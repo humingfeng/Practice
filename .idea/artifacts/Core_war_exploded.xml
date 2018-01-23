@@ -98,6 +98,16 @@
           <element id="library" level="project" name="Maven: jline:jline:0.9.94" />
           <element id="library" level="project" name="Maven: io.netty:netty:3.10.5.Final" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.10.RELEASE" />
+          <element id="library" level="project" name="Maven: org.apache.solr:solr-solrj:4.10.4" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpmime:4.3.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.woodstox:wstx-asl:3.2.7" />
+          <element id="library" level="project" name="Maven: org.noggit:noggit:0.5" />
+          <element id="library" level="project" name="Maven: com.janeluo:ikanalyzer:2012_u6" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-core:4.7.2" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queryparser:4.7.2" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queries:4.7.2" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-sandbox:4.7.2" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-analyzers-common:4.7.2" />
           <element id="library" level="project" name="Maven: se.jiderhamn.classloader-leak-prevention:classloader-leak-prevention-servlet:2.1.0" />
           <element id="library" level="project" name="Maven: se.jiderhamn.classloader-leak-prevention:classloader-leak-prevention-core:2.1.0" />
         </element>

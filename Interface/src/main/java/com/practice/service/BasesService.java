@@ -53,4 +53,11 @@ public interface BasesService {
      * @return
      */
     JsonResult getBases(Long id);
+
+    /**
+     * Get base PO
+     * @param baseId
+     * @return
+     */
+    ManageBase getBasesPO(Long baseId);
 }

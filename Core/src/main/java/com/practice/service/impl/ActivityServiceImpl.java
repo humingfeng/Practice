@@ -3,6 +3,7 @@ package com.practice.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
@@ -14,20 +15,27 @@ import com.practice.vo.ActivityVerifyVO;
 import com.practice.vo.QuestionVO;
 import com.practice.vo.TaskQuestionVO;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
+
 
 /**
  * @author Xushd  2017/12/25 20:46
  */
 @Service
 public class ActivityServiceImpl implements ActivityService {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(ActivityServiceImpl.class);
 
     @Resource
     private ManageActivityTypeMapper typeMapper;
@@ -69,7 +77,17 @@ public class ActivityServiceImpl implements ActivityService {
     private ManageActivityEnrollRecordMapper enrollRecordMapper;
     @Resource
     private SchoolService schoolService;
+    @Resource
+    private BasesService basesService;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private ActiveMqProducer activeMqProducer;
 
+    @Resource(name="activitySolrAddQueue")
+    private Destination activitySolrAddQueue;
+    @Resource
+    private SolrService solrServer;
 
     @Value("${ENDPOINT}")
     private String ENDPOINT;
@@ -88,6 +106,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Value("${PARENET_DIR}")
     private String PARENET_DIR;
+
+
+
+
 
     /**
      * 获取OSS对象参数
@@ -1680,6 +1702,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @param id
      * @return
      */
+    @Transactional
     @Override
     public JsonResult delTask(String token, Long activityId, Long id) {
 
@@ -1695,7 +1718,12 @@ public class ActivityServiceImpl implements ActivityService {
             return JsonResult.error("活动任务一个不设置，这样子不好");
         }
 
-        //todo 判断是否有子任务
+
+        ManageActivityTaskItemExample itemExample = new ManageActivityTaskItemExample();
+
+        itemExample.createCriteria().andActivityIdEqualTo(activityId).andTaskIdEqualTo(id);
+
+        taskItemMapper.deleteByExample(itemExample);
 
         taskMapper.deleteByPrimaryKey(id);
 
@@ -2765,6 +2793,14 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityMapper.updateByPrimaryKeySelective(manageActivity);
 
+        ActivitySolrItemDTO activitySolrItemDTO = this.getActivitySolrItemDTO(id);
+
+        cacheService.setActvitySolrItemDTO(activitySolrItemDTO);
+
+        String message = JsonUtils.objectToJson(new ActivitySolrAddMessage(id, activitySolrItemDTO.getName(), new Date()));
+
+        activeMqProducer.sendAddActivitySolrItemMessage(activitySolrAddQueue,message);
+
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
@@ -2971,6 +3007,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityMapper.updateByPrimaryKeySelective(manageActivity);
 
+        //TODO solr 删除
+
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
@@ -3024,5 +3062,113 @@ public class ActivityServiceImpl implements ActivityService {
 
 
         return JsonResult.success(pageInfo);
+    }
+
+
+    /**
+     * Get activitySolrItemDTO
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ActivitySolrItemDTO getActivitySolrItemDTO(Long activityId) {
+
+        ActivitySolrItemDTO solrItemDTO = new ActivitySolrItemDTO();
+
+        ManageActivity activity = activityMapper.selectByPrimaryKey(activityId);
+
+        solrItemDTO.setId(activityId);
+
+        solrItemDTO.setTypeId(activity.getTypeId());
+
+        solrItemDTO.setClassifyId(activity.getClassifyId());
+
+        solrItemDTO.setThemeId(activity.getThemeId());
+
+        solrItemDTO.setName(activity.getName());
+
+        solrItemDTO.setOrganizeId(activity.getOrganizeId());
+
+        solrItemDTO.setBaseId(activity.getBaseId());
+
+        solrItemDTO.setTimeHour(activity.getDuration());
+
+        solrItemDTO.setSelf(activity.getSelf());
+
+        solrItemDTO.setMoney(Float.valueOf(activity.getMoney().toString()));
+
+        solrItemDTO.setBeginTime(activity.getBeginTime());
+
+        solrItemDTO.setEndTime(activity.getEndTime());
+
+        solrItemDTO.setCloseTime(activity.getCloseTime());
+
+        solrItemDTO.setLike(0L);
+
+        solrItemDTO.setNumber(activity.getNumber());
+
+        String typeName = typeMapper.selectByPrimaryKey(activity.getTypeId()).getName();
+
+        solrItemDTO.setTypeName(typeName);
+
+        String classifyName = classifyMapper.selectByPrimaryKey(activity.getClassifyId()).getName();
+
+        solrItemDTO.setClassifyName(classifyName);
+
+        String themeName = themeMapper.selectByPrimaryKey(activity.getThemeId()).getName();
+
+        solrItemDTO.setThemeName(themeName);
+
+        String organizeName = dictionaryService.getDictionaryPO(activity.getOrganizeId()).getName();
+
+        solrItemDTO.setOrganizeName(organizeName);
+
+        String baseName = "";
+        if(activity.getBaseId()==0L){
+            solrItemDTO.setBaseName("");
+        }else{
+            baseName = basesService.getBasesPO(activity.getBaseId()).getName();
+            solrItemDTO.setBaseName(baseName);
+        }
+
+        String name = activity.getName();
+
+        List<String> pinyinList = new ArrayList<>();
+
+        pinyinList.add(PinYinUtils.cnToPinYin(name));
+        pinyinList.add(PinYinUtils.cnToPinYin(classifyName));
+        pinyinList.add(PinYinUtils.cnToPinYin(themeName));
+        pinyinList.add(PinYinUtils.cnToPinYin(organizeName));
+        if(StringUtils.isNotBlank(baseName)){
+            pinyinList.add(PinYinUtils.cnToPinYin(baseName));
+        }
+
+        solrItemDTO.setPinyin(StringUtils.join(pinyinList," "));
+
+        return solrItemDTO;
+    }
+
+    /**
+     * execute activity add to solr
+     *
+     * @param text
+     */
+    @Override
+    public void executeActivityToSolr(String text) {
+
+        ActivitySolrAddMessage activitySolrAddMessage = JsonUtils.jsonToPojo(text, ActivitySolrAddMessage.class);
+
+        ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(activitySolrAddMessage.getId());
+
+        if(actvitySolrItemDTO!=null){
+            Boolean aBoolean = solrServer.addActivityItem(actvitySolrItemDTO);
+
+            if(aBoolean){
+                LOGGER.info("INFO:{}", activitySolrAddMessage.getMessage()+" ADD SOLR SUCCESS");
+            }else{
+                LOGGER.info("ERROR:{}", activitySolrAddMessage.getMessage()+" ADD SOLR ERROR");
+            }
+        }
     }
 }

@@ -94,4 +94,11 @@ public interface RunService {
      * @return
      */
     JsonResult listUsableAppSlider(Integer type);
+
+    /**
+     * List app slider form cache
+     * @param tag
+     * @return
+     */
+    JsonResult listSliderCache(Integer tag);
 }

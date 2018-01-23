@@ -425,4 +425,31 @@ public class CacheServiceImpl implements CacheService {
     public void setAppSlider(Integer type, List<SliderItemDTO> list) {
         jedisClient.hset(ConstantEnum.APP_SLIDER.getStrValue(),"KEY:"+type,JsonUtils.objectToJson(list));
     }
+
+    /**
+     * Set activity solr item
+     *
+     * @param activitySolrItemDTO
+     */
+    @Override
+    public void setActvitySolrItemDTO(ActivitySolrItemDTO activitySolrItemDTO) {
+        jedisClient.hset(ConstantEnum.ACTIVITY_SOLR_ITEM.getStrValue(),"KEY:"+activitySolrItemDTO.getId(),JsonUtils.objectToJson(activitySolrItemDTO));
+    }
+
+    /**
+     * Get activity solr item
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ActivitySolrItemDTO getActvitySolrItemDTO(Long activityId) {
+
+        String hget = jedisClient.hget(ConstantEnum.ACTIVITY_SOLR_ITEM.getStrValue(), "KEY:" + activityId);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,ActivitySolrItemDTO.class);
+        }
+
+        return null;
+    }
 }

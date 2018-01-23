@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--定义solr carsource 的server-->
+    <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+        <constructor-arg index="0" value="${solr.Url}"/>
+        <!-- 设置响应解析器 -->
+        <property name="parser">
+            <bean class="org.apache.solr.client.solrj.impl.XMLResponseParser"/>
+        </property>
+        <!-- 设置重试次数-->
+        <property name="maxRetries" value="${solr.maxRetries}"/>
+        <!-- 建立连接的最长时间 -->
+        <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
+    </bean>
+
+    <!--配置searchDao-->
+    <bean id="searchDao" class="com.practice.dao.impl.SolrDaoImpl"></bean>
+
+</beans>

@@ -70,7 +70,7 @@
         模版页
     </a>
     {{# } }}
-    {{# if(d.statu==0){ }}
+    {{# if(d.status==0){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs do-action-page"
        data-type="delete" data-name="{{d.name}}" data-url="/auth/run/slider/app/del/{{d.id}}">
         <i class="iconfont icon-shanchu"></i>
