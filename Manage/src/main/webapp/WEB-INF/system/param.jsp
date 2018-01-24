@@ -30,7 +30,7 @@
                    data-type="handle" data-url="/auth/jump/system/param_handle"
                    data-name="参数新增"><i class="iconfont icon-add"></i>新增参数</a>
                 <a class="layui-btn layui-btn-danger newsAdd_btn do-action-page"
-                   data-type="clearCache" data-url="/auth/system/param/sync/cache"
+                   data-type="confrim" data-url="/auth/system/param/sync/cache"
                    data-name="刷新缓存"><i class="iconfont icon-image"></i>刷新缓存</a>
             </div>
         </div>

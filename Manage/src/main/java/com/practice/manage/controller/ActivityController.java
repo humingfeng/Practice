@@ -4,6 +4,8 @@ import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
 import com.practice.enums.DicParentEnum;
+import com.practice.exception.ServiceException;
+import com.practice.manage.target.ControllerPermisson;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
@@ -12,7 +14,6 @@ import com.practice.service.DictionaryService;
 import com.practice.service.UserService;
 import com.practice.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -1162,9 +1163,10 @@ public class ActivityController {
      * Activity offline
      * @return
      */
+    @ControllerPermisson(value = "/offline")
     @RequestMapping(value = "/offline/{id}")
     @ResponseBody
-    public JsonResult ajaxActivityOffline(@RequestAttribute String token,@PathVariable Long id){
+    public JsonResult ajaxActivityOffline(@RequestAttribute String token,@PathVariable Long id) throws ServiceException {
         return activityService.offline(token,id);
     }
 

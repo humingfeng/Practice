@@ -10,6 +10,7 @@ import java.util.Date;
  */
 public class ManageActivity implements Serializable {
 
+    private String baseName;
 
     private String type;
 
@@ -59,6 +60,14 @@ public class ManageActivity implements Serializable {
 
     public void setTimeStr(String timeStr) {
         this.timeStr = timeStr;
+    }
+
+    public String getBaseName() {
+        return baseName;
+    }
+
+    public void setBaseName(String baseName) {
+        this.baseName = baseName;
     }
 
     private Long id;

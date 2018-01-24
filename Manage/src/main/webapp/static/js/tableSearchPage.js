@@ -133,7 +133,7 @@ layui.define(['app','form','table','laypage'], exports => {
                     app.layerMessageE("没有设定链接");
                 }
             }
-            ,clearCache:function(){
+            ,confrim:function(){
                 var url = $(this).data('url'),
                     name = $(this).data('name'),
                     text = '确定要 ' + name + '？';
@@ -142,6 +142,7 @@ layui.define(['app','form','table','laypage'], exports => {
                         load = app.showLoading();
                         app.get(url).then(d=>{
                             app.layerMessageS(d.message);
+                            _this.refresh();
                         },e=>{
                             app.layerMessageE(e);
                         }).finally(()=>{app.closeLoading(load)})

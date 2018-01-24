@@ -44,6 +44,7 @@
                     <td class="title">基地</td>
                     <td colspan="5">
                         {{# if(d.base.baseId){ }}
+                        {{d.base.baseName}}
                         {{# }else{ }}
                         无基地
                         {{# } }}

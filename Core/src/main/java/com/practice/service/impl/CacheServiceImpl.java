@@ -452,4 +452,14 @@ public class CacheServiceImpl implements CacheService {
 
         return null;
     }
+
+    /**
+     * Clear activity solr item
+     *
+     * @param id
+     */
+    @Override
+    public void clearActivitySolrItemDTO(Long id) {
+        jedisClient.hdel(ConstantEnum.ACTIVITY_SOLR_ITEM.getStrValue(), "KEY:" + id);
+    }
 }

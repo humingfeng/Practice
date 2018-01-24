@@ -46,8 +46,8 @@ public class GlobalExceptionResolver extends SimpleMappingExceptionResolver {
 
             }else{
 
-                result = JsonUtils.objectToJson(JsonResult.error(ExceptionUtil.getStackTrace(ex)));
-                LOGGER.error("Error:{}", ex);
+                result = JsonUtils.objectToJson(JsonResult.error(ex.getMessage()));
+                LOGGER.error("Error:{}", ExceptionUtil.getStackTrace(ex));
             }
 
             try {

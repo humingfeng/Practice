@@ -22,7 +22,9 @@ public enum OperateEnum {
     USE_STATUS_ERROR(500,"当前登录用户状态不可修改"),
     REPEAT(500,"数据重复，请仔细核查"),
     PHONE_ERROR(500,"手机号格式错误，请仔细核查"),
-    FILE_UPLOAD_SUCCESS(200,"上传成功");
+    FILE_UPLOAD_SUCCESS(200,"上传成功"),
+    SOLR_ADD_ERROR(500,"SOLR 信息添加失败，请联系管理员"),
+    SOLR_DEL_ERROR(500,"SOLR 信息移除失败，请联系管理员");
 
     private int state;
 

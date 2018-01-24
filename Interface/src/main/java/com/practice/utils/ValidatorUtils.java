@@ -1,5 +1,6 @@
 package com.practice.utils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -46,6 +47,11 @@ public class ValidatorUtils {
      * 正则表达式：验证IP地址
      */
     public static final String REGEX_IP_ADDR = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
+
+    /**
+     * 正则表达式：中文 + 字母 + 数字
+     */
+    public static final String REGEX_PINYIN = "[^(a-zA-Z0-9\\u4e00-\\u9fa5)$]";
 
     /**
      * 校验用户名
@@ -125,6 +131,18 @@ public class ValidatorUtils {
      */
     public static boolean isIPAddr(String ipAddr) {
         return Pattern.matches(REGEX_IP_ADDR, ipAddr);
+    }
+
+    /**
+     * 提取中文字母和数字
+     * @param text
+     * @return
+     */
+    public static String eliminate(String text){
+
+        Matcher matcher = Pattern.compile(REGEX_PINYIN).matcher(text);
+
+        return matcher.replaceAll("").trim();
     }
 }
 

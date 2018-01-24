@@ -233,4 +233,10 @@ public interface CacheService {
      * @return
      */
     ActivitySolrItemDTO getActvitySolrItemDTO(Long activityId);
+
+    /**
+     * Clear activity solr item
+     * @param id
+     */
+    void clearActivitySolrItemDTO(Long id);
 }

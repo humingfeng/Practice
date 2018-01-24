@@ -76,4 +76,14 @@ public class PageResult<T> implements Serializable {
     public void setList(List<T> list) {
         this.list = list;
     }
+
+    @Override
+    public String toString() {
+        return "PageResult{" +
+                "total=" + total +
+                ", pages=" + pages +
+                ", pageNum=" + pageNum +
+                ", list=" + list +
+                '}';
+    }
 }

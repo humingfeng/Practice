@@ -103,4 +103,19 @@ public class ActivityVerifyVO implements Serializable {
     public void setTaskList(List<TaskDTO> taskList) {
         this.taskList = taskList;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityVerifyVO{" +
+                "base=" + base +
+                ", introduce=" + introduce +
+                ", activityApplyList=" + activityApplyList +
+                ", enroll=" + enroll +
+                ", leaderList=" + leaderList +
+                ", sign=" + sign +
+                ", superviseList=" + superviseList +
+                ", attentionList=" + attentionList +
+                ", taskList=" + taskList +
+                '}';
+    }
 }

@@ -1,0 +1,17 @@
+package com;
+
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+/**
+ * @author Xushd  2018/1/24 23:44
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:spring/spring-dao.xml",
+        "classpath:spring/spring-service.xml",
+        "classpath:spring/spring-jedis.xml",
+        "classpath:spring/spring-solr.xml",
+        "classpath:spring/spring-activemq.xml"})
+public class TestBase {
+}

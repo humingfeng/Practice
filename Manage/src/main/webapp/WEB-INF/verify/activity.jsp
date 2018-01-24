@@ -21,6 +21,25 @@
 </blockquote>
 
 <div class="row" style="overflow: inherit">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">活动ID</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" autocomplete="off" class="layui-input" placeholder="活动ID">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">活动名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="活动名称">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn search_btn" lay-submit="return false" lay-filter="search">查询</a>
+            </div>
+        </div>
+    </form>
 </div>
 <!--table-->
 <div class="layui-form">
@@ -53,7 +72,7 @@
                 <td>
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs do-action layui-btn-normal"
-                           data-type="handle" data-url="/auth/jump/verify/activity_view?id={{item.id}}" data-name="基本信息">
+                           data-type="handle" data-url="/auth/jump/verify/activity_view?id={{item.id}}" data-name="审核">
                             <i class="iconfont icon-bianji"></i>
                             审核
                         </a>

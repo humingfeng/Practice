@@ -39,7 +39,21 @@ public class SolrQueryDTO {
     }
 
     public void init(){
-        System.out.println(123);
+        this.query="";
+        this.typeId = 0L;
+        this.classifyId= 0L;
+        this.themeId= 0L;
+        this.organizeId= 0L;
+        this.baseId= 0L;
+        this.apply= 0L;
+        this.free= 0;
+        this.self= 0;
+        this.ducation=0;
+        this.close=0;
+        this.soft=0;
+        this.sign=0;
+        this.pageIndex=1;
+        this.pageSize=10;
     }
 
     public Integer getPageIndex() {

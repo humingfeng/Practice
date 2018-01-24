@@ -3,6 +3,7 @@ package com.practice.service;
 import com.practice.dto.ActivitySolrItemDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
+import com.practice.exception.ServiceException;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 
@@ -534,7 +535,7 @@ public interface ActivityService {
      * @param id
      * @return
      */
-    JsonResult passActivity(Long id);
+    JsonResult passActivity(Long id) throws ServiceException;
 
     /**
      * Reject activity
@@ -565,8 +566,9 @@ public interface ActivityService {
      * @param token
      * @param id
      * @return
+     * @throws ServiceException
      */
-    JsonResult offline(String token, Long id);
+    JsonResult offline(String token, Long id) throws ServiceException;
 
     /**
      * List enroll record
@@ -588,4 +590,11 @@ public interface ActivityService {
      * @param text
      */
     void executeActivityToSolr(String text);
+
+    /**
+     * List online activity
+     * @param param
+     * @return
+     */
+    JsonResult listOnlineActivity(PageSearchParam param);
 }

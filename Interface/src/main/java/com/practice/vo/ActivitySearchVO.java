@@ -149,4 +149,24 @@ public class ActivitySearchVO implements Serializable{
     public void setLike(Integer like) {
         this.like = like;
     }
+
+    @Override
+    public String toString() {
+        return "ActivitySearchVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", imgCover='" + imgCover + '\'' +
+                ", duration='" + duration + '\'' +
+                ", price='" + price + '\'' +
+                ", beginTime='" + beginTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", number=" + number +
+                ", enrolled=" + enrolled +
+                ", like=" + like +
+                ", sign=" + sign +
+                ", ducationType=" + ducationType +
+                ", closeType=" + closeType +
+                ", closeTime='" + closeTime + '\'' +
+                '}';
+    }
 }

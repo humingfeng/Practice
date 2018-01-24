@@ -44,6 +44,7 @@
                     <td class="title">基地</td>
                     <td colspan="5">
                         {{# if(d.base.baseId){ }}
+                        {{d.base.baseName}}
                         {{# }else{ }}
                         无基地
                         {{# } }}
@@ -347,14 +348,15 @@
                 if($.trim(text).length<10 && $.trim(text).length>200){
                     app.layerMessageE('驳回原因 10 ~ 200 个字符');
                 }else{
-
+                    layer.close(index);
+                    load = app.showLoading();
                     app.post('/auth/verify/activity/reject/${id}',{reason:$.trim(text)}).then(d=>{
                         app.layerMessageS(d.message);
                         app.time(function(){
                             app.back();
                         })
                     },e=>{app.layerMessageE(e)}).finally(_=>{
-                        layer.close(index);
+                        app.closeLoading(load);
                     })
 
 

@@ -58,7 +58,7 @@ public class SolrServiceImpl implements SolrService {
 
         SolrQuery query = new SolrQuery();
 
-        query.setStart(queryDTO.getPageIndex());
+        query.setStart(queryDTO.getPageIndex()-1);
 
         query.setRows(queryDTO.getPageSize());
 
@@ -124,7 +124,7 @@ public class SolrServiceImpl implements SolrService {
         }
 
         if(queryDTO.getApply()!=0L){
-            query.addFilterQuery("apply:"+queryDTO.getApply());
+            query.addFilterQuery("apply:*"+queryDTO.getApply()+"*");
         }
 
         //1 活动时间大于1D  2活动时间一天'
@@ -176,6 +176,8 @@ public class SolrServiceImpl implements SolrService {
         activitySearchVOPageResult.setPageNum(queryDTO.getPageIndex());
 
         activitySearchVOPageResult.setPages((int)pageCount);
+
+        activitySearchVOPageResult.setList(solrResultDTO.getList());
 
         return activitySearchVOPageResult;
     }

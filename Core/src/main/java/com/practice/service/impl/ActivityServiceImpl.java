@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
+import com.practice.exception.ServiceException;
 import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
@@ -697,6 +698,23 @@ public class ActivityServiceImpl implements ActivityService {
         PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         ManageActivityExample activityExample = new ManageActivityExample();
+
+        ManageActivityExample.Criteria criteria = activityExample.createCriteria();
+
+        String key1="typeId",key2="classifyId",key3="themeId";
+
+        if(param.getFiled(key1)!=null){
+            criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(key1)));
+        }
+        if(param.getFiled(key2)!=null){
+            criteria.andClassifyIdEqualTo(Long.valueOf(param.getFiled(key2)));
+        }
+        if(param.getFiled(key3)!=null){
+            criteria.andThemeIdEqualTo(Long.valueOf(param.getFiled(key3)));
+        }
+
+        activityExample.setOrderByClause("update_time desc");
+
 
         List<ManageActivity> manageActivities = activityMapper.selectByExample(activityExample);
 
@@ -2758,7 +2776,58 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityExample example = new ManageActivityExample();
 
-        example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(3);
+        ManageActivityExample.Criteria criteria = example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(3);
+
+        String key1 = "name",key2 = "id";
+        if(param.getFiled(key1)!=null){
+            criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key1)));
+        }
+        if(param.getFiled(key2)!=null){
+            criteria.andIdEqualTo(Long.valueOf(param.getFiled(key2)));
+        }
+
+        example.setOrderByClause("update_time desc");
+
+        List<ManageActivity> manageActivities = activityMapper.selectByExample(example);
+
+        for (ManageActivity manageActivity : manageActivities) {
+
+            manageActivity.setType(typeMapper.selectByPrimaryKey(manageActivity.getTypeId()).getName());
+
+            manageActivity.setClassify(classifyMapper.selectByPrimaryKey(manageActivity.getClassifyId()).getName());
+
+            manageActivity.setTheme(themeMapper.selectByPrimaryKey(manageActivity.getThemeId()).getName());
+        }
+
+        PageInfo<ManageActivity> manageActivityPageInfo = new PageInfo<>(manageActivities);
+
+        return JsonResult.success(manageActivityPageInfo);
+    }
+
+    /**
+     * List online activity
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JsonResult listOnlineActivity(PageSearchParam param) {
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
+
+        ManageActivityExample example = new ManageActivityExample();
+
+        ManageActivityExample.Criteria criteria = example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(6);
+
+        String key1 = "name",key2 = "id";
+
+        if(param.getFiled(key1)!=null){
+            criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key1)));
+        }
+        if(param.getFiled(key2)!=null){
+            criteria.andIdEqualTo(Long.valueOf(param.getFiled(key2)));
+        }
+
+        example.setOrderByClause("update_time desc");
 
         List<ManageActivity> manageActivities = activityMapper.selectByExample(example);
 
@@ -2782,8 +2851,9 @@ public class ActivityServiceImpl implements ActivityService {
      * @param id
      * @return
      */
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public JsonResult passActivity(Long id) {
+    public JsonResult passActivity(Long id) throws ServiceException {
 
         ManageActivity manageActivity = new ManageActivity();
 
@@ -2797,9 +2867,14 @@ public class ActivityServiceImpl implements ActivityService {
 
         cacheService.setActvitySolrItemDTO(activitySolrItemDTO);
 
-        String message = JsonUtils.objectToJson(new ActivitySolrAddMessage(id, activitySolrItemDTO.getName(), new Date()));
+        Boolean aBoolean = solrServer.addActivityItem(activitySolrItemDTO);
 
-        activeMqProducer.sendAddActivitySolrItemMessage(activitySolrAddQueue,message);
+        if(!aBoolean){
+
+            cacheService.clearActivitySolrItemDTO(id);
+
+            throw new ServiceException(OperateEnum.SOLR_ADD_ERROR.getStateInfo());
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -2854,6 +2929,11 @@ public class ActivityServiceImpl implements ActivityService {
         Date endTime = manageActivity.getEndTime();
 
         manageActivity.setTimeStr(TimeUtils.getDateString(beginTime) + " - " + TimeUtils.getDateString(endTime));
+
+        if(manageActivity.getBaseId() != 0L){
+            String name = basesService.getBasesPO(manageActivity.getBaseId()).getName();
+            manageActivity.setBaseName(name);
+        }
 
 
         ActivityVerifyVO verifyVO = new ActivityVerifyVO();
@@ -2968,8 +3048,9 @@ public class ActivityServiceImpl implements ActivityService {
      * @param id
      * @return
      */
+    @Transactional(rollbackFor = ServiceException.class)
     @Override
-    public JsonResult offline(String token, Long id) {
+    public JsonResult offline(String token, Long id) throws ServiceException {
 
         TokenUserDTO tokeUser = JwtTokenUtil.getTokeUser(token);
 
@@ -3007,7 +3088,11 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityMapper.updateByPrimaryKeySelective(manageActivity);
 
-        //TODO solr 删除
+        Boolean aBoolean = solrServer.removeActivityItem(id);
+
+        if(!aBoolean){
+            throw new ServiceException(OperateEnum.SOLR_DEL_ERROR.getStateInfo());
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -3139,12 +3224,18 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<String> pinyinList = new ArrayList<>();
 
-        pinyinList.add(PinYinUtils.cnToPinYin(name));
-        pinyinList.add(PinYinUtils.cnToPinYin(classifyName));
-        pinyinList.add(PinYinUtils.cnToPinYin(themeName));
-        pinyinList.add(PinYinUtils.cnToPinYin(organizeName));
+        pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(name)));
+
+        pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(typeName)));
+
+        pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(classifyName)));
+
+        pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(themeName)));
+
+        pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(organizeName)));
+
         if(StringUtils.isNotBlank(baseName)){
-            pinyinList.add(PinYinUtils.cnToPinYin(baseName));
+            pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(baseName)));
         }
 
         solrItemDTO.setPinyin(StringUtils.join(pinyinList," "));

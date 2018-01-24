@@ -5,6 +5,7 @@ import com.practice.dto.ActivitySolrItemDTO;
 import com.practice.dto.PageResult;
 import com.practice.dto.SolrQueryDTO;
 import com.practice.dto.SolrResultDTO;
+import com.practice.utils.TimeUtils;
 import com.practice.vo.ActivitySearchVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -18,10 +19,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Xushd  2018/1/23 21:21
@@ -183,15 +181,15 @@ public class SolrDaoImpl implements SolrDao {
 
                 activitySearchVO.setPrice(String.valueOf(result.get("money")));
 
-                activitySearchVO.setBeginTime(String.valueOf(result.get("begin_time")));
+                activitySearchVO.setBeginTime(TimeUtils.getDateString((Date) result.get("begin_time")));
 
-                activitySearchVO.setEndTime(String.valueOf(result.get("end_time")));
+                activitySearchVO.setEndTime(TimeUtils.getDateString((Date) result.get("end_time")));
 
                 activitySearchVO.setCloseType(Integer.valueOf(String.valueOf(result.get("close_type"))));
 
-                activitySearchVO.setCloseTime(String.valueOf(result.get("close_time")));
+                activitySearchVO.setCloseTime(TimeUtils.getDateString((Date) result.get("close_time")));
 
-                activitySearchVO.setSign(Integer.valueOf(String.valueOf("sign")));
+                activitySearchVO.setSign(Integer.valueOf(String.valueOf(result.get("sign"))));
 
                 activitySearchVO.setNumber(Integer.valueOf(String.valueOf(result.get("number"))));
 
