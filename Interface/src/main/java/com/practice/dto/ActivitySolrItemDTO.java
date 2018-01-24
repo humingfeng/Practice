@@ -18,6 +18,8 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private String name;
 
+    private String imgCover;
+
     private Long organizeId;
 
     private Long baseId;
@@ -34,9 +36,19 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private Date closeTime;
 
+    private Integer closeType;
+
     private Long like;
 
     private Integer number;
+
+    private Integer ducationType;
+
+    private Integer sign;
+
+    private Integer enroll;
+
+    private String apply;
 
     private String typeName;
 
@@ -221,6 +233,54 @@ public class ActivitySolrItemDTO implements Serializable{
         this.number = number;
     }
 
+    public String getImgCover() {
+        return imgCover;
+    }
+
+    public void setImgCover(String imgCover) {
+        this.imgCover = imgCover;
+    }
+
+    public Integer getEnroll() {
+        return enroll;
+    }
+
+    public void setEnroll(Integer enroll) {
+        this.enroll = enroll;
+    }
+
+    public String getApply() {
+        return apply;
+    }
+
+    public void setApply(String apply) {
+        this.apply = apply;
+    }
+
+    public Integer getDucationType() {
+        return ducationType;
+    }
+
+    public void setDucationType(Integer ducationType) {
+        this.ducationType = ducationType;
+    }
+
+    public Integer getSign() {
+        return sign;
+    }
+
+    public void setSign(Integer sign) {
+        this.sign = sign;
+    }
+
+    public Integer getCloseType() {
+        return closeType;
+    }
+
+    public void setCloseType(Integer closeType) {
+        this.closeType = closeType;
+    }
+
     @Override
     public String toString() {
         return "ActivitySolrItemDTO{" +
@@ -229,6 +289,7 @@ public class ActivitySolrItemDTO implements Serializable{
                 ", classifyId=" + classifyId +
                 ", themeId=" + themeId +
                 ", name='" + name + '\'' +
+                ", imgCover='" + imgCover + '\'' +
                 ", organizeId=" + organizeId +
                 ", baseId=" + baseId +
                 ", timeHour=" + timeHour +
@@ -239,6 +300,8 @@ public class ActivitySolrItemDTO implements Serializable{
                 ", closeTime=" + closeTime +
                 ", like=" + like +
                 ", number=" + number +
+                ", enroll=" + enroll +
+                ", apply='" + apply + '\'' +
                 ", typeName='" + typeName + '\'' +
                 ", classifyName='" + classifyName + '\'' +
                 ", themeName='" + themeName + '\'' +

@@ -3106,6 +3106,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setLike(0L);
 
+        solrItemDTO.setEnroll(0);
+
+
         solrItemDTO.setNumber(activity.getNumber());
 
         String typeName = typeMapper.selectByPrimaryKey(activity.getTypeId()).getName();
@@ -3145,6 +3148,32 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         solrItemDTO.setPinyin(StringUtils.join(pinyinList," "));
+
+        List<ManageActivityIntroduce> manageActivityIntroduces = introduceMapper.selectByActivityId(activityId);
+
+        if(manageActivityIntroduces.size()>0){
+            solrItemDTO.setImgCover(manageActivityIntroduces.get(0).getImgCover());
+        }else{
+            solrItemDTO.setImgCover("");
+        }
+
+        List<ManageActivityApply> manageActivityApplies = applyMapper.selectByActivityId(activityId);
+
+        List<Long> apply = new ArrayList<>();
+
+        for (ManageActivityApply manageActivityApply : manageActivityApplies) {
+
+            apply.add(manageActivityApply.getGradeId());
+        }
+
+        solrItemDTO.setApply(StringUtils.join(apply,","));
+
+        solrItemDTO.setDucationType(activity.getDurationType());
+
+        solrItemDTO.setSign(activity.getSign());
+
+        solrItemDTO.setCloseType(activity.getCloseType());
+
 
         return solrItemDTO;
     }
