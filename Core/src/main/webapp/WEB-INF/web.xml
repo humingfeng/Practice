@@ -16,6 +16,7 @@
             classpath:spring/spring-solr.xml
             classpath:spring/spring-activemq.xml
             classpath:spring/spring-dubbo.xml
+            classpath:spring/spring-task.xml
         </param-value>
     </context-param>
 

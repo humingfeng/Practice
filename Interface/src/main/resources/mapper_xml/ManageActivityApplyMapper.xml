@@ -215,4 +215,6 @@
     from manage_activity_apply
     where activity_id = #{activityId,jdbcType=BIGINT}
   </select>
+
+
 </mapper>

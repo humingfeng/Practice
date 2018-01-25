@@ -22,9 +22,11 @@ public class TimeUtils {
 
     private static final String FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
     private static final String FORMAT_DEFAULT_SHORT = "yyyy-MM-dd";
+    private static final String FORMAT_DEFAULT_HOUR = "yyyy/MM/dd HH";
 
     private static final DateTimeFormatter FORMAT = DateTimeFormat.forPattern(FORMAT_DEFAULT);
     private static final DateTimeFormatter FORMAT_SHORT = DateTimeFormat.forPattern(FORMAT_DEFAULT_SHORT);
+    private static final DateTimeFormatter FORMAT_HOUR = DateTimeFormat.forPattern(FORMAT_DEFAULT_HOUR);
 
     private static final Pattern TIME_PATTERN = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))?$");
     /**
@@ -153,6 +155,42 @@ public class TimeUtils {
 
     }
 
+    /**
+     * 获取 minutes 前的时间
+     * @return
+     */
+    public static Date getDateBeforeMinutes(Integer minutes) {
+        DateTime dt = new DateTime().minusMinutes(minutes);
+        return dt.toDate();
+    }
+    /**
+     * 获取 minutes 后的时间
+     * @return
+     */
+    public static Date getDateAfterMinutes(Integer minutes){
+        DateTime dt = new DateTime().plusMinutes(minutes);
+        return dt.toDate();
+    }
+
+    /**
+     * Get Time form string hour
+     * @param time
+     * @return
+     */
+    public static Date getDateHourFromString(String time) {
+        DateTime dateTime = DateTime.parse(time, FORMAT).withSecondOfMinute(0).withMinuteOfHour(0);
+        return dateTime.toDate();
+    }
+
+    /**
+     * Get String form data yyyy/MM/dd/ HH
+     * @param date
+     * @return
+     */
+    public static String getSringDateLastHour(Date date){
+        SimpleDateFormat format = new SimpleDateFormat(FORMAT_DEFAULT_HOUR);
+        return format.format(date);
+    }
 
 //    /**
 //     * 获取当前日期字符串 yyyyMMdd

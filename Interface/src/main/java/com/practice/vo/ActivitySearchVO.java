@@ -29,7 +29,7 @@ public class ActivitySearchVO implements Serializable{
 
     private Integer sign;
 
-    private Integer ducationType;
+    private Integer durationType;
 
     private Integer closeType;
 
@@ -38,12 +38,12 @@ public class ActivitySearchVO implements Serializable{
     public ActivitySearchVO() {
     }
 
-    public Integer getDucationType() {
-        return ducationType;
+    public Integer getDurationType() {
+        return durationType;
     }
 
-    public void setDucationType(Integer ducationType) {
-        this.ducationType = ducationType;
+    public void setDurationType(Integer durationType) {
+        this.durationType = durationType;
     }
 
     public Integer getCloseType() {
@@ -164,7 +164,7 @@ public class ActivitySearchVO implements Serializable{
                 ", enrolled=" + enrolled +
                 ", like=" + like +
                 ", sign=" + sign +
-                ", ducationType=" + ducationType +
+                ", ducationType=" + durationType +
                 ", closeType=" + closeType +
                 ", closeTime='" + closeTime + '\'' +
                 '}';

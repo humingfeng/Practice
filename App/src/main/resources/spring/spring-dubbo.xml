@@ -33,4 +33,6 @@
 
     <dubbo:reference id="runService" interface="com.practice.service.RunService"/>
 
+    <dubbo:reference id="searchService" interface="com.practice.service.SearchService"/>
+
 </beans>

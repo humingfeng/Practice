@@ -1,9 +1,13 @@
 package com.practice.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+
 /**
  * @author Xushd on 2018/1/24 14:46
  */
-public class SolrQueryDTO {
+public class SolrQueryDTO implements Serializable{
 
     private String query;
 
@@ -38,22 +42,49 @@ public class SolrQueryDTO {
     public SolrQueryDTO() {
     }
 
-    public void init(){
-        this.query="";
+
+    public void init() {
+        this.query = "";
         this.typeId = 0L;
-        this.classifyId= 0L;
-        this.themeId= 0L;
-        this.organizeId= 0L;
-        this.baseId= 0L;
-        this.apply= 0L;
-        this.free= 0;
-        this.self= 0;
-        this.ducation=0;
-        this.close=0;
-        this.soft=0;
-        this.sign=0;
-        this.pageIndex=1;
-        this.pageSize=10;
+        this.classifyId = 0L;
+        this.themeId = 0L;
+        this.organizeId = 0L;
+        this.baseId = 0L;
+        this.apply = 0L;
+        this.free = 0;
+        this.self = 0;
+        this.ducation = 0;
+        this.close = 0;
+        this.soft = 0;
+        this.sign = 0;
+        this.pageIndex = 1;
+        this.pageSize = 10;
+    }
+
+    public void init(String searchParam, String query) {
+        String[] param = searchParam.split("q_t|i|e|o|b|a|f|m|d|c|s|g|p");
+
+        if (StringUtils.isNotBlank(query)) {
+            this.query = query;
+        } else {
+            this.query = "";
+        }
+        this.typeId = Long.valueOf(param[1]);
+        this.classifyId = Long.valueOf(param[2]);
+        this.themeId = Long.valueOf(param[3]);
+        this.organizeId = Long.valueOf(param[4]);
+        this.baseId = Long.valueOf(param[5]);
+        this.apply = Long.valueOf(param[6]);
+        this.free = Integer.valueOf(param[7]);
+        this.self = Integer.valueOf(param[8]);
+        this.ducation = Integer.valueOf(param[9]);
+        this.close = Integer.valueOf(param[10]);
+        this.soft = Integer.valueOf(param[11]);
+        this.sign = Integer.valueOf(param[12]);
+        this.pageIndex = Integer.valueOf(param[13]);
+
+        this.pageSize = 10;
+
     }
 
     public Integer getPageIndex() {
@@ -186,9 +217,15 @@ public class SolrQueryDTO {
                 ", themeId=" + themeId +
                 ", organizeId=" + organizeId +
                 ", baseId=" + baseId +
+                ", apply=" + apply +
                 ", free=" + free +
                 ", self=" + self +
+                ", ducation=" + ducation +
+                ", close=" + close +
                 ", soft=" + soft +
+                ", sign=" + sign +
+                ", pageIndex=" + pageIndex +
+                ", pageSize=" + pageSize +
                 '}';
     }
 }

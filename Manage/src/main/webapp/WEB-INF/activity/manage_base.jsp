@@ -12,7 +12,10 @@
 <body class="childrenBody">
 
 <fieldset class="layui-elem-field" style="width: 700px;">
-    <blockquote class="layui-elem-quote layui-quote-nm qute-blue">活动基本信息</blockquote>
+    <blockquote class="layui-elem-quote layui-quote-nm qute-blue">
+        活动基本信息
+        1、系统轮询时间只精确到小时，所以时间设置后系统会自动过滤分钟和秒
+    </blockquote>
     <div class="layui-row">
         <div class="layui-col-md12">
             <form class="layui-form layui-form-pane" id="form">
@@ -165,9 +168,9 @@
 
         var url = "/auth/activity/manage/base/add";
 
-        laydate.render({elem: '#closeTime',min: 3,btns: ['clear', 'confirm']});
+        laydate.render({elem: '#closeTime',type: 'datetime',min: 1,btns: ['clear', 'confirm']});
 
-        laydate.render({elem: '#timeStr',type: 'datetime',range: true,min: 3});
+        laydate.render({elem: '#timeStr',type: 'datetime',range: true,min: 2});
 
         if(id){
 

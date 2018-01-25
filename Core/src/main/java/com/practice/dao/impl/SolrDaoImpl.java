@@ -175,19 +175,27 @@ public class SolrDaoImpl implements SolrDao {
 
                 activitySearchVO.setName(String.valueOf(result.get("name")));
 
-                activitySearchVO.setDuration(String.valueOf(result.get("time_hour")));
+                String duration = String.valueOf(result.get("time_hour"));
 
-                activitySearchVO.setDucationType(Integer.valueOf(String.valueOf(result.get("ducation_type"))));
+                String[] split = duration.split("\\.");
+
+                if(split[1].equals("0")){
+                    activitySearchVO.setDuration(split[0]);
+                }else{
+                    activitySearchVO.setDuration(duration);
+                }
+
+                activitySearchVO.setDurationType(Integer.valueOf(String.valueOf(result.get("ducation_type"))));
 
                 activitySearchVO.setPrice(String.valueOf(result.get("money")));
 
-                activitySearchVO.setBeginTime(TimeUtils.getDateString((Date) result.get("begin_time")));
+                activitySearchVO.setBeginTime(TimeUtils.getDateStringShort((Date) result.get("begin_time")));
 
-                activitySearchVO.setEndTime(TimeUtils.getDateString((Date) result.get("end_time")));
+                activitySearchVO.setEndTime(TimeUtils.getDateStringShort((Date) result.get("end_time")));
 
                 activitySearchVO.setCloseType(Integer.valueOf(String.valueOf(result.get("close_type"))));
 
-                activitySearchVO.setCloseTime(TimeUtils.getDateString((Date) result.get("close_time")));
+                activitySearchVO.setCloseTime(TimeUtils.getDateStringShort((Date) result.get("close_time")));
 
                 activitySearchVO.setSign(Integer.valueOf(String.valueOf(result.get("sign"))));
 

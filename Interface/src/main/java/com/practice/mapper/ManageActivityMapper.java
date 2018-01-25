@@ -27,4 +27,6 @@ public interface ManageActivityMapper {
     int updateByPrimaryKeySelective(ManageActivity record);
 
     int updateByPrimaryKey(ManageActivity record);
+
+    int updateStatusByPrimaryKeyList(@Param("ids") List<Long> ids,@Param("status") int status);
 }

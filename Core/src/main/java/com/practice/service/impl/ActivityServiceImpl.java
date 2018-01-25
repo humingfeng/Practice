@@ -3,7 +3,6 @@ package com.practice.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.exception.ServiceException;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.jms.Destination;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -83,12 +81,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Resource
     private CacheService cacheService;
     @Resource
-    private ActiveMqProducer activeMqProducer;
-
-    @Resource(name="activitySolrAddQueue")
-    private Destination activitySolrAddQueue;
-    @Resource
-    private SolrService solrServer;
+    private SearchService searchService;
 
     @Value("${ENDPOINT}")
     private String ENDPOINT;
@@ -755,7 +748,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
         } else {
-            manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
+            manageActivity.setCloseTime(TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr()));
         }
 
         if (manageActivity.getSign() == 1) {
@@ -769,9 +762,9 @@ public class ActivityServiceImpl implements ActivityService {
 
             String[] split = timeStr.split(" - ");
 
-            Date dateBegin = TimeUtils.getDateFromString(split[0]);
+            Date dateBegin = TimeUtils.getDateHourFromString(split[0]);
 
-            Date dateEnd = TimeUtils.getDateFromString(split[1]);
+            Date dateEnd = TimeUtils.getDateHourFromString(split[1]);
 
             manageActivity.setBeginTime(dateBegin);
 
@@ -817,7 +810,7 @@ public class ActivityServiceImpl implements ActivityService {
     public JsonResult getActivityManage(Long id) {
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
         if (manageActivity.getCloseType() == 1) {
-            manageActivity.setCloseTimeStr(TimeUtils.getDateStringShort(manageActivity.getCloseTime()));
+            manageActivity.setCloseTimeStr(TimeUtils.getDateString(manageActivity.getCloseTime()));
         }
 
         Date beginTime = manageActivity.getBeginTime();
@@ -846,7 +839,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
         } else {
-            manageActivity.setCloseTime(TimeUtils.getDateFromStringShort(manageActivity.getCloseTimeStr()));
+            manageActivity.setCloseTime(TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr()));
         }
 
         if (manageActivity.getSign() == 1) {
@@ -860,9 +853,9 @@ public class ActivityServiceImpl implements ActivityService {
 
             String[] split = timeStr.split(" - ");
 
-            Date dateBegin = TimeUtils.getDateFromString(split[0]);
+            Date dateBegin = TimeUtils.getDateHourFromString(split[0]);
 
-            Date dateEnd = TimeUtils.getDateFromString(split[1]);
+            Date dateEnd = TimeUtils.getDateHourFromString(split[1]);
 
             manageActivity.setBeginTime(dateBegin);
 
@@ -2867,7 +2860,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         cacheService.setActvitySolrItemDTO(activitySolrItemDTO);
 
-        Boolean aBoolean = solrServer.addActivityItem(activitySolrItemDTO);
+        Boolean aBoolean = searchService.addActivityItem(activitySolrItemDTO);
 
         if(!aBoolean){
 
@@ -3088,7 +3081,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         activityMapper.updateByPrimaryKeySelective(manageActivity);
 
-        Boolean aBoolean = solrServer.removeActivityItem(id);
+        Boolean aBoolean = searchService.removeActivityItem(id);
 
         if(!aBoolean){
             throw new ServiceException(OperateEnum.SOLR_DEL_ERROR.getStateInfo());
@@ -3282,7 +3275,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(activitySolrAddMessage.getId());
 
         if(actvitySolrItemDTO!=null){
-            Boolean aBoolean = solrServer.addActivityItem(actvitySolrItemDTO);
+            Boolean aBoolean = searchService.addActivityItem(actvitySolrItemDTO);
 
             if(aBoolean){
                 LOGGER.info("INFO:{}", activitySolrAddMessage.getMessage()+" ADD SOLR SUCCESS");

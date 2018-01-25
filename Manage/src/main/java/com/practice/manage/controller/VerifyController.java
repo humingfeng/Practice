@@ -103,7 +103,7 @@ public class VerifyController {
      * @param token
      * @return
      */
-    @ControllerPermisson(value = "/activity/revoke")
+    @ControllerPermisson(value = "activity/revoke")
     @RequestMapping(value = "/activity/revoke/{id}")
     @ResponseBody
     public JsonResult ajaxActivityRevoke(@PathVariable Long id, @RequestAttribute String token) throws ServiceException {

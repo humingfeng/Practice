@@ -1163,7 +1163,7 @@ public class ActivityController {
      * Activity offline
      * @return
      */
-    @ControllerPermisson(value = "/offline")
+    @ControllerPermisson(value = "activity/offline")
     @RequestMapping(value = "/offline/{id}")
     @ResponseBody
     public JsonResult ajaxActivityOffline(@RequestAttribute String token,@PathVariable Long id) throws ServiceException {

@@ -5,7 +5,7 @@ import com.practice.dto.ActivitySolrItemDTO;
 import com.practice.dto.PageResult;
 import com.practice.dto.SolrQueryDTO;
 import com.practice.dto.SolrResultDTO;
-import com.practice.service.SolrService;
+import com.practice.service.SearchService;
 import com.practice.utils.IkAnalyzerUtils;
 import com.practice.vo.ActivitySearchVO;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,7 @@ import java.util.List;
  * @author Xushd  2018/1/23 22:56
  */
 @Service
-public class SolrServiceImpl implements SolrService {
+public class SearchServiceImpl implements SearchService {
 
 
     @Resource
@@ -176,6 +176,8 @@ public class SolrServiceImpl implements SolrService {
         activitySearchVOPageResult.setPageNum(queryDTO.getPageIndex());
 
         activitySearchVOPageResult.setPages((int)pageCount);
+
+        activitySearchVOPageResult.setTotal(Integer.valueOf(String.valueOf(total)));
 
         activitySearchVOPageResult.setList(solrResultDTO.getList());
 

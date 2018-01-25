@@ -604,4 +604,12 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--批量更新状态-->
+  <update id="updateStatusByPrimaryKeyList" parameterType="map">
+    UPDATE manage_activity SET status = #{status,jdbcType=BIGINT} WHERE id IN
+    <foreach collection="ids" item="item" index="index" open="(" separator="," close=")" >
+      #{item}
+    </foreach>
+  </update>
 </mapper>

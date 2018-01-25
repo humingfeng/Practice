@@ -87,4 +87,8 @@
     <bean id="runService" class="com.practice.service.impl.RunServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.RunService" ref="runService"></dubbo:service>
 
+    <!--solrService-->
+    <bean id="searchService" class="com.practice.service.impl.SearchServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.SearchService" ref="searchService"></dubbo:service>
+
 </beans>

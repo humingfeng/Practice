@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/task
+	    http://www.springframework.org/schema/task/spring-task.xsd">
+    <description>spring-task配置</description>
+    <!-- springMVC 定时器开关 -->
+    <task:annotation-driven />
+
+    <bean id="taskHour" class="com.practice.task.HourTask"></bean>
+    <task:scheduled-tasks>
+        <task:scheduled ref="taskHour" method="timerController" cron="0 0 0/1 * * ? " />  <!-- 这里表示的是每隔1小时执行一次    -->
+    </task:scheduled-tasks>
+    <!--<bean id="taskSecond" class="com.practice.task.SecondTask"></bean>-->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="taskSecond" method="timerController" cron="0/1 * * * * ?" />  &lt;!&ndash; 这里表示的是每隔5秒执行一次    &ndash;&gt;-->
+    <!--</task:scheduled-tasks>-->
+</beans>

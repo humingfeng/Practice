@@ -8,11 +8,12 @@ import com.practice.vo.ActivitySearchVO;
 /**
  * @author Xushd  2018/1/23 21:24
  */
-public interface SolrService {
+public interface SearchService {
 
     /**
      * Add activity to solr
      * @param actvitySolrItemDTO
+     * @return
      */
     Boolean addActivityItem(ActivitySolrItemDTO actvitySolrItemDTO);
 
