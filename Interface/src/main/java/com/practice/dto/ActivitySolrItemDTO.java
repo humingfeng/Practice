@@ -16,6 +16,12 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private Long themeId;
 
+    private Long pid;
+
+    private Long cid;
+
+    private Long aid;
+
     private String name;
 
     private String imgCover;
@@ -24,7 +30,11 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private Long baseId;
 
-    private Float timeHour;
+    private Integer duration;
+
+    private Integer durationType;
+
+    private String time;
 
     private Integer self;
 
@@ -41,8 +51,6 @@ public class ActivitySolrItemDTO implements Serializable{
     private Long like;
 
     private Integer number;
-
-    private Integer ducationType;
 
     private Integer sign;
 
@@ -97,12 +105,44 @@ public class ActivitySolrItemDTO implements Serializable{
         this.themeId = themeId;
     }
 
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public Long getCid() {
+        return cid;
+    }
+
+    public void setCid(Long cid) {
+        this.cid = cid;
+    }
+
+    public Long getAid() {
+        return aid;
+    }
+
+    public void setAid(Long aid) {
+        this.aid = aid;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImgCover() {
+        return imgCover;
+    }
+
+    public void setImgCover(String imgCover) {
+        this.imgCover = imgCover;
     }
 
     public Long getOrganizeId() {
@@ -121,12 +161,28 @@ public class ActivitySolrItemDTO implements Serializable{
         this.baseId = baseId;
     }
 
-    public Float getTimeHour() {
-        return timeHour;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setTimeHour(Float timeHour) {
-        this.timeHour = timeHour;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getDurationType() {
+        return durationType;
+    }
+
+    public void setDurationType(Integer durationType) {
+        this.durationType = durationType;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public Integer getSelf() {
@@ -169,12 +225,52 @@ public class ActivitySolrItemDTO implements Serializable{
         this.closeTime = closeTime;
     }
 
+    public Integer getCloseType() {
+        return closeType;
+    }
+
+    public void setCloseType(Integer closeType) {
+        this.closeType = closeType;
+    }
+
     public Long getLike() {
         return like;
     }
 
     public void setLike(Long like) {
         this.like = like;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Integer getSign() {
+        return sign;
+    }
+
+    public void setSign(Integer sign) {
+        this.sign = sign;
+    }
+
+    public Integer getEnroll() {
+        return enroll;
+    }
+
+    public void setEnroll(Integer enroll) {
+        this.enroll = enroll;
+    }
+
+    public String getApply() {
+        return apply;
+    }
+
+    public void setApply(String apply) {
+        this.apply = apply;
     }
 
     public String getTypeName() {
@@ -225,62 +321,6 @@ public class ActivitySolrItemDTO implements Serializable{
         this.pinyin = pinyin;
     }
 
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public String getImgCover() {
-        return imgCover;
-    }
-
-    public void setImgCover(String imgCover) {
-        this.imgCover = imgCover;
-    }
-
-    public Integer getEnroll() {
-        return enroll;
-    }
-
-    public void setEnroll(Integer enroll) {
-        this.enroll = enroll;
-    }
-
-    public String getApply() {
-        return apply;
-    }
-
-    public void setApply(String apply) {
-        this.apply = apply;
-    }
-
-    public Integer getDucationType() {
-        return ducationType;
-    }
-
-    public void setDucationType(Integer ducationType) {
-        this.ducationType = ducationType;
-    }
-
-    public Integer getSign() {
-        return sign;
-    }
-
-    public void setSign(Integer sign) {
-        this.sign = sign;
-    }
-
-    public Integer getCloseType() {
-        return closeType;
-    }
-
-    public void setCloseType(Integer closeType) {
-        this.closeType = closeType;
-    }
-
     @Override
     public String toString() {
         return "ActivitySolrItemDTO{" +
@@ -288,18 +328,25 @@ public class ActivitySolrItemDTO implements Serializable{
                 ", typeId=" + typeId +
                 ", classifyId=" + classifyId +
                 ", themeId=" + themeId +
+                ", pid=" + pid +
+                ", cid=" + cid +
+                ", aid=" + aid +
                 ", name='" + name + '\'' +
                 ", imgCover='" + imgCover + '\'' +
                 ", organizeId=" + organizeId +
                 ", baseId=" + baseId +
-                ", timeHour=" + timeHour +
+                ", duration=" + duration +
+                ", durationType=" + durationType +
+                ", time='" + time + '\'' +
                 ", self=" + self +
                 ", money=" + money +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 ", closeTime=" + closeTime +
+                ", closeType=" + closeType +
                 ", like=" + like +
                 ", number=" + number +
+                ", sign=" + sign +
                 ", enroll=" + enroll +
                 ", apply='" + apply + '\'' +
                 ", typeName='" + typeName + '\'' +

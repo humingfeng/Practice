@@ -26,6 +26,8 @@ public class ManageActivityClassify implements Serializable{
 
     private Long typeId;
 
+    private String icon;
+
     private Integer status;
 
     private Integer delflag;
@@ -58,6 +60,14 @@ public class ManageActivityClassify implements Serializable{
 
     public void setTypeId(Long typeId) {
         this.typeId = typeId;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon == null ? null : icon.trim();
     }
 
     public Integer getStatus() {

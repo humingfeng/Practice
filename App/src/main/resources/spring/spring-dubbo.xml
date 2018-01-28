@@ -35,4 +35,8 @@
 
     <dubbo:reference id="searchService" interface="com.practice.service.SearchService"/>
 
+    <dubbo:reference id="activityService" interface="com.practice.service.ActivityService"/>
+
+    <dubbo:reference id="basesService" interface="com.practice.service.BasesService"/>
+
 </beans>

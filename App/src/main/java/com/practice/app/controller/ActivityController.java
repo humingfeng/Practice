@@ -2,10 +2,18 @@ package com.practice.app.controller;
 
 import com.practice.dto.PageResult;
 import com.practice.dto.SolrQueryDTO;
+import com.practice.dto.TokenParentDTO;
+import com.practice.po.ManageStudent;
+import com.practice.po.School;
 import com.practice.result.JsonResult;
+import com.practice.service.ActivityService;
+import com.practice.service.PersonnelService;
+import com.practice.service.SchoolService;
 import com.practice.service.SearchService;
+import com.practice.utils.JwtTokenUtil;
 import com.practice.vo.ActivitySearchVO;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +28,12 @@ public class ActivityController {
 
     @Resource
     private SearchService searchService;
+    @Resource
+    private SchoolService schoolService;
+    @Resource
+    private PersonnelService personnelService;
+    @Resource
+    private ActivityService activityService;
 
     /**
      * Activity list by search param
@@ -27,16 +41,40 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/list/{searchParam}")
-    public JsonResult listActivity(@PathVariable String searchParam,String query){
+    public JsonResult listActivity(@PathVariable String searchParam, String query, @RequestAttribute String token){
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        Long studentId = tokenParent.getStudentId();
+
+        ManageStudent studentPO = personnelService.getStudentPO(studentId);
+
+        School schoolPO = schoolService.getSchoolPO(studentPO.getSchoolId());
 
         SolrQueryDTO solrQueryDTO = new SolrQueryDTO();
 
         solrQueryDTO.init(searchParam,query);
 
+        solrQueryDTO.setPid(schoolPO.getProviceId());
+
+        solrQueryDTO.setCid(schoolPO.getCityId());
+
         PageResult<ActivitySearchVO> searchResult = searchService.getSearchResult(solrQueryDTO);
 
         return JsonResult.success(searchResult);
 
+    }
+
+    /**
+     * Get activity detail
+     * @param id
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}")
+    public JsonResult getActivityDetail(@PathVariable Long id,@RequestAttribute String token){
+
+        return activityService.getActivityDetail(id,token);
     }
 
 }

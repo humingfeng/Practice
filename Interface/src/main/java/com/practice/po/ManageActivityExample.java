@@ -546,52 +546,52 @@ public class ManageActivityExample {
             return (Criteria) this;
         }
 
-        public Criteria andDurationEqualTo(Float value) {
+        public Criteria andDurationEqualTo(Integer value) {
             addCriterion("duration =", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationNotEqualTo(Float value) {
+        public Criteria andDurationNotEqualTo(Integer value) {
             addCriterion("duration <>", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationGreaterThan(Float value) {
+        public Criteria andDurationGreaterThan(Integer value) {
             addCriterion("duration >", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationGreaterThanOrEqualTo(Float value) {
+        public Criteria andDurationGreaterThanOrEqualTo(Integer value) {
             addCriterion("duration >=", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationLessThan(Float value) {
+        public Criteria andDurationLessThan(Integer value) {
             addCriterion("duration <", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationLessThanOrEqualTo(Float value) {
+        public Criteria andDurationLessThanOrEqualTo(Integer value) {
             addCriterion("duration <=", value, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationIn(List<Float> values) {
+        public Criteria andDurationIn(List<Integer> values) {
             addCriterion("duration in", values, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationNotIn(List<Float> values) {
+        public Criteria andDurationNotIn(List<Integer> values) {
             addCriterion("duration not in", values, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationBetween(Float value1, Float value2) {
+        public Criteria andDurationBetween(Integer value1, Integer value2) {
             addCriterion("duration between", value1, value2, "duration");
             return (Criteria) this;
         }
 
-        public Criteria andDurationNotBetween(Float value1, Float value2) {
+        public Criteria andDurationNotBetween(Integer value1, Integer value2) {
             addCriterion("duration not between", value1, value2, "duration");
             return (Criteria) this;
         }
@@ -653,6 +653,76 @@ public class ManageActivityExample {
 
         public Criteria andDurationTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("duration_type not between", value1, value2, "durationType");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeIsNull() {
+            addCriterion("valid_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeIsNotNull() {
+            addCriterion("valid_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeEqualTo(String value) {
+            addCriterion("valid_time =", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeNotEqualTo(String value) {
+            addCriterion("valid_time <>", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeGreaterThan(String value) {
+            addCriterion("valid_time >", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("valid_time >=", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeLessThan(String value) {
+            addCriterion("valid_time <", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeLessThanOrEqualTo(String value) {
+            addCriterion("valid_time <=", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeLike(String value) {
+            addCriterion("valid_time like", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeNotLike(String value) {
+            addCriterion("valid_time not like", value, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeIn(List<String> values) {
+            addCriterion("valid_time in", values, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeNotIn(List<String> values) {
+            addCriterion("valid_time not in", values, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeBetween(String value1, String value2) {
+            addCriterion("valid_time between", value1, value2, "validTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andValidTimeNotBetween(String value1, String value2) {
+            addCriterion("valid_time not between", value1, value2, "validTime");
             return (Criteria) this;
         }
 

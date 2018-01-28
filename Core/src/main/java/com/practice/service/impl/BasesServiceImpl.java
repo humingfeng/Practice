@@ -12,6 +12,7 @@ import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.AreaService;
 import com.practice.service.BasesService;
+import com.practice.service.CacheService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,8 @@ public class BasesServiceImpl implements BasesService {
     private AreaService areaService;
     @Resource
     private ManageActivityMapper activityMapper;
+    @Resource
+    private CacheService cacheService;
 
 
     /**
@@ -250,6 +253,14 @@ public class BasesServiceImpl implements BasesService {
      */
     @Override
     public ManageBase getBasesPO(Long baseId) {
-        return baseMapper.selectByPrimaryKey(baseId);
+
+        ManageBase bases = cacheService.getBases(baseId);
+
+        if(bases==null){
+            bases = baseMapper.selectByPrimaryKey(baseId);
+            cacheService.setBases(baseId,bases);
+        }
+
+        return bases;
     }
 }

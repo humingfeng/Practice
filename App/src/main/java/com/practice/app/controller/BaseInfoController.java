@@ -1,8 +1,10 @@
 package com.practice.app.controller;
 
+import com.practice.dto.AppBaseDataDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.enums.DicParentEnum;
 import com.practice.enums.SMSTemplateEnum;
+import com.practice.po.ManageBase;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,10 @@ public class BaseInfoController {
     private SmsService smsService;
     @Resource
     private RunService runService;
+    @Resource
+    private ActivityService activityService;
+    @Resource
+    private BasesService basesService;
 
     /**
      * List province
@@ -157,6 +163,47 @@ public class BaseInfoController {
     @RequestMapping(value = "/slider/content/{id}")
     public JsonResult getSliderContent(@PathVariable Long id){
         return runService.getAppSliderContent(id);
+    }
+
+    /**
+     * Get Base data
+     * @return
+     */
+    @RequestMapping(value = "/data")
+    public JsonResult getBaseData(){
+
+        AppBaseDataDTO appBaseDataDTO = new AppBaseDataDTO();
+
+        List<KeyValueDTO> periodList = dictionaryService.listDicByEnumFromCache(DicParentEnum.PERIOD);
+
+        appBaseDataDTO.setPeriod(periodList);
+
+        List<KeyValueDTO> typeList = activityService.listTypeKV();
+
+        appBaseDataDTO.setActvityType(typeList);
+
+        return JsonResult.success(appBaseDataDTO);
+    }
+
+    /**
+     * Get classify by typeId
+     * @param typeId
+     * @return
+     */
+    @RequestMapping(value = "/classify/{typeId}")
+    public JsonResult getClassifyByType(@PathVariable Long typeId){
+        return activityService.listClassifyCache(typeId);
+    }
+
+    /**
+     * Get bases
+     * @param basesId
+     * @return
+     */
+    @RequestMapping(value = "/bases/{basesId}")
+    public JsonResult getBasesIntroduce(@PathVariable Long basesId){
+        ManageBase basesPO = basesService.getBasesPO(basesId);
+        return JsonResult.success(basesPO);
     }
 }
 

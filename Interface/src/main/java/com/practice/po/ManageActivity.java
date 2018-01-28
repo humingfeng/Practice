@@ -84,9 +84,11 @@ public class ManageActivity implements Serializable {
 
     private Long baseId;
 
-    private Float duration;
+    private Integer duration;
 
     private Integer durationType;
+
+    private String validTime;
 
     private Date beginTime;
 
@@ -186,11 +188,11 @@ public class ManageActivity implements Serializable {
         this.baseId = baseId;
     }
 
-    public Float getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Float duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -200,6 +202,14 @@ public class ManageActivity implements Serializable {
 
     public void setDurationType(Integer durationType) {
         this.durationType = durationType;
+    }
+
+    public String getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(String validTime) {
+        this.validTime = validTime == null ? null : validTime.trim();
     }
 
     public Date getBeginTime() {

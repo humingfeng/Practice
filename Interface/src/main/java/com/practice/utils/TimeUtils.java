@@ -1,9 +1,6 @@
 package com.practice.utils;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Seconds;
-import org.joda.time.Years;
+import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -190,6 +187,54 @@ public class TimeUtils {
     public static String getSringDateLastHour(Date date){
         SimpleDateFormat format = new SimpleDateFormat(FORMAT_DEFAULT_HOUR);
         return format.format(date);
+    }
+
+    /**
+     * Get day diff
+     * @param dateEnd
+     * @param dateBegin
+     * @return
+     */
+    public static int getDateDayDiff(Date dateEnd, Date dateBegin) {
+
+        DateTime dateTime1 = new DateTime(dateEnd);
+        DateTime dateTime2 = new DateTime(dateBegin);
+
+        Days days = Days.daysBetween(dateTime2,dateTime1);
+
+        return days.getDays();
+
+    }
+
+    /**
+     * Get hour diff
+     * @param timeEnd
+     * @param timeBegin
+     * @return
+     */
+    public static int getDateHourDiff(Date timeEnd, Date timeBegin) {
+        DateTime dateTime2 = new DateTime(timeEnd);
+        DateTime dateTime1 = new DateTime(timeBegin);
+
+        Hours hours = Hours.hoursBetween(dateTime1, dateTime2);
+
+        return hours.getHours();
+
+    }
+
+    /**
+     * Get minutes diff
+     * @param timeEnd
+     * @param timeBegin
+     * @return
+     */
+    public static int getDateMinuteDiff(Date timeEnd, Date timeBegin){
+        DateTime dateTime2 = new DateTime(timeEnd);
+        DateTime dateTime1 = new DateTime(timeBegin);
+
+        Minutes minutes = Minutes.minutesBetween(dateTime1, dateTime2);
+
+        return minutes.getMinutes();
     }
 
 //    /**

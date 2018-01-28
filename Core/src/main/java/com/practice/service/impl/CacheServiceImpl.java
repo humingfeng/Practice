@@ -4,10 +4,13 @@ import com.practice.dao.JedisClient;
 import com.practice.dto.*;
 import com.practice.enums.ConstantEnum;
 import com.practice.enums.DicParentEnum;
+import com.practice.po.ManageBase;
 import com.practice.po.ManageDictionary;
 import com.practice.po.SystemParam;
+import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
 import com.practice.utils.JsonUtils;
+import com.practice.vo.ActivityDetailVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -461,5 +464,86 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void clearActivitySolrItemDTO(Long id) {
         jedisClient.hdel(ConstantEnum.ACTIVITY_SOLR_ITEM.getStrValue(), "KEY:" + id);
+    }
+
+    /**
+     * Get classify
+     *
+     * @param typeId
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> getClassify(Long typeId) {
+
+        String hget = jedisClient.hget(ConstantEnum.ACTIVITY_CLASSIFY.getStrValue(), "KEY:" + typeId);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,KeyValueDTO.class);
+        }
+        return null;
+    }
+
+    /**
+     * set classify
+     *
+     * @param typeId
+     * @param list
+     */
+    @Override
+    public void setClassify(Long typeId, List<KeyValueDTO> list) {
+
+        jedisClient.hset(ConstantEnum.ACTIVITY_CLASSIFY.getStrValue(),"KEY:"+typeId,JsonUtils.objectToJson(list));
+    }
+
+    /**
+     * Get activity detail
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ActivityDetailVO getActivityDetail(Long id) {
+
+        String hget = jedisClient.hget(ConstantEnum.ACTIVITY_DETAIL.getStrValue(), "KEY:" + id);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,ActivityDetailVO.class);
+        }
+        return null;
+    }
+
+    /**
+     * Set activity detail
+     *
+     * @param id
+     * @param detailVO
+     */
+    @Override
+    public void setActivityDetail(Long id, ActivityDetailVO detailVO) {
+        jedisClient.hset(ConstantEnum.ACTIVITY_DETAIL.getStrValue(),"KEY:"+id,JsonUtils.objectToJson(detailVO));
+    }
+
+    /**
+     * Get bases
+     *
+     * @param baseId
+     * @return
+     */
+    @Override
+    public ManageBase getBases(Long baseId) {
+        String hget = jedisClient.hget(ConstantEnum.CACHE_BASES.getStrValue(), "KEY:" + baseId);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,ManageBase.class);
+        }
+        return null;
+    }
+
+    /**
+     * Set bases
+     *
+     * @param basesId
+     * @param bases
+     */
+    @Override
+    public void setBases(Long basesId, ManageBase bases) {
+        jedisClient.hset(ConstantEnum.CACHE_BASES.getStrValue(),"KEY:"+basesId,JsonUtils.objectToJson(bases));
     }
 }

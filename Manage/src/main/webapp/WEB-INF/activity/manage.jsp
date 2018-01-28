@@ -143,7 +143,7 @@
                         </a>
                     </div>
                     {{# } }}
-                    {{# if (item.status==6) { }}
+                    {{# if (item.status==6||item.status==2) { }}
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs  do-action layui-btn-normal"
                            data-type="handle" data-url="/auth/jump/activity/activity_view?id={{item.id}}" data-name="活动预览">
@@ -201,13 +201,11 @@
             var id = $(this).data("id");
             load = app.showLoading();
             app.get('/auth/activity/over/check/'+id).then(d=>{
-                if(d.message){
-                    app.layerMessageE(d.message)
-                }else{
-                    app.layerMessageS("完整");
-                    page.getList();
-                }
-            },e=>{}).finally(_=>{app.closeLoading(load)})
+                app.layerMessageS(d.message);
+                page.getList();
+            },e=>{
+                app.layerAlertE(e);
+            }).finally(_=>{app.closeLoading(load)})
         });
 
         $("body").on('click','.sub',function(){
@@ -235,11 +233,11 @@
              var id = $(this).data('id');
 
              app.layerConfirm('确定非要下线么，下线后可以修改活动信息，但需要再次审核！',function(){
-
+                 load = app.showLoading();
                  app.get('/auth/activity/offline/'+id).then(d=>{
                      app.layerMessageS(d.message);
                      page.getList();
-                 },e=>{app.layerMessageE(e)});
+                 },e=>{app.layerMessageE(e)}).finally(()=>{app.closeLoading(load)});
              })
         })
 

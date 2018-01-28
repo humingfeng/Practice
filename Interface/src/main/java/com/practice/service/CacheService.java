@@ -2,8 +2,9 @@ package com.practice.service;
 
 import com.practice.dto.*;
 import com.practice.enums.DicParentEnum;
+import com.practice.po.ManageBase;
 import com.practice.po.ManageDictionary;
-import com.practice.po.SystemParam;
+import com.practice.vo.ActivityDetailVO;
 
 import java.util.List;
 
@@ -239,4 +240,46 @@ public interface CacheService {
      * @param id
      */
     void clearActivitySolrItemDTO(Long id);
+
+    /**
+     * Get classify
+     * @param typeId
+     * @return
+     */
+    List<KeyValueDTO> getClassify(Long typeId);
+
+    /**
+     * set classify
+     * @param typeId
+     * @param list
+     */
+    void setClassify(Long typeId, List<KeyValueDTO> list);
+
+    /**
+     * Get activity detail
+     * @param id
+     * @return
+     */
+    ActivityDetailVO getActivityDetail(Long id);
+
+    /**
+     * Set activity detail
+     * @param id
+     * @param detailVO
+     */
+    void setActivityDetail(Long id,ActivityDetailVO detailVO);
+
+    /**
+     * Get bases
+     * @param baseId
+     * @return
+     */
+    ManageBase getBases(Long baseId);
+
+    /**
+     * Set bases
+     * @param basesId
+     * @param bases
+     */
+    void setBases(Long basesId,ManageBase bases);
 }

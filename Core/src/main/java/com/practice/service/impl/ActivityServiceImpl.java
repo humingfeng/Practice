@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dto.*;
+import com.practice.enums.DicParentEnum;
 import com.practice.enums.OperateEnum;
 import com.practice.exception.ServiceException;
 import com.practice.mapper.*;
@@ -11,6 +12,7 @@ import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
 import com.practice.utils.*;
+import com.practice.vo.ActivityDetailVO;
 import com.practice.vo.ActivityVerifyVO;
 import com.practice.vo.QuestionVO;
 import com.practice.vo.TaskQuestionVO;
@@ -25,6 +27,7 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -82,6 +85,8 @@ public class ActivityServiceImpl implements ActivityService {
     private CacheService cacheService;
     @Resource
     private SearchService searchService;
+    @Resource
+    private ManageActivityCollectMapper collectMapper;
 
     @Value("${ENDPOINT}")
     private String ENDPOINT;
@@ -100,9 +105,6 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Value("${PARENET_DIR}")
     private String PARENET_DIR;
-
-
-
 
 
     /**
@@ -480,9 +482,49 @@ public class ActivityServiceImpl implements ActivityService {
         List<KeyValueDTO> list = new ArrayList<>();
 
         for (ManageActivityClassify activityClassify : manageActivityClassifies) {
-            list.add(new KeyValueDTO(activityClassify.getId(), activityClassify.getName()));
+            list.add(new KeyValueDTO(activityClassify.getId(), activityClassify.getName(),activityClassify.getIcon()));
         }
 
+        return JsonResult.success(list);
+    }
+
+    private List<KeyValueDTO> listClassifyUsablePO(Long id){
+
+        ManageActivityClassifyExample classifyExample = new ManageActivityClassifyExample();
+
+        classifyExample.createCriteria()
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1)
+                .andTypeIdEqualTo(id);
+
+        List<ManageActivityClassify> manageActivityClassifies = classifyMapper.selectByExample(classifyExample);
+
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityClassify activityClassify : manageActivityClassifies) {
+            list.add(new KeyValueDTO(activityClassify.getId(), activityClassify.getName(),activityClassify.getIcon()));
+        }
+        return list;
+    }
+    /**
+     * List classify from cache
+     *
+     * @param typeId
+     * @return
+     */
+    @Override
+    public JsonResult listClassifyCache(Long typeId) {
+
+        List<KeyValueDTO> list = cacheService.getClassify(typeId);
+
+        if(list==null){
+
+            list = this.listClassifyUsablePO(typeId);
+
+            cacheService.setClassify(typeId,list);
+
+        }
         return JsonResult.success(list);
     }
 
@@ -694,15 +736,15 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityExample.Criteria criteria = activityExample.createCriteria();
 
-        String key1="typeId",key2="classifyId",key3="themeId";
+        String key1 = "typeId", key2 = "classifyId", key3 = "themeId";
 
-        if(param.getFiled(key1)!=null){
+        if (param.getFiled(key1) != null) {
             criteria.andTypeIdEqualTo(Long.valueOf(param.getFiled(key1)));
         }
-        if(param.getFiled(key2)!=null){
+        if (param.getFiled(key2) != null) {
             criteria.andClassifyIdEqualTo(Long.valueOf(param.getFiled(key2)));
         }
-        if(param.getFiled(key3)!=null){
+        if (param.getFiled(key3) != null) {
             criteria.andThemeIdEqualTo(Long.valueOf(param.getFiled(key3)));
         }
 
@@ -748,7 +790,15 @@ public class ActivityServiceImpl implements ActivityService {
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
         } else {
-            manageActivity.setCloseTime(TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr()));
+
+            Date closeDate = TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr());
+
+            if (!TimeUtils.greaterThanNow(closeDate)) {
+                return JsonResult.error("报名截止时间小于当前时间");
+            }
+
+            manageActivity.setCloseTime(closeDate);
+
         }
 
         if (manageActivity.getSign() == 1) {
@@ -757,19 +807,45 @@ public class ActivityServiceImpl implements ActivityService {
             manageActivity.setCheckSign(0);
         }
 
-        if (StringUtils.isNotBlank(manageActivity.getTimeStr())) {
-            String timeStr = manageActivity.getTimeStr();
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr()) && StringUtils.isNotBlank(manageActivity.getValidTime())) {
+            String dateStr = manageActivity.getTimeStr();
+            String timeStr = manageActivity.getValidTime();
 
-            String[] split = timeStr.split(" - ");
+            String[] split = dateStr.split(" - ");
 
-            Date dateBegin = TimeUtils.getDateHourFromString(split[0]);
+            String[] split1 = timeStr.split(" - ");
 
-            Date dateEnd = TimeUtils.getDateHourFromString(split[1]);
+            Date dateBegin = TimeUtils.getDateFromStringShort(split[0]);
+
+            if (!TimeUtils.greaterThanNow(dateBegin)) {
+                return JsonResult.error("活动开始时间小于当前时间");
+            }
+
+            Date dateEnd = TimeUtils.getDateFromStringShort(split[1]);
+
+            int day = TimeUtils.getDateDayDiff(dateEnd, dateBegin);
+
+            if (day > 1) {
+                manageActivity.setDurationType(1);
+            } else {
+                manageActivity.setDurationType(2);
+            }
+
+            String nowTimeShort = TimeUtils.getNowTimeShort();
+
+            Date timeBegin = TimeUtils.getDateFromString(nowTimeShort + " " + split1[0]);
+            Date timeEnd = TimeUtils.getDateFromString(nowTimeShort + " " + split1[1]);
+
+            int minutes = TimeUtils.getDateMinuteDiff(timeEnd, timeBegin);
+
+            manageActivity.setDuration(minutes);
 
             manageActivity.setBeginTime(dateBegin);
 
             manageActivity.setEndTime(dateEnd);
 
+        } else {
+            return JsonResult.error("信息录入不完整，请仔细检查");
         }
 
         manageActivity.setCheckLeader(3);
@@ -817,7 +893,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Date endTime = manageActivity.getEndTime();
 
-        manageActivity.setTimeStr(TimeUtils.getDateString(beginTime) + " - " + TimeUtils.getDateString(endTime));
+        manageActivity.setTimeStr(TimeUtils.getDateStringShort(beginTime) + " - " + TimeUtils.getDateStringShort(endTime));
 
         return JsonResult.success(manageActivity);
     }
@@ -839,7 +915,13 @@ public class ActivityServiceImpl implements ActivityService {
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
         } else {
-            manageActivity.setCloseTime(TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr()));
+            Date closeDate = TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr());
+
+            if (!TimeUtils.greaterThanNow(closeDate)) {
+                return JsonResult.error("报名截止时间小于当前时间");
+            }
+
+            manageActivity.setCloseTime(closeDate);
         }
 
         if (manageActivity.getSign() == 1) {
@@ -848,14 +930,38 @@ public class ActivityServiceImpl implements ActivityService {
             manageActivity.setCheckSign(0);
         }
 
-        if (StringUtils.isNotBlank(manageActivity.getTimeStr())) {
-            String timeStr = manageActivity.getTimeStr();
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr()) && StringUtils.isNotBlank(manageActivity.getValidTime())) {
+            String dateStr = manageActivity.getTimeStr();
+            String timeStr = manageActivity.getValidTime();
 
-            String[] split = timeStr.split(" - ");
+            String[] split = dateStr.split(" - ");
 
-            Date dateBegin = TimeUtils.getDateHourFromString(split[0]);
+            String[] split1 = timeStr.split(" - ");
 
-            Date dateEnd = TimeUtils.getDateHourFromString(split[1]);
+            Date dateBegin = TimeUtils.getDateFromStringShort(split[0]);
+
+            if (!TimeUtils.greaterThanNow(dateBegin)) {
+                return JsonResult.error("活动开始时间小于当前时间");
+            }
+
+            Date dateEnd = TimeUtils.getDateFromStringShort(split[1]);
+
+            int day = TimeUtils.getDateDayDiff(dateEnd, dateBegin);
+
+            if (day > 1) {
+                manageActivity.setDurationType(1);
+            } else {
+                manageActivity.setDurationType(2);
+            }
+
+            String nowTimeShort = TimeUtils.getNowTimeShort();
+
+            Date timeBegin = TimeUtils.getDateFromString(nowTimeShort + " " + split1[0]);
+            Date timeEnd = TimeUtils.getDateFromString(nowTimeShort + " " + split1[1]);
+
+            int minutes = TimeUtils.getDateMinuteDiff(timeEnd, timeBegin);
+
+            manageActivity.setDuration(minutes);
 
             manageActivity.setBeginTime(dateBegin);
 
@@ -2450,100 +2556,57 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
 
-        int checkStatus = 3, okStatus = 1;
+        int checkStatus = 3;
 
-        ActivityCheckDTO activityCheckDTO = new ActivityCheckDTO();
-
-        String msg = "";
+        List<String> errors = new ArrayList<>();
 
         Date beginTime = manageActivity.getBeginTime();
 
         Date endTime = manageActivity.getEndTime();
 
         if (TimeUtils.lessThanNow(beginTime)) {
-
-            msg+= "活动开始时间小于当期时间";
+            errors.add("活动开始时间小于当期时间");
         }
 
         if (TimeUtils.lessThanNow(endTime)) {
-            msg+= "活动结束时间小于当期时间";
+            errors.add("活动结束时间小于当期时间");
         }
 
-        if(manageActivity.getCloseType()==1){
-
+        if (manageActivity.getCloseType() == 1) {
             Date closeTime = manageActivity.getCloseTime();
-
-            if(TimeUtils.Obj1LessObj2(beginTime,closeTime)){
-                msg+= "活动报名截至时间小于活动开始时间";
+            if (TimeUtils.Obj1LessObj2(beginTime, closeTime)) {
+                errors.add("活动报名截至时间小于活动开始时间");
             }
-
         }
-
-
 
         //introduce
         if (manageActivity.getCheckIntroduce() == checkStatus) {
-            //3 完成 2 为完成 0 不需要检测
-            activityCheckDTO.setIntroduceStatus(3);
-            activityCheckDTO.setIntroduceMessage("完整");
 
             List<ManageActivityIntroduce> introduces = introduceMapper.selectByActivityId(id);
 
             if (introduces.size() == 0) {
-                activityCheckDTO.setIntroduceStatus(2);
-                activityCheckDTO.setIntroduceMessage("未设置活动介绍");
-
-                msg += activityCheckDTO.getIntroduceMessage();
+                errors.add("未设置活动介绍");
             }
-        }
-
-        if (manageActivity.getCheckIntroduce() == okStatus) {
-            activityCheckDTO.setIntroduceStatus(3);
-            activityCheckDTO.setIntroduceMessage("完整");
-        }
-
-        if (activityCheckDTO.getIntroduceStatus() == checkStatus) {
-            manageActivity.setCheckIntroduce(1);
         }
 
         //apply
         if (manageActivity.getCheckApply() == checkStatus) {
 
-            activityCheckDTO.setApplyStatus(3);
-            activityCheckDTO.setApplyMessage("完整");
-
             List<ManageActivityApply> applies = applyMapper.selectByActivityId(id);
 
             if (applies.size() == 0) {
-                activityCheckDTO.setApplyStatus(2);
-                activityCheckDTO.setApplyMessage("未设置活动适用年段");
-
-                msg += activityCheckDTO.getApplyMessage();
+                errors.add("未设置活动适用年段");
             }
-        }
-        if (manageActivity.getCheckApply() == okStatus) {
-            activityCheckDTO.setApplyStatus(3);
-            activityCheckDTO.setApplyMessage("完整");
-        }
-
-        if (activityCheckDTO.getApplyStatus() == checkStatus) {
-            manageActivity.setCheckApply(1);
         }
 
 
         //leader
         if (manageActivity.getCheckLeader() == checkStatus) {
 
-            activityCheckDTO.setLeaderStatus(3);
-            activityCheckDTO.setLeaderMessage("完整");
-
             List<ManageActivityLeader> leaders = leaderMapper.selectByActivityId(id);
 
             if (leaders.size() == 0) {
-                activityCheckDTO.setLeaderStatus(2);
-                activityCheckDTO.setLeaderMessage("未设置活动负责人");
-
-                msg += activityCheckDTO.getLeaderMessage();
+                errors.add("未设置活动负责人");
             }
 
             int i = 0;
@@ -2557,176 +2620,102 @@ public class ActivityServiceImpl implements ActivityService {
             }
 
             if (i == 0) {
-                activityCheckDTO.setLeaderStatus(2);
-                activityCheckDTO.setLeaderMessage("未设置活动主负责人");
-
-                msg += activityCheckDTO.getLeaderMessage();
+                errors.add("未设置活动主负责人");
             }
 
 
-        }
-
-        if (manageActivity.getCheckLeader() == okStatus) {
-            activityCheckDTO.setLeaderStatus(3);
-            activityCheckDTO.setLeaderMessage("完整");
-        }
-
-        if (activityCheckDTO.getLeaderStatus() == 3) {
-            manageActivity.setCheckLeader(1);
         }
 
         //sign
         if (manageActivity.getCheckSign() == checkStatus) {
 
-            activityCheckDTO.setSignStatus(3);
-            activityCheckDTO.setSignMessage("完整");
-
             List<ManageActivitySign> signs = signMapper.selectByActivityId(id);
 
             if (signs.size() == 0) {
-                activityCheckDTO.setSignStatus(2);
-                activityCheckDTO.setSignMessage("未设置签到信息");
-
-                msg += activityCheckDTO.getSignMessage();
+                errors.add("未设置签到信息");
             }
 
             ManageActivitySign sign = signs.get(0);
 
             if (sign.getSignIn() == 0 && sign.getSignOut() == 0) {
-                activityCheckDTO.setSignStatus(2);
-                activityCheckDTO.setSignMessage("未开启签到、签退");
-
-                msg += activityCheckDTO.getSignMessage();
+                errors.add("未开启签到、签退");
             }
             if (sign.getSignIn() == 1 && StringUtils.isBlank(sign.getSignInErcode())) {
-                activityCheckDTO.setSignStatus(2);
-                activityCheckDTO.setSignMessage("开启签到但未设置签到二维码");
-
-                msg += activityCheckDTO.getSignMessage();
+                errors.add("开启签到但未设置签到二维码");
             }
             if (sign.getSignOut() == 1 && StringUtils.isBlank(sign.getSignOutErcode())) {
-                activityCheckDTO.setSignStatus(2);
-                activityCheckDTO.setSignMessage("开启签退但未设置签退二维码");
-
-                msg += activityCheckDTO.getSignMessage();
+                errors.add("开启签退但未设置签退二维码");
             }
 
 
-        }
-
-        if (manageActivity.getCheckSign() == okStatus) {
-            activityCheckDTO.setSignStatus(3);
-            activityCheckDTO.setSignMessage("完整");
-        }
-        if (manageActivity.getCheckSign() == 0) {
-            activityCheckDTO.setSignStatus(0);
-            activityCheckDTO.setSignMessage("不需要检测");
-        }
-
-        if (activityCheckDTO.getSignStatus() == 3) {
-            manageActivity.setCheckSign(1);
         }
 
         //supervise
         if (manageActivity.getCheckSupervise() == checkStatus) {
 
-            activityCheckDTO.setSuperviseStatus(3);
-            activityCheckDTO.setSuperviseMessage("完整");
-
             List<ManageActivitySupervise> supervises = superviseMapper.selectByActivityId(id);
 
             if (supervises.size() == 0) {
-                activityCheckDTO.setSuperviseStatus(2);
-                activityCheckDTO.setSuperviseMessage("未设置监督人员");
-
-                msg += activityCheckDTO.getSuperviseMessage();
+                errors.add("未设置监督人员");
             }
-        }
-        if (manageActivity.getCheckSupervise() == okStatus) {
-            activityCheckDTO.setSuperviseStatus(3);
-            activityCheckDTO.setSuperviseMessage("完整");
-        }
-        if (manageActivity.getCheckSupervise() == 0) {
-            activityCheckDTO.setSuperviseStatus(0);
-            activityCheckDTO.setSuperviseMessage("不需要检测");
-        }
-
-        if (activityCheckDTO.getSuperviseStatus() == 3) {
-            manageActivity.setCheckSupervise(1);
         }
 
         //enroll
         if (manageActivity.getCheckEnroll() == checkStatus) {
 
-
-            activityCheckDTO.setEnrollStatus(3);
-            activityCheckDTO.setEnrollMessage("完整");
-
             List<ManageActivityEnroll> enrolls = enrollMapper.selectByActivityId(id);
 
             if (enrolls.size() == 0) {
-                activityCheckDTO.setEnrollStatus(2);
-                activityCheckDTO.setEnrollMessage("未设置报名信息");
-
-                msg += activityCheckDTO.getEnrollMessage();
+                errors.add("未设置报名信息");
             }
 
             ManageActivityEnroll enroll = enrolls.get(0);
 
             if (enroll.getName() == 0) {
-                activityCheckDTO.setEnrollStatus(2);
-                activityCheckDTO.setEnrollMessage("报名采集信息设置有误");
 
-                msg += activityCheckDTO.getEnrollMessage();
+                errors.add("报名采集信息设置有误");
             }
 
-        }
-
-        if (manageActivity.getCheckEnroll() == okStatus) {
-            activityCheckDTO.setEnrollStatus(3);
-            activityCheckDTO.setEnrollMessage("完整");
-        }
-
-        if (activityCheckDTO.getEnrollStatus() == checkStatus) {
-            manageActivity.setCheckEnroll(1);
         }
 
         //task
         if (manageActivity.getCheckTask() == checkStatus) {
 
-            activityCheckDTO.setTaskStatus(3);
-            activityCheckDTO.setTaskMessage("完整");
-
-
             List<ManageActivityTask> tasks = taskMapper.selectByActivityId(id);
 
             if (tasks.size() == 0) {
 
-                activityCheckDTO.setTaskStatus(2);
-                activityCheckDTO.setTaskMessage("未设置活动任务");
+                errors.add("未设置活动任务");
 
-                msg += activityCheckDTO.getTaskMessage();
+            } else {
+
+                for (ManageActivityTask task : tasks) {
+                    Integer limitNum = task.getLimitNum();
+
+                    List<Long> questionIds = taskItemMapper.selectQuestionIds(id, task.getId());
+
+                    if (questionIds.size() == 0) {
+                        errors.add("[" + task.getTitle() + "] 任务没有设置题目");
+                    }
+                    if (questionIds.size() != limitNum) {
+                        errors.add("[" + task.getTitle() + "] 任务题目数小于任务最低完成个数");
+                    }
+
+                }
+
             }
 
         }
 
-        if (manageActivity.getCheckTask() == okStatus) {
-            activityCheckDTO.setTaskStatus(3);
-            activityCheckDTO.setTaskMessage("完整");
-        }
-
-        if (activityCheckDTO.getTaskStatus() == 3) {
-            manageActivity.setCheckTask(1);
-        }
-
-        if (StringUtils.isBlank(msg)) {
+        if (errors.size() == 0) {
             manageActivity.setStatus(8);
+            activityMapper.updateByPrimaryKeySelective(manageActivity);
+
+            return JsonResult.success("活动信息完整，可以提交啦");
         }
 
-        activityMapper.updateByPrimaryKeySelective(manageActivity);
 
-
-        return JsonResult.success(msg);
+        return JsonResult.error(StringUtils.join(errors, "</br>"));
     }
 
     /**
@@ -2771,11 +2760,11 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityExample.Criteria criteria = example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(3);
 
-        String key1 = "name",key2 = "id";
-        if(param.getFiled(key1)!=null){
+        String key1 = "name", key2 = "id";
+        if (param.getFiled(key1) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key1)));
         }
-        if(param.getFiled(key2)!=null){
+        if (param.getFiled(key2) != null) {
             criteria.andIdEqualTo(Long.valueOf(param.getFiled(key2)));
         }
 
@@ -2811,12 +2800,12 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivityExample.Criteria criteria = example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(6);
 
-        String key1 = "name",key2 = "id";
+        String key1 = "name", key2 = "id";
 
-        if(param.getFiled(key1)!=null){
+        if (param.getFiled(key1) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key1)));
         }
-        if(param.getFiled(key2)!=null){
+        if (param.getFiled(key2) != null) {
             criteria.andIdEqualTo(Long.valueOf(param.getFiled(key2)));
         }
 
@@ -2862,7 +2851,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Boolean aBoolean = searchService.addActivityItem(activitySolrItemDTO);
 
-        if(!aBoolean){
+        if (!aBoolean) {
 
             cacheService.clearActivitySolrItemDTO(id);
 
@@ -2923,7 +2912,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         manageActivity.setTimeStr(TimeUtils.getDateString(beginTime) + " - " + TimeUtils.getDateString(endTime));
 
-        if(manageActivity.getBaseId() != 0L){
+        if (manageActivity.getBaseId() != 0L) {
             String name = basesService.getBasesPO(manageActivity.getBaseId()).getName();
             manageActivity.setBaseName(name);
         }
@@ -3049,14 +3038,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
 
-        Date beginTime = manageActivity.getBeginTime();
 
         Date endTime = manageActivity.getEndTime();
-
-        if (!TimeUtils.greaterThanNow(beginTime)) {
-
-            return JsonResult.error("活动已开始");
-        }
 
         if (TimeUtils.lessThanNow(endTime)) {
             return JsonResult.error("活动已结束");
@@ -3073,7 +3056,7 @@ public class ActivityServiceImpl implements ActivityService {
             return JsonResult.error("已经有报名学生，不可下线");
         }
 
-        manageActivity.setStatus(8);
+        manageActivity.setStatus(9);
 
         manageActivity.setUpdateTime(new Date());
 
@@ -3083,7 +3066,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         Boolean aBoolean = searchService.removeActivityItem(id);
 
-        if(!aBoolean){
+        if (!aBoolean) {
             throw new ServiceException(OperateEnum.SOLR_DEL_ERROR.getStateInfo());
         }
 
@@ -3100,21 +3083,21 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JsonResult listEnrollRecordList(PageSearchParam param, Long activityId) {
 
-        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+        PageHelper.startPage(param.getPageIndex(), param.getPageSize());
 
         ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
 
         ManageActivityEnrollRecordExample.Criteria criteria = recordExample.createCriteria().andActivityIdEqualTo(activityId).andStatusNotEqualTo(0);
 
-        String key1 = "schoolId",key2="name",key3="status";
+        String key1 = "schoolId", key2 = "name", key3 = "status";
 
-        if(param.getFiled(key1)!=null){
+        if (param.getFiled(key1) != null) {
             criteria.andSchoolIdEqualTo(Long.valueOf(param.getFiled(key1)));
         }
-        if(param.getFiled(key2)!=null){
+        if (param.getFiled(key2) != null) {
             criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key2)));
         }
-        if(param.getFiled(key3)!=null){
+        if (param.getFiled(key3) != null) {
             criteria.andStatusEqualTo(Integer.valueOf(param.getFiled(key3)));
         }
 
@@ -3128,7 +3111,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             record.setClassName(dictionaryService.getDictionaryPO(record.getClassId()).getName());
 
-            if(record.getNation()!=null){
+            if (record.getNation() != null) {
                 record.setNationName(dictionaryService.getDictionaryPO(record.getNation()).getName());
             }
 
@@ -3170,7 +3153,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setBaseId(activity.getBaseId());
 
-        solrItemDTO.setTimeHour(activity.getDuration());
+        solrItemDTO.setDuration(activity.getDuration());
+
+        solrItemDTO.setDurationType(activity.getDurationType());
 
         solrItemDTO.setSelf(activity.getSelf());
 
@@ -3185,7 +3170,6 @@ public class ActivityServiceImpl implements ActivityService {
         solrItemDTO.setLike(0L);
 
         solrItemDTO.setEnroll(0);
-
 
         solrItemDTO.setNumber(activity.getNumber());
 
@@ -3206,9 +3190,9 @@ public class ActivityServiceImpl implements ActivityService {
         solrItemDTO.setOrganizeName(organizeName);
 
         String baseName = "";
-        if(activity.getBaseId()==0L){
+        if (activity.getBaseId() == 0L) {
             solrItemDTO.setBaseName("");
-        }else{
+        } else {
             baseName = basesService.getBasesPO(activity.getBaseId()).getName();
             solrItemDTO.setBaseName(baseName);
         }
@@ -3227,18 +3211,27 @@ public class ActivityServiceImpl implements ActivityService {
 
         pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(organizeName)));
 
-        if(StringUtils.isNotBlank(baseName)){
+        if (StringUtils.isNotBlank(baseName)) {
             pinyinList.add(PinYinUtils.cnToPinYin(ValidatorUtils.eliminate(baseName)));
         }
 
-        solrItemDTO.setPinyin(StringUtils.join(pinyinList," "));
+        solrItemDTO.setPinyin(StringUtils.join(pinyinList, " "));
 
         List<ManageActivityIntroduce> manageActivityIntroduces = introduceMapper.selectByActivityId(activityId);
 
-        if(manageActivityIntroduces.size()>0){
+        if (manageActivityIntroduces.size() > 0) {
+
             solrItemDTO.setImgCover(manageActivityIntroduces.get(0).getImgCover());
-        }else{
+            solrItemDTO.setPid(manageActivityIntroduces.get(0).getPid());
+            solrItemDTO.setCid(manageActivityIntroduces.get(0).getCid());
+            solrItemDTO.setAid(manageActivityIntroduces.get(0).getAid());
+
+        } else {
+
             solrItemDTO.setImgCover("");
+            solrItemDTO.setPid(0L);
+            solrItemDTO.setCid(0L);
+            solrItemDTO.setAid(0L);
         }
 
         List<ManageActivityApply> manageActivityApplies = applyMapper.selectByActivityId(activityId);
@@ -3250,13 +3243,23 @@ public class ActivityServiceImpl implements ActivityService {
             apply.add(manageActivityApply.getGradeId());
         }
 
-        solrItemDTO.setApply(StringUtils.join(apply,","));
-
-        solrItemDTO.setDucationType(activity.getDurationType());
+        solrItemDTO.setApply(StringUtils.join(apply, ","));
 
         solrItemDTO.setSign(activity.getSign());
 
         solrItemDTO.setCloseType(activity.getCloseType());
+
+        String validTime = activity.getValidTime();
+
+        if (StringUtils.isNotBlank(validTime)) {
+            String[] split = validTime.split(" - ");
+            String time1 = split[0].substring(0, 5);
+            String time2 = split[1].substring(0, 5);
+            solrItemDTO.setTime(time1 + " - " + time2);
+
+        } else {
+            solrItemDTO.setTime("");
+        }
 
 
         return solrItemDTO;
@@ -3274,14 +3277,182 @@ public class ActivityServiceImpl implements ActivityService {
 
         ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(activitySolrAddMessage.getId());
 
-        if(actvitySolrItemDTO!=null){
+        if (actvitySolrItemDTO != null) {
             Boolean aBoolean = searchService.addActivityItem(actvitySolrItemDTO);
 
-            if(aBoolean){
-                LOGGER.info("INFO:{}", activitySolrAddMessage.getMessage()+" ADD SOLR SUCCESS");
-            }else{
-                LOGGER.info("ERROR:{}", activitySolrAddMessage.getMessage()+" ADD SOLR ERROR");
+            if (aBoolean) {
+                LOGGER.info("INFO:{}", activitySolrAddMessage.getMessage() + " ADD SOLR SUCCESS");
+            } else {
+                LOGGER.info("ERROR:{}", activitySolrAddMessage.getMessage() + " ADD SOLR ERROR");
             }
         }
+    }
+
+    /**
+     * List actvity type
+     *
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> listTypeKV() {
+
+        ManageActivityTypeExample example = new ManageActivityTypeExample();
+
+        example.createCriteria().andDelflagEqualTo(0).andStatusEqualTo(1);
+
+        List<ManageActivityType> manageActivityTypes = typeMapper.selectByExample(example);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityType type : manageActivityTypes) {
+
+            list.add(new KeyValueDTO(type.getId(), type.getName()));
+
+        }
+
+        return list;
+    }
+
+    /**
+     * Get activity detail
+     *
+     * @param id
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult getActivityDetail(Long id, String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ActivityDetailVO detailVO = cacheService.getActivityDetail(id);
+
+        if(detailVO == null){
+            detailVO = new ActivityDetailVO();
+
+            ManageActivity activity = activityMapper.selectByPrimaryKey(id);
+
+            List<ManageActivityIntroduce> introduces = introduceMapper.selectByActivityId(id);
+
+            ManageActivityIntroduce introduce = introduces.get(0);
+
+            detailVO.setId(id);
+
+            detailVO.setImgCover(introduce.getImgCover());
+
+            detailVO.setName(activity.getName());
+
+            detailVO.setType(typeMapper.selectByPrimaryKey(activity.getTypeId()).getName());
+
+            detailVO.setClassify(classifyMapper.selectByPrimaryKey(activity.getClassifyId()).getName());
+
+            detailVO.setTheme(themeMapper.selectByPrimaryKey(activity.getThemeId()).getName());
+
+            List<ManageActivityTask> tasks = taskMapper.selectByActivityId(id);
+
+            detailVO.setTaskNum(tasks.size());
+
+            detailVO.setNumber(activity.getNumber());
+
+            detailVO.setEnroll(0);
+
+            detailVO.setCollect(0);
+
+            detailVO.setCloseType(activity.getCloseType());
+
+            detailVO.setCloseTime(TimeUtils.getDateStringShort(activity.getCloseTime()));
+
+            detailVO.setBeginTime(TimeUtils.getDateStringShort(activity.getBeginTime()));
+
+            detailVO.setEndTime(TimeUtils.getDateStringShort(activity.getEndTime()));
+
+            detailVO.setBaseId(activity.getBaseId());
+
+            if(activity.getBaseId()!=0L){
+
+                ManageBase basesPO = basesService.getBasesPO(activity.getBaseId());
+                detailVO.setBaseName( basesPO.getName());
+                detailVO.setBaseCover(basesPO.getImgCover());
+
+            }else{
+                detailVO.setBaseName("");
+                detailVO.setBaseCover("");
+            }
+
+            BigDecimal minutes = new BigDecimal(activity.getDuration());
+
+            BigDecimal hour = minutes.divide(new BigDecimal(60), 1, BigDecimal.ROUND_DOWN);
+
+            detailVO.setDuration(hour.toString());
+
+            detailVO.setDurationType(activity.getDurationType());
+
+            detailVO.setAddress(introduce.getAddress());
+
+            detailVO.setIntroduce(introduce.getDetail());
+
+            detailVO.setPrice(activity.getMoney().toString());
+
+            detailVO.setSign(activity.getSign());
+
+            if (StringUtils.isNotBlank(activity.getValidTime())) {
+                String[] split = activity.getValidTime().split(" - ");
+                String time1 = split[0].substring(0, 5);
+                String time2 = split[1].substring(0, 5);
+                detailVO.setTime(time1 + " - " + time2);
+
+            } else {
+                detailVO.setTime("");
+            }
+            List<String> list = new ArrayList<>();
+            List<ManageActivityAttention> attentions = attentionMapper.selectByActivityId(id);
+            for (ManageActivityAttention attention : attentions) {
+
+                list.add(attention.getDoc());
+            }
+            detailVO.setAttentions(list);
+
+            List<String> listApply = new ArrayList<>();
+            List<ManageActivityApply> applies = applyMapper.selectByActivityId(id);
+            for (ManageActivityApply apply : applies) {
+                listApply.add(dictionaryService.getDictionaryPO(apply.getGradeId()).getName());
+            }
+            detailVO.setApplys(listApply);
+
+            cacheService.setActivityDetail(id,detailVO);
+        }
+
+        //报名数
+        ManageActivityEnrollRecordExample enrollRecordExample = new ManageActivityEnrollRecordExample();
+
+        enrollRecordExample.createCriteria().andActivityIdEqualTo(id).andStatusGreaterThanOrEqualTo(8);
+
+        long l = enrollRecordMapper.countByExample(enrollRecordExample);
+
+        detailVO.setEnroll((int) l);
+
+
+        ManageActivityCollectExample collectExample = new ManageActivityCollectExample();
+
+        collectExample.createCriteria().andActivityIdEqualTo(id);
+
+        long l1 = collectMapper.countByExample(collectExample);
+
+        detailVO.setCollect((int) l1);
+
+        collectExample.clear();
+
+        collectExample.createCriteria().andActivityIdEqualTo(id).andParentIdEqualTo(tokenParent.getId());
+
+        long l2 = collectMapper.countByExample(collectExample);
+
+        if(l2==0L){
+            detailVO.setMyConllect(0);
+        }else{
+            detailVO.setMyConllect(1);
+        }
+
+
+        return JsonResult.success(detailVO);
     }
 }

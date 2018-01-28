@@ -34,7 +34,7 @@
                     </select>
                 </div>
                 <div class="layui-input-inline">
-                    <select name="aid" id="areaId" lay-verify="required">
+                    <select name="aid" id="areaId" >
                         <option value="">请选择县/区</option>
                     </select>
                 </div>

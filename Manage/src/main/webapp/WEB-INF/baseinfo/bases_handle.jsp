@@ -53,7 +53,13 @@
                         <textarea  name="address" lay-verify="required" maxlength="200" class="layui-textarea" placeholder="请输入基地地址" style="resize: none;"></textarea>
                     </div>
                 </div>
-
+                <div class="layui-form-item layui-form-text" style="width: 320px;">
+                    <input type="hidden" name="imgCover" id="imgCover">
+                    <label class="layui-form-label">封面</label>
+                    <div class="layui-input-block " id="upload">
+                        <img class="layui-upload-img" src="/static/img/noimg.svg" id="cover" width="318" height="160" style="border:1px solid #e6e6e6">
+                    </div>
+                </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">基地图文介绍</label>
                     <div class="layui-input-block">
@@ -76,8 +82,8 @@
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
 <script type="text/javascript">
-    layui.config({base:"/static/js/"}).use(['app','form','jsonToForm'],function(){
-        var $ = layui.$,form = layui.form,app = layui.app;
+    layui.config({base:"/static/js/"}).use(['app','form','jsonToForm','upload'],function(){
+        var $ = layui.$,form = layui.form,app = layui.app,upload = layui.upload;
 
         var load;
 
@@ -100,6 +106,22 @@
 
             }
         }
+        upload.render({
+            elem: '#upload',url: '/upload/img/bases',
+            accept:"images",size:1024*1024*3,
+            before: function(){
+                load = app.showLoading();
+            },
+            done: function(result){
+                if(result.code==200){
+                    $("#cover").attr("src",result.data);
+                    $("#imgCover").val(result.data);
+                }else{
+                    app.layerMessageE(result.message);
+                }
+                app.closeLoading(load);
+            }
+        });
 
         $(document).ready(function () {
             editor.create()
@@ -123,6 +145,9 @@
                             $("#form").initForm(d.data);
                             form.render('select');
                             editor.txt.html(d.data.description);
+                            if(d.data.imgCover){
+                                $("#cover").attr('src',d.data.imgCover)
+                            }
                             app.closeLoading(load);
                         })
                     });

@@ -35,7 +35,17 @@ public class ActivitySearchVO implements Serializable{
 
     private String closeTime;
 
+    private String time;
+
     public ActivitySearchVO() {
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public Integer getDurationType() {

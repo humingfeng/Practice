@@ -26,6 +26,12 @@ public class KeyValueDTO implements Serializable{
         this.value = value;
     }
 
+    public KeyValueDTO( Long id, String value,String key) {
+        this.key = key;
+        this.id = id;
+        this.value = value;
+    }
+
     public String getKey() {
         return key;
     }

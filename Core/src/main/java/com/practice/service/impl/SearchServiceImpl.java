@@ -94,6 +94,15 @@ public class SearchServiceImpl implements SearchService {
             }
 
         }
+        if(queryDTO.getPid()!=0L){
+            query.addFilterQuery("pid:"+queryDTO.getPid());
+        }
+        if(queryDTO.getCid()!=0L){
+            query.addFilterQuery("cid:"+queryDTO.getCid());
+        }
+        if(queryDTO.getAid()!=0L){
+            query.addFilterQuery("aid:"+queryDTO.getAid());
+        }
 
         if(queryDTO.getTypeId()!=0L){
             query.addFilterQuery("type_id:"+queryDTO.getTypeId());
@@ -128,8 +137,8 @@ public class SearchServiceImpl implements SearchService {
         }
 
         //1 活动时间大于1D  2活动时间一天'
-        if(queryDTO.getDucation()!=0){
-            query.addFilterQuery("ducation_type:"+queryDTO.getDucation());
+        if(queryDTO.getDuration()!=0){
+            query.addFilterQuery("duration_type:"+queryDTO.getDuration());
         }
 
         if(queryDTO.getClose()!=0){
@@ -155,7 +164,7 @@ public class SearchServiceImpl implements SearchService {
                 query.addSort("money", SolrQuery.ORDER.asc);
                 break;
             case 4:
-                query.addSort("time_hour", SolrQuery.ORDER.asc);
+                query.addSort("duration", SolrQuery.ORDER.asc);
                 break;
             default:
                 break;

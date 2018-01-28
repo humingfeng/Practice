@@ -52,13 +52,13 @@
                 </tr>
                 <tr>
                     <td class="title">活动时长</td>
-                    <td>{{d.base.duration}} 小时</td>
-                    <td class="title">时长类型</td>
+                    <td>{{d.base.duration}} 分钟</td>
+                    <td class="title">活动日期</td>
                     <td colspan="3">
                         {{# if(d.base.durationType==1){ }}
-                        当天
+                        1D/
                         {{# }else { }}
-                        时长大于一天
+                        nD/
                         {{# } }}
                         {{d.base.timeStr}}
                     </td>

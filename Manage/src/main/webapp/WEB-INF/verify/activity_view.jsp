@@ -52,13 +52,13 @@
                 </tr>
                 <tr>
                     <td class="title">活动时长</td>
-                    <td>{{d.base.duration}} 小时</td>
-                    <td class="title">时长类型</td>
+                    <td>{{d.base.duration}} 分钟</td>
+                    <td class="title">活动日期</td>
                     <td colspan="3">
                         {{# if(d.base.durationType==1){ }}
-                        当天
+                        1D/
                         {{# }else { }}
-                        时长大于一天
+                        nD/
                         {{# } }}
                         {{d.base.timeStr}}
                     </td>
@@ -333,13 +333,15 @@
         $(".pass").click(function(){
 
             app.layerConfirm('确定通过审核？',function(){
-
+                load = app.showLoading();
                 app.get('/auth/verify/activity/pass/${id}').then(d=>{
                     app.layerMessageS(d.message);
                     app.time(function(){
                         app.back();
                     })
-                },e=>{app.layerMessageE(e)})
+                },e=>{app.layerMessageE(e)}).finally(_=>{
+                    app.closeLoading(load);
+                })
             })
         })
         $(".reject").click(function(){

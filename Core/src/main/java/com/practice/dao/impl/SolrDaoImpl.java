@@ -19,6 +19,8 @@ import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -64,7 +66,9 @@ public class SolrDaoImpl implements SolrDao {
 
             entries.setField("base_id", actvitySolrItemDTO.getBaseId());
 
-            entries.setField("time_hour", actvitySolrItemDTO.getTimeHour());
+            entries.setField("duration", actvitySolrItemDTO.getDuration());
+
+            entries.setField("duration_type", actvitySolrItemDTO.getDurationType());
 
             entries.setField("money", actvitySolrItemDTO.getMoney());
 
@@ -98,7 +102,13 @@ public class SolrDaoImpl implements SolrDao {
 
             entries.setField("sign", actvitySolrItemDTO.getSign());
 
-            entries.setField("ducation_type", actvitySolrItemDTO.getDucationType());
+            entries.setField("time",actvitySolrItemDTO.getTime());
+
+            entries.setField("pid",actvitySolrItemDTO.getPid());
+
+            entries.setField("cid",actvitySolrItemDTO.getCid());
+
+            entries.setField("aid",actvitySolrItemDTO.getAid());
 
             entries.setField("close_type", actvitySolrItemDTO.getCloseType());
 
@@ -175,17 +185,15 @@ public class SolrDaoImpl implements SolrDao {
 
                 activitySearchVO.setName(String.valueOf(result.get("name")));
 
-                String duration = String.valueOf(result.get("time_hour"));
+                BigDecimal minutes = new BigDecimal(String.valueOf(result.get("duration")));
 
-                String[] split = duration.split("\\.");
+                BigDecimal hour = minutes.divide(new BigDecimal(60), 1, BigDecimal.ROUND_DOWN);
 
-                if(split[1].equals("0")){
-                    activitySearchVO.setDuration(split[0]);
-                }else{
-                    activitySearchVO.setDuration(duration);
-                }
+                activitySearchVO.setDuration(hour.toString());
 
-                activitySearchVO.setDurationType(Integer.valueOf(String.valueOf(result.get("ducation_type"))));
+                activitySearchVO.setTime(String.valueOf(result.get("time")));
+
+                activitySearchVO.setDurationType(Integer.valueOf(String.valueOf(result.get("duration_type"))));
 
                 activitySearchVO.setPrice(String.valueOf(result.get("money")));
 

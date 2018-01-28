@@ -172,10 +172,8 @@ layui.define(['layer', 'sha256', 'cookie'], function (e) {
         layer.alert(text, {
             title: "错误",
             icon: 2,
-            time: 5000,
             resize: false,
-            zIndex: layer.zIndex,
-            anim: Math.ceil(Math.random() * 6)
+            zIndex: layer.zIndex
         });
     };
     app.layerMessage = function (text) {

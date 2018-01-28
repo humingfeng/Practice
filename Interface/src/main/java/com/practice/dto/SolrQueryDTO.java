@@ -11,6 +11,12 @@ public class SolrQueryDTO implements Serializable{
 
     private String query;
 
+    private Long pid;
+
+    private Long cid;
+
+    private Long aid;
+
     private Long typeId;
 
     private Long classifyId;
@@ -27,7 +33,7 @@ public class SolrQueryDTO implements Serializable{
 
     private Integer self;
 
-    private Integer ducation;
+    private Integer duration;
 
     private Integer close;
 
@@ -53,12 +59,16 @@ public class SolrQueryDTO implements Serializable{
         this.apply = 0L;
         this.free = 0;
         this.self = 0;
-        this.ducation = 0;
+        this.duration = 0;
         this.close = 0;
         this.soft = 0;
         this.sign = 0;
         this.pageIndex = 1;
         this.pageSize = 10;
+
+        this.pid = 0L;
+        this.cid = 0L;
+        this.aid = 0L;
     }
 
     public void init(String searchParam, String query) {
@@ -77,13 +87,17 @@ public class SolrQueryDTO implements Serializable{
         this.apply = Long.valueOf(param[6]);
         this.free = Integer.valueOf(param[7]);
         this.self = Integer.valueOf(param[8]);
-        this.ducation = Integer.valueOf(param[9]);
+        this.duration = Integer.valueOf(param[9]);
         this.close = Integer.valueOf(param[10]);
         this.soft = Integer.valueOf(param[11]);
         this.sign = Integer.valueOf(param[12]);
         this.pageIndex = Integer.valueOf(param[13]);
 
         this.pageSize = 10;
+
+        this.pid = 0L;
+        this.cid = 0L;
+        this.aid = 0L;
 
     }
 
@@ -175,7 +189,6 @@ public class SolrQueryDTO implements Serializable{
         this.soft = soft;
     }
 
-
     public Long getApply() {
         return apply;
     }
@@ -184,12 +197,12 @@ public class SolrQueryDTO implements Serializable{
         this.apply = apply;
     }
 
-    public Integer getDucation() {
-        return ducation;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setDucation(Integer ducation) {
-        this.ducation = ducation;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public Integer getClose() {
@@ -208,6 +221,30 @@ public class SolrQueryDTO implements Serializable{
         this.sign = sign;
     }
 
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public Long getCid() {
+        return cid;
+    }
+
+    public void setCid(Long cid) {
+        this.cid = cid;
+    }
+
+    public Long getAid() {
+        return aid;
+    }
+
+    public void setAid(Long aid) {
+        this.aid = aid;
+    }
+
     @Override
     public String toString() {
         return "SolrQueryDTO{" +
@@ -220,7 +257,7 @@ public class SolrQueryDTO implements Serializable{
                 ", apply=" + apply +
                 ", free=" + free +
                 ", self=" + self +
-                ", ducation=" + ducation +
+                ", duration=" + duration +
                 ", close=" + close +
                 ", soft=" + soft +
                 ", sign=" + sign +

@@ -1,11 +1,14 @@
 package com.practice.service;
 
 import com.practice.dto.ActivitySolrItemDTO;
+import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
 import com.practice.exception.ServiceException;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
+
+import java.util.List;
 
 /**
  * @author Xushd  2017/12/25 20:46
@@ -597,4 +600,25 @@ public interface ActivityService {
      * @return
      */
     JsonResult listOnlineActivity(PageSearchParam param);
+
+    /**
+     * List actvity type
+     * @return
+     */
+    List<KeyValueDTO> listTypeKV();
+
+    /**
+     * List classify from cache
+     * @param typeId
+     * @return
+     */
+    JsonResult listClassifyCache(Long typeId);
+
+    /**
+     * Get activity detail
+     * @param id
+     * @param token
+     * @return
+     */
+    JsonResult getActivityDetail(Long id, String token);
 }

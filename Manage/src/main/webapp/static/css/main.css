@@ -386,3 +386,8 @@ input:disabled{
 	white-space: nowrap;
 	text-decoration: none;
 }
+
+.layui-elem-quote p{
+	color: #666;
+	font-size: small;
+}

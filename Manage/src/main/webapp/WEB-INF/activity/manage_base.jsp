@@ -13,8 +13,9 @@
 
 <fieldset class="layui-elem-field" style="width: 700px;">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">
-        活动基本信息
-        1、系统轮询时间只精确到小时，所以时间设置后系统会自动过滤分钟和秒
+        <h3>活动基本信息</h3>
+        <p>1、活动日期为当期日期后至少2天</p>
+        <p>2、报名截止日期为当期日期后至少1天</p>
     </blockquote>
     <div class="layui-row">
         <div class="layui-col-md12">
@@ -73,22 +74,30 @@
                         <input type="checkbox" id="nobases" lay-skin="primary" title="无基地" lay-filter="nobases">
                     </div>
                 </div>
+                <%--<div class="layui-form-item">--%>
+                    <%--<div class="layui-inline">--%>
+                        <%--<label class="layui-form-label">时长</label>--%>
+                        <%--<div class="layui-input-block" >--%>
+                            <%--<input type="text" name="duration" class="layui-input" lay-verify="required" maxlength="20" style="width: 212px" placeholder="请输入活动时长，单位小时">--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+                    <%--<div class="layui-inline">--%>
+                        <%--<input type="radio" name="durationType" value="2" title="当天">--%>
+                        <%--<input type="radio" name="durationType" value="1" title="超过1天" checked="">--%>
+                    <%--</div>--%>
+                <%--</div>--%>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">时长</label>
-                        <div class="layui-input-block" >
-                            <input type="text" name="duration" class="layui-input" lay-verify="required" maxlength="20" style="width: 212px" placeholder="请输入活动时长，单位小时">
+                        <label class="layui-form-label">活动日期</label>
+                        <div class="layui-input-block" style="width: 212px">
+                            <input type="text" name="timeStr" id="timeStr" class="layui-input" lay-verify="required" placeholder="请选择活动时间段">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <input type="radio" name="durationType" value="2" title="当天">
-                        <input type="radio" name="durationType" value="1" title="超过1天" checked="">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">活动时间</label>
-                    <div class="layui-input-block" style="width: 545px">
-                        <input type="text" name="timeStr" id="timeStr" class="layui-input" lay-verify="required" placeholder="请输入活动时间段">
+                        <label class="layui-form-label">活动时间</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="validTime" id="validTime" class="layui-input" lay-verify="required" placeholder="请选择活动时间">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item" >
@@ -168,9 +177,11 @@
 
         var url = "/auth/activity/manage/base/add";
 
-        laydate.render({elem: '#closeTime',type: 'datetime',min: 1,btns: ['clear', 'confirm']});
+        laydate.render({elem: '#closeTime',min: 1,type: 'datetime',btns: ['clear', 'confirm']});
 
-        laydate.render({elem: '#timeStr',type: 'datetime',range: true,min: 2});
+        laydate.render({elem: '#timeStr',range: true,min: 2});
+
+        laydate.render({elem: '#validTime',type: 'time',range: true});
 
         if(id){
 
