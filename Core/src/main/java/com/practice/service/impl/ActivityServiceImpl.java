@@ -12,10 +12,7 @@ import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
 import com.practice.utils.*;
-import com.practice.vo.ActivityDetailVO;
-import com.practice.vo.ActivityVerifyVO;
-import com.practice.vo.QuestionVO;
-import com.practice.vo.TaskQuestionVO;
+import com.practice.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -3454,5 +3451,100 @@ public class ActivityServiceImpl implements ActivityService {
 
 
         return JsonResult.success(detailVO);
+    }
+
+    /**
+     * Collect activity
+     *
+     * @param id
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult collectActivity(Long id, String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ManageActivityCollectExample example = new ManageActivityCollectExample();
+
+        example.createCriteria().andActivityIdEqualTo(id).andParentIdEqualTo(tokenParent.getId());
+
+        long l = collectMapper.countByExample(example);
+
+        if(l>0){
+            return JsonResult.error("您已经收藏，请勿重复收藏");
+        }else{
+            ManageActivityCollect collect = new ManageActivityCollect();
+
+            collect.setActivityId(id);
+            collect.setParentId(tokenParent.getId());
+
+            collectMapper.insertSelective(collect);
+        }
+
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * List collect
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult listCollect(String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        List<Long> activityIds = collectMapper.listActivityIdsByParentId(tokenParent.getId());
+
+        List<ActivitySearchVO> list = new ArrayList<>();
+
+        for (Long activityId : activityIds) {
+
+            ActivitySolrItemDTO solrItemDTO = cacheService.getActvitySolrItemDTO(activityId);
+            if(solrItemDTO == null){
+                solrItemDTO = this.getActivitySolrItemDTO(activityId);
+            }
+            ActivitySearchVO searchVO = new ActivitySearchVO();
+
+            searchVO.setId(activityId);
+            searchVO.setName(solrItemDTO.getName());
+            searchVO.setImgCover(solrItemDTO.getImgCover());
+            BigDecimal minutes = new BigDecimal(solrItemDTO.getDuration());
+
+            BigDecimal hour = minutes.divide(new BigDecimal(60), 1, BigDecimal.ROUND_DOWN);
+
+            searchVO.setDuration(hour.toString());
+
+            searchVO.setBeginTime(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime()));
+
+            searchVO.setEndTime(TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
+
+            searchVO.setNumber(solrItemDTO.getNumber());
+
+            long l = enrollRecordMapper.getEnrolledCount(activityId);
+            searchVO.setEnrolled((int) l);
+
+            l = collectMapper.getCollectCount(activityId);
+
+            searchVO.setLike((int) l);
+
+            searchVO.setSign(solrItemDTO.getSign());
+
+            searchVO.setDurationType(solrItemDTO.getDurationType());
+
+            searchVO.setCloseType(solrItemDTO.getCloseType());
+
+            searchVO.setCloseTime(TimeUtils.getDateStringShort(solrItemDTO.getCloseTime()));
+
+            searchVO.setTime(solrItemDTO.getTime());
+
+            list.add(searchVO);
+
+        }
+
+        return JsonResult.success(list);
     }
 }

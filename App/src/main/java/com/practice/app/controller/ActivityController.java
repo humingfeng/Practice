@@ -77,4 +77,17 @@ public class ActivityController {
         return activityService.getActivityDetail(id,token);
     }
 
+    /**
+     * Collect Activity
+     * @param id
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/collect/{id}")
+    public JsonResult collectActivity(@PathVariable Long id,@RequestAttribute String token){
+
+        return activityService.collectActivity(id,token);
+    }
+
+
 }

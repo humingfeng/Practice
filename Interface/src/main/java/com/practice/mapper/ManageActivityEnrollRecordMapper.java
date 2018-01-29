@@ -27,4 +27,6 @@ public interface ManageActivityEnrollRecordMapper {
     int updateByPrimaryKeySelective(ManageActivityEnrollRecord record);
 
     int updateByPrimaryKey(ManageActivityEnrollRecord record);
+
+    long getEnrolledCount(@Param("activityId")Long activityId);
 }

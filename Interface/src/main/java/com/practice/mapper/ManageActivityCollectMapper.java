@@ -27,4 +27,10 @@ public interface ManageActivityCollectMapper {
     int updateByPrimaryKeySelective(ManageActivityCollect record);
 
     int updateByPrimaryKey(ManageActivityCollect record);
+
+    List<Long> listActivityIdsByParentId(@Param("parentId")Long parentId);
+
+
+    Long getCollectCount(@Param("activityId") Long activityId);
+
 }

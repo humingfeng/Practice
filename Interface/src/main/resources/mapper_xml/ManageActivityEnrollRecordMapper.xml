@@ -414,4 +414,10 @@
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <select id="getEnrolledCount" resultType="java.lang.Long">
+    select count(*) from manage_activity_enroll_record
+    WHERE activity_id  = #{activityId,jdbcType=BIGINT} AND status >= 8
+  </select>
 </mapper>

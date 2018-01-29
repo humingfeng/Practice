@@ -621,4 +621,19 @@ public interface ActivityService {
      * @return
      */
     JsonResult getActivityDetail(Long id, String token);
+
+    /**
+     * Collect activity
+     * @param id
+     * @param token
+     * @return
+     */
+    JsonResult collectActivity(Long id, String token);
+
+    /**
+     * List collect
+     * @param token
+     * @return
+     */
+    JsonResult listCollect(String token);
 }

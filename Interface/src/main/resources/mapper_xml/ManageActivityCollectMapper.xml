@@ -178,4 +178,14 @@
       parent_id = #{parentId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listActivityIdsByParentId" resultType="java.lang.String">
+    SELECT activity_id FROM manage_activity_collect
+    WHERE parent_id = #{parentId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getCollectCount" resultType="java.lang.Long">
+    select count(*) from manage_activity_collect
+    WHERE activity_id  = #{activityId,jdbcType=BIGINT}
+  </select>
 </mapper>
