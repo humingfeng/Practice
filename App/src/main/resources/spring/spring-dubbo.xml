@@ -39,4 +39,6 @@
 
     <dubbo:reference id="basesService" interface="com.practice.service.BasesService"/>
 
+    <dubbo:reference id="enrollService" interface="com.practice.service.EnrollService"/>
+
 </beans>

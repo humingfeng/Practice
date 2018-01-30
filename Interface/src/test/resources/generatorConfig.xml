@@ -105,6 +105,10 @@
 
         <!--<table schema="" tableName="manage_activity_collect"/>-->
 
+        <!--<table schema="" tableName="order"/>-->
+
+        <!--<table schema="" tableName="student_enroll_info"/>-->
+
 
 
 

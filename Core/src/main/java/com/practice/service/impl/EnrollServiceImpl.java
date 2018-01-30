@@ -2,7 +2,9 @@ package com.practice.service.impl;
 
 import com.practice.dto.TokenParentDTO;
 import com.practice.enums.OperateEnum;
+import com.practice.mapper.ManageStudentMapper;
 import com.practice.mapper.StudentEnrollInfoMapper;
+import com.practice.po.ManageStudent;
 import com.practice.po.StudentEnrollInfo;
 import com.practice.po.StudentEnrollInfoExample;
 import com.practice.result.JsonResult;
@@ -22,6 +24,8 @@ public class EnrollServiceImpl implements EnrollService {
 
     @Resource
     private StudentEnrollInfoMapper studentEnrollInfoMapper;
+    @Resource
+    private ManageStudentMapper studentMapper;
 
     /**
      * Get student enroll info
@@ -42,9 +46,30 @@ public class EnrollServiceImpl implements EnrollService {
 
         if(studentEnrollInfos.size()>0){
             return JsonResult.success(studentEnrollInfos.get(0));
+        }else{
+            StudentEnrollInfo studentEnrollInfo = new StudentEnrollInfo();
+
+            studentEnrollInfo.setStudentId(tokenParent.getStudentId());
+
+            studentEnrollInfo.setPhone(String.valueOf(tokenParent.getPhone()));
+
+            studentEnrollInfo.setParentName(tokenParent.getName());
+
+            ManageStudent student = studentMapper.selectByPrimaryKey(tokenParent.getStudentId());
+
+            studentEnrollInfo.setName(student.getName());
+
+            studentEnrollInfo.setSex(student.getSex());
+
+            studentEnrollInfo.setBirthday(student.getBirthday());
+
+            studentEnrollInfo.setNation(student.getNation());
+
+            studentEnrollInfoMapper.insertSelective(studentEnrollInfo);
+
+            return JsonResult.success(studentEnrollInfo);
         }
 
-        return JsonResult.error("未设置报名信息");
     }
 
     /**

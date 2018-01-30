@@ -91,4 +91,8 @@
     <bean id="searchService" class="com.practice.service.impl.SearchServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.SearchService" ref="searchService"></dubbo:service>
 
+    <!--enrollService-->
+    <bean id="enrollService" class="com.practice.service.impl.EnrollServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.EnrollService" ref="enrollService"></dubbo:service>
+
 </beans>

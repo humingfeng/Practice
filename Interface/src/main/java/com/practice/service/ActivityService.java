@@ -636,4 +636,12 @@ public interface ActivityService {
      * @return
      */
     JsonResult listCollect(String token);
+
+    /**
+     * collect cancle
+     * @param activityId
+     * @param token
+     * @return
+     */
+    JsonResult collectActivityCancle(Long activityId, String token);
 }

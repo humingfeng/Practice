@@ -3547,4 +3547,25 @@ public class ActivityServiceImpl implements ActivityService {
 
         return JsonResult.success(list);
     }
+
+    /**
+     * collect cancle
+     *
+     * @param activityId
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult collectActivityCancle(Long activityId, String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ManageActivityCollectExample example = new ManageActivityCollectExample();
+
+        example.createCriteria().andParentIdEqualTo(tokenParent.getId()).andActivityIdEqualTo(activityId);
+
+        collectMapper.deleteByExample(example);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
 }

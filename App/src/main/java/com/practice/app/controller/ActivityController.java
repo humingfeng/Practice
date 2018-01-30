@@ -92,6 +92,17 @@ public class ActivityController {
     }
 
     /**
+     * Collect cancle
+     * @param activityId
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/collect/cancle/{activityId}")
+    public JsonResult collectActivityCancle(@PathVariable Long activityId,@RequestAttribute String token){
+        return activityService.collectActivityCancle(activityId,token);
+    }
+
+    /**
      * Get enroll info
      * @param activityId
      * @return

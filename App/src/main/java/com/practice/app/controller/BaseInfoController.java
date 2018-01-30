@@ -116,6 +116,16 @@ public class BaseInfoController {
     }
 
     /**
+     * List nations
+     * @return
+     */
+    @RequestMapping(value = "/nations/list")
+    public JsonResult nationsList(){
+        List<KeyValueDTO> keyValueDTOS = dictionaryService.listDicByEnumFromCache(DicParentEnum.NATION_TYPE);
+        return JsonResult.success(keyValueDTOS);
+    }
+
+    /**
      * Send sms
      * @param phone
      * @param type
