@@ -3,19 +3,19 @@ package com.practice.app.controller;
 import com.practice.dto.PageResult;
 import com.practice.dto.SolrQueryDTO;
 import com.practice.dto.TokenParentDTO;
+import com.practice.po.ManageActivityEnroll;
 import com.practice.po.ManageStudent;
 import com.practice.po.School;
+import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
-import com.practice.service.ActivityService;
-import com.practice.service.PersonnelService;
-import com.practice.service.SchoolService;
-import com.practice.service.SearchService;
+import com.practice.service.*;
 import com.practice.utils.JwtTokenUtil;
 import com.practice.vo.ActivitySearchVO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.awt.SunHints;
 
 import javax.annotation.Resource;
 
@@ -34,6 +34,8 @@ public class ActivityController {
     private PersonnelService personnelService;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private EnrollService enrollService;
 
     /**
      * Activity list by search param
@@ -67,27 +69,59 @@ public class ActivityController {
 
     /**
      * Get activity detail
-     * @param id
+     * @param activityId
      * @param token
      * @return
      */
-    @RequestMapping(value = "/detail/{id}")
-    public JsonResult getActivityDetail(@PathVariable Long id,@RequestAttribute String token){
+    @RequestMapping(value = "/detail/{activityId}")
+    public JsonResult getActivityDetail(@PathVariable Long activityId,@RequestAttribute String token){
 
-        return activityService.getActivityDetail(id,token);
+        return activityService.getActivityDetail(activityId,token);
     }
 
     /**
      * Collect Activity
-     * @param id
+     * @param activityId
      * @param token
      * @return
      */
-    @RequestMapping(value = "/collect/{id}")
-    public JsonResult collectActivity(@PathVariable Long id,@RequestAttribute String token){
+    @RequestMapping(value = "/collect/{activityId}")
+    public JsonResult collectActivity(@PathVariable Long activityId,@RequestAttribute String token){
 
-        return activityService.collectActivity(id,token);
+        return activityService.collectActivity(activityId,token);
     }
 
+    /**
+     * Get enroll info
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/enroll/info/{activityId}")
+    public JsonResult getEnrollInfo(@PathVariable Long activityId){
+
+        ManageActivityEnroll activityEnroll = activityService.getActivityEnroll(activityId);
+        return JsonResult.success(activityEnroll);
+    }
+
+    /**
+     * Get student enroll info
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/student/enroll/info")
+    public JsonResult getStudentEnrollInfo(@RequestAttribute String token){
+        return enrollService.getStudentEnrollInfo(token);
+    }
+
+    /**
+     * Update student enroll info
+     * @param enrollInfo
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/student/enroll/info/update")
+    public JsonResult saveEnrollInfo(StudentEnrollInfo enrollInfo,@RequestAttribute String token){
+        return enrollService.updateStudentEnrollInfo(enrollInfo,token);
+    }
 
 }
