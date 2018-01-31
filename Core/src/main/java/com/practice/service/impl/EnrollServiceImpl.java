@@ -2,10 +2,7 @@ package com.practice.service.impl;
 
 import com.practice.dto.TokenParentDTO;
 import com.practice.enums.OperateEnum;
-import com.practice.mapper.ManageActivityEnrollRecordMapper;
-import com.practice.mapper.ManageActivityMapper;
-import com.practice.mapper.ManageStudentMapper;
-import com.practice.mapper.StudentEnrollInfoMapper;
+import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.EnrollService;
@@ -32,6 +29,8 @@ public class EnrollServiceImpl implements EnrollService {
     private ManageActivityEnrollRecordMapper enrollRecordMapper;
     @Resource
     private ManageActivityMapper activityMapper;
+    @Resource
+    private ParentActivityLinkMapper parentActivityLinkMapper;
 
     /**
      * Get student enroll info
@@ -121,7 +120,7 @@ public class EnrollServiceImpl implements EnrollService {
      * @param activityId
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public JsonResult saveActivityEnrollInfo(StudentEnrollInfo enrollInfo, String token, Long activityId) {
 
@@ -155,18 +154,45 @@ public class EnrollServiceImpl implements EnrollService {
 
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(activityId);
 
+        Date date = new Date();
         int mark = 0;
         if(manageActivity.getMoney().compareTo(new BigDecimal(0))==0){
             //免费
             enrollRecord.setStatus(8);
+
         }else{
             enrollRecord.setStatus(9);
             mark = 1;
-
+            //TODO 创建订单信息
+            //创建订单信息
         }
+        enrollRecord.setUpdateTime(date);
+
+        enrollRecord.setUpdateUser(tokenParent.getId());
+
+        enrollRecordMapper.insertSelective(enrollRecord);
+
+
+        //记录
+
+
+
+        ParentActivityLink parentActivityLink = new ParentActivityLink();
+
+        parentActivityLink.setActivityId(activityId);
+        parentActivityLink.setParentId(tokenParent.getId());
+        parentActivityLink.setStudentId(tokenParent.getStudentId());
+
+        parentActivityLink.setUpdateTime(date);
+        parentActivityLink.setCreateTime(date);
+
+        parentActivityLink.setDelflag(0);
+
+        parentActivityLinkMapper.insertSelective(parentActivityLink);
 
         //更新报名信息
 
+        enrollInfo.setUpdateTime(date);
         studentEnrollInfoMapper.updateByPrimaryKeySelective(enrollInfo);
 
 

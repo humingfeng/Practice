@@ -61,9 +61,19 @@ public class ActivityDetailVO implements Serializable {
 
     private Integer myConllect;
 
+    private Integer myEnroll;
+
     private List<String> applys;
 
     public ActivityDetailVO() {
+    }
+
+    public Integer getMyEnroll() {
+        return myEnroll;
+    }
+
+    public void setMyEnroll(Integer myEnroll) {
+        this.myEnroll = myEnroll;
     }
 
     public List<String> getApplys() {
