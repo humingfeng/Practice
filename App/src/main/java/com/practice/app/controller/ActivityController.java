@@ -135,4 +135,18 @@ public class ActivityController {
         return enrollService.updateStudentEnrollInfo(enrollInfo,token);
     }
 
+
+    /**
+     * Save enroll info
+     * @param enrollInfo
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/{activityId}/save/enroll/info")
+    public JsonResult saveActvityEnrollInfo(StudentEnrollInfo enrollInfo,
+                                            @RequestAttribute String token,
+                                            @PathVariable Long activityId){
+        return enrollService.saveActivityEnrollInfo(enrollInfo,token,activityId);
+    }
+
 }

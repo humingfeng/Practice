@@ -22,4 +22,13 @@ public interface EnrollService {
      * @return
      */
     JsonResult updateStudentEnrollInfo(StudentEnrollInfo enrollInfo, String token);
+
+    /**
+     * Save activity enroll info
+     * @param enrollInfo
+     * @param token
+     * @param activityId
+     * @return
+     */
+    JsonResult saveActivityEnrollInfo(StudentEnrollInfo enrollInfo, String token, Long activityId);
 }
