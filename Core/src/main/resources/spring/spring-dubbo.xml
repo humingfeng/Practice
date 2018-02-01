@@ -95,4 +95,8 @@
     <bean id="enrollService" class="com.practice.service.impl.EnrollServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.EnrollService" ref="enrollService"></dubbo:service>
 
+    <!--orderService-->
+    <bean id="orderService" class="com.practice.service.impl.OrderServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.OrderService" ref="orderService"></dubbo:service>
+
 </beans>

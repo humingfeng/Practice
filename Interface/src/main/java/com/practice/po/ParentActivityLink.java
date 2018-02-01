@@ -5,16 +5,20 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/1/31 23:34
+ * @author Xushd  2018/2/2 0:10
  */
 public class ParentActivityLink implements Serializable{
     private Long id;
+
+    private String orderNum;
 
     private Long activityId;
 
     private Long parentId;
 
     private Long studentId;
+
+    private Integer status;
 
     private Integer delflag;
 
@@ -28,6 +32,14 @@ public class ParentActivityLink implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum == null ? null : orderNum.trim();
     }
 
     public Long getActivityId() {
@@ -52,6 +64,14 @@ public class ParentActivityLink implements Serializable{
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getDelflag() {

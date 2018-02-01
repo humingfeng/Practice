@@ -3,9 +3,11 @@
 <mapper namespace="com.practice.mapper.ParentActivityLinkMapper">
   <resultMap id="BaseResultMap" type="com.practice.po.ParentActivityLink">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_num" jdbcType="CHAR" property="orderNum" />
     <result column="activity_id" jdbcType="BIGINT" property="activityId" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="student_id" jdbcType="BIGINT" property="studentId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, parent_id, student_id, delflag, create_time, update_time
+    id, order_num, activity_id, parent_id, student_id, status, delflag, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ParentActivityLinkExample" resultMap="BaseResultMap">
     select
@@ -102,18 +105,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.practice.po.ParentActivityLink">
-    insert into parent_activity_link (id, activity_id, parent_id, 
-      student_id, delflag, create_time, 
-      update_time)
-    values (#{id,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, 
-      #{studentId,jdbcType=BIGINT}, #{delflag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into parent_activity_link (id, order_num, activity_id, 
+      parent_id, student_id, status, 
+      delflag, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderNum,jdbcType=CHAR}, #{activityId,jdbcType=BIGINT}, 
+      #{parentId,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{delflag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ParentActivityLink">
     insert into parent_activity_link
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="orderNum != null">
+        order_num,
       </if>
       <if test="activityId != null">
         activity_id,
@@ -123,6 +131,9 @@
       </if>
       <if test="studentId != null">
         student_id,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="delflag != null">
         delflag,
@@ -138,6 +149,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=CHAR},
+      </if>
       <if test="activityId != null">
         #{activityId,jdbcType=BIGINT},
       </if>
@@ -146,6 +160,9 @@
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="delflag != null">
         #{delflag,jdbcType=INTEGER},
@@ -170,6 +187,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.orderNum != null">
+        order_num = #{record.orderNum,jdbcType=CHAR},
+      </if>
       <if test="record.activityId != null">
         activity_id = #{record.activityId,jdbcType=BIGINT},
       </if>
@@ -178,6 +198,9 @@
       </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.delflag != null">
         delflag = #{record.delflag,jdbcType=INTEGER},
@@ -196,9 +219,11 @@
   <update id="updateByExample" parameterType="map">
     update parent_activity_link
     set id = #{record.id,jdbcType=BIGINT},
+      order_num = #{record.orderNum,jdbcType=CHAR},
       activity_id = #{record.activityId,jdbcType=BIGINT},
       parent_id = #{record.parentId,jdbcType=BIGINT},
       student_id = #{record.studentId,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -209,6 +234,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.practice.po.ParentActivityLink">
     update parent_activity_link
     <set>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=CHAR},
+      </if>
       <if test="activityId != null">
         activity_id = #{activityId,jdbcType=BIGINT},
       </if>
@@ -217,6 +245,9 @@
       </if>
       <if test="studentId != null">
         student_id = #{studentId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="delflag != null">
         delflag = #{delflag,jdbcType=INTEGER},
@@ -232,9 +263,11 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.practice.po.ParentActivityLink">
     update parent_activity_link
-    set activity_id = #{activityId,jdbcType=BIGINT},
+    set order_num = #{orderNum,jdbcType=CHAR},
+      activity_id = #{activityId,jdbcType=BIGINT},
       parent_id = #{parentId,jdbcType=BIGINT},
       student_id = #{studentId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

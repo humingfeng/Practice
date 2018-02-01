@@ -644,4 +644,11 @@ public interface ActivityService {
      * @return
      */
     JsonResult collectActivityCancle(Long activityId, String token);
+
+    /**
+     * Get Activity
+     * @param activityId
+     * @return
+     */
+    ManageActivity getActivity(Long activityId);
 }

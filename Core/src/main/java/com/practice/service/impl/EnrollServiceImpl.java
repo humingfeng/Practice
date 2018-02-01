@@ -42,17 +42,18 @@ public class EnrollServiceImpl implements EnrollService {
     /**
      * Get student enroll info
      *
+     * @param studentId
      * @param token
      * @return
      */
     @Override
-    public JsonResult getStudentEnrollInfo(String token) {
+    public JsonResult getStudentEnrollInfo(Long studentId,String token) {
 
         TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
 
         StudentEnrollInfoExample example = new StudentEnrollInfoExample();
 
-        example.createCriteria().andStudentIdEqualTo(tokenParent.getStudentId());
+        example.createCriteria().andStudentIdEqualTo(studentId);
 
         List<StudentEnrollInfo> studentEnrollInfos = studentEnrollInfoMapper.selectByExample(example);
 
@@ -61,7 +62,7 @@ public class EnrollServiceImpl implements EnrollService {
         }else{
             StudentEnrollInfo studentEnrollInfo = new StudentEnrollInfo();
 
-            studentEnrollInfo.setStudentId(tokenParent.getStudentId());
+            studentEnrollInfo.setStudentId(studentId);
 
             studentEnrollInfo.setPhone(String.valueOf(tokenParent.getPhone()));
 
@@ -119,92 +120,7 @@ public class EnrollServiceImpl implements EnrollService {
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
-    /**
-     * Save activity enroll info
-     *
-     * @param enrollInfo
-     * @param token
-     * @param activityId
-     * @return
-     */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public JsonResult saveActivityEnrollInfo(StudentEnrollInfo enrollInfo, String token, Long activityId) {
 
-        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
-
-        ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
-
-        recordExample.createCriteria().andActivityIdEqualTo(activityId).andStudentIdEqualTo(tokenParent.getStudentId());
-
-        long l = enrollRecordMapper.countByExample(recordExample);
-
-        if(l>0){
-            return JsonResult.error("您已经报名，请勿重复报名");
-        }
-
-        ManageStudent manageStudent = studentMapper.selectByPrimaryKey(tokenParent.getStudentId());
-
-        ManageActivityEnrollRecord enrollRecord = new ManageActivityEnrollRecord();
-
-        enrollRecord.setActivityId(activityId);
-
-        enrollRecord.setSchoolId(manageStudent.getSchoolId());
-
-        enrollRecord.setPeriodId(manageStudent.getPeriodId());
-
-        enrollRecord.setClassId(manageStudent.getClassId());
-
-        enrollRecord.setStudentId(tokenParent.getStudentId());
-
-        enrollRecord.setName(enrollInfo.getName());
-
-        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(activityId);
-
-        Date date = new Date();
-        int mark = 0;
-        if(manageActivity.getMoney().compareTo(new BigDecimal(0))==0){
-            //免费
-            enrollRecord.setStatus(8);
-
-        }else{
-            enrollRecord.setStatus(9);
-            mark = 1;
-            //TODO 创建订单信息
-            //创建订单信息
-        }
-        enrollRecord.setUpdateTime(date);
-
-        enrollRecord.setUpdateUser(tokenParent.getId());
-
-        enrollRecordMapper.insertSelective(enrollRecord);
-
-
-        //记录
-
-
-
-        ParentActivityLink parentActivityLink = new ParentActivityLink();
-
-        parentActivityLink.setActivityId(activityId);
-        parentActivityLink.setParentId(tokenParent.getId());
-        parentActivityLink.setStudentId(tokenParent.getStudentId());
-
-        parentActivityLink.setUpdateTime(date);
-        parentActivityLink.setCreateTime(date);
-
-        parentActivityLink.setDelflag(0);
-
-        parentActivityLinkMapper.insertSelective(parentActivityLink);
-
-        //更新报名信息
-
-        enrollInfo.setUpdateTime(date);
-        studentEnrollInfoMapper.updateByPrimaryKeySelective(enrollInfo);
-
-
-        return JsonResult.success(mark);
-    }
 
     /**
      * List my student
@@ -228,6 +144,8 @@ public class EnrollServiceImpl implements EnrollService {
         for (ParentStudent parentStudent : parentStudents) {
 
             StudentDTO studentDTO = personnelService.getStudentDTO(parentStudent.getStudentId());
+
+            studentDTO.setPhone(String.valueOf(tokenParent.getPhone()));
 
             list.add(studentDTO);
         }

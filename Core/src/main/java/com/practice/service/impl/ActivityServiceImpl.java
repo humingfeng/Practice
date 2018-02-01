@@ -3428,18 +3428,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         detailVO.setEnroll((int) l);
 
-        enrollRecordExample.clear();
 
-        enrollRecordExample.createCriteria()
-                .andActivityIdEqualTo(id)
-                .andStudentIdEqualTo(tokenParent.getId()).andStatusGreaterThanOrEqualTo(8);
-
-        long l3 = enrollRecordMapper.countByExample(enrollRecordExample);
-        if(l3>0){
-            detailVO.setMyEnroll(1);
-        }else{
-            detailVO.setMyEnroll(0);
-        }
+        detailVO.setMyEnroll(0);
 
 
         ManageActivityCollectExample collectExample = new ManageActivityCollectExample();
@@ -3580,5 +3570,16 @@ public class ActivityServiceImpl implements ActivityService {
         collectMapper.deleteByExample(example);
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Get Activity
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ManageActivity getActivity(Long activityId) {
+        return activityMapper.selectByPrimaryKey(activityId);
     }
 }

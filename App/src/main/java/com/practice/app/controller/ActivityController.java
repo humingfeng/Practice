@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.awt.SunHints;
 
 import javax.annotation.Resource;
 
@@ -112,41 +111,6 @@ public class ActivityController {
 
         ManageActivityEnroll activityEnroll = activityService.getActivityEnroll(activityId);
         return JsonResult.success(activityEnroll);
-    }
-
-    /**
-     * Get student enroll info
-     * @param token
-     * @return
-     */
-    @RequestMapping(value = "/student/enroll/info")
-    public JsonResult getStudentEnrollInfo(@RequestAttribute String token){
-        return enrollService.getStudentEnrollInfo(token);
-    }
-
-    /**
-     * Update student enroll info
-     * @param enrollInfo
-     * @param token
-     * @return
-     */
-    @RequestMapping(value = "/student/enroll/info/update")
-    public JsonResult saveEnrollInfo(StudentEnrollInfo enrollInfo,@RequestAttribute String token){
-        return enrollService.updateStudentEnrollInfo(enrollInfo,token);
-    }
-
-
-    /**
-     * Save enroll info
-     * @param enrollInfo
-     * @param token
-     * @return
-     */
-    @RequestMapping(value = "/{activityId}/save/enroll/info")
-    public JsonResult saveActvityEnrollInfo(StudentEnrollInfo enrollInfo,
-                                            @RequestAttribute String token,
-                                            @PathVariable Long activityId){
-        return enrollService.saveActivityEnrollInfo(enrollInfo,token,activityId);
     }
 
 }

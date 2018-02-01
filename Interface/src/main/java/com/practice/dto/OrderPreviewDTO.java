@@ -33,8 +33,18 @@ public class OrderPreviewDTO implements Serializable {
 
     private String beginAndEnd;
 
+    private String apply;
+
 
     public OrderPreviewDTO() {
+    }
+
+    public String getApply() {
+        return apply;
+    }
+
+    public void setApply(String apply) {
+        this.apply = apply;
     }
 
     public Long getActivityId() {

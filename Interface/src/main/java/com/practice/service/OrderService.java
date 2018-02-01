@@ -13,4 +13,13 @@ public interface OrderService {
      * @return
      */
     JsonResult getOrderInfoPreview(Long activityId, String token);
+
+    /**
+     * Create order
+     * @param activityId
+     * @param studentId
+     * @param token
+     * @return
+     */
+    JsonResult createOrder(Long activityId, Long studentId, String token);
 }

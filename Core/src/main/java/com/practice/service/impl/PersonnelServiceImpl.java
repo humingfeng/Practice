@@ -866,7 +866,7 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         parentDTO.setRelationId(parentStudent.getRelationId());
 
-        parentDTO.setRelationName(dictionaryService.getDictionaryPO(parent.getRelationId()).getName());
+        parentDTO.setRelationName(dictionaryService.getDictionaryPO(parentStudent.getRelationId()).getName());
 
         parentDTO.setStudentName(studentMapper.selectByPrimaryKey(parentStudent.getStudentId()).getName());
 

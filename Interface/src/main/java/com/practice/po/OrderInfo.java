@@ -5,9 +5,9 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/1/30 20:28
+ * @author Xushd  2018/2/2 1:02
  */
-public class Order implements Serializable{
+public class OrderInfo implements Serializable{
     private Long id;
 
     private String orderNum;

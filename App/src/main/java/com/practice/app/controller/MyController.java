@@ -4,6 +4,7 @@ import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.EnrollService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
 /**
  * @author Xushd on 2018/1/29 14:12
  */
-@RequestMapping(value = "/auth/my")
+@RequestMapping(value = "/app/auth/my")
 @RestController
 public class MyController {
 
@@ -52,5 +53,15 @@ public class MyController {
     @RequestMapping(value = "/student/list")
     public JsonResult listMyStudent(@RequestAttribute String token){
         return enrollService.listMyStudent(token);
+    }
+
+    /**
+     * Get student enroll info
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/student/enroll/info/{id}")
+    public JsonResult getStudentEnrollInfo(@PathVariable Long id,@RequestAttribute String token){
+        return enrollService.getStudentEnrollInfo(id,token);
     }
 }

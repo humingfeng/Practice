@@ -12,14 +12,15 @@ import javax.annotation.Resource;
 /**
  * @author Xushd on 2018/2/1 13:21
  */
-@RestController("/app/auth/order")
+@RequestMapping("/app/auth/order")
+@RestController
 public class OrderController {
 
     @Resource
     private OrderService orderService;
 
     /**
-     * Get
+     * Get order preview
      * @param activityId
      * @param token
      * @return
@@ -27,5 +28,16 @@ public class OrderController {
     @RequestMapping(value = "/preview/{activityId}")
     public JsonResult getOrderInfoPreview(@PathVariable Long activityId, @RequestAttribute String token){
         return orderService.getOrderInfoPreview(activityId,token);
+    }
+
+    /**
+     * Create order
+     * @param activityId
+     * @param studentId
+     * @return
+     */
+    @RequestMapping(value = "/create/order")
+    public JsonResult createOrder(Long activityId,Long studentId,@RequestAttribute String token){
+        return orderService.createOrder(activityId,studentId,token);
     }
 }

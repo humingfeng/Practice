@@ -10,10 +10,11 @@ public interface EnrollService {
 
     /**
      * Get student enroll info
+     * @param studentId
      * @param token
      * @return
      */
-    JsonResult getStudentEnrollInfo(String token);
+    JsonResult getStudentEnrollInfo(Long studentId,String token);
 
     /**
      * Update student enroll info
@@ -23,14 +24,6 @@ public interface EnrollService {
      */
     JsonResult updateStudentEnrollInfo(StudentEnrollInfo enrollInfo, String token);
 
-    /**
-     * Save activity enroll info
-     * @param enrollInfo
-     * @param token
-     * @param activityId
-     * @return
-     */
-    JsonResult saveActivityEnrollInfo(StudentEnrollInfo enrollInfo, String token, Long activityId);
 
     /**
      * List my student

@@ -41,4 +41,6 @@
 
     <dubbo:reference id="enrollService" interface="com.practice.service.EnrollService"/>
 
+    <dubbo:reference id="orderService" interface="com.practice.service.OrderService"/>
+
 </beans>

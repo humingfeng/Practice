@@ -23,8 +23,18 @@ public class StudentDTO implements Serializable {
 
     private String className;
 
+    private String phone;
+
 
     public StudentDTO() {
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Long getStudentId() {
