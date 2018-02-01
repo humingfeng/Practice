@@ -3,13 +3,10 @@
 <mapper namespace="com.practice.mapper.ParentMapper">
   <resultMap id="BaseResultMap" type="com.practice.po.Parent">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="student_id" jdbcType="BIGINT" property="studentId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="relation_id" jdbcType="BIGINT" property="relationId" />
     <result column="phone" jdbcType="BIGINT" property="phone" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="head_img" jdbcType="VARCHAR" property="headImg" />
-    <result column="current" jdbcType="INTEGER" property="current" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -74,8 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, student_id, name, relation_id, phone, password, head_img, current, status, delflag, 
-    update_time, create_time
+    id, name, phone, password, head_img, status, delflag, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ParentExample" resultMap="BaseResultMap">
     select
@@ -108,31 +104,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.practice.po.Parent">
-    insert into parent (id, student_id, name, 
-      relation_id, phone, password, 
-      head_img, current, status, 
+    insert into parent (id, name, phone, 
+      password, head_img, status, 
       delflag, update_time, create_time
       )
-    values (#{id,jdbcType=BIGINT}, #{studentId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{relationId,jdbcType=BIGINT}, #{phone,jdbcType=BIGINT}, #{password,jdbcType=VARCHAR}, 
-      #{headImg,jdbcType=VARCHAR}, #{current,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=BIGINT}, 
+      #{password,jdbcType=VARCHAR}, #{headImg,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.Parent">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into parent
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="studentId != null">
-        student_id,
-      </if>
       <if test="name != null">
         name,
-      </if>
-      <if test="relationId != null">
-        relation_id,
       </if>
       <if test="phone != null">
         phone,
@@ -142,9 +133,6 @@
       </if>
       <if test="headImg != null">
         head_img,
-      </if>
-      <if test="current != null">
-        current,
       </if>
       <if test="status != null">
         status,
@@ -163,14 +151,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="studentId != null">
-        #{studentId,jdbcType=BIGINT},
-      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="relationId != null">
-        #{relationId,jdbcType=BIGINT},
       </if>
       <if test="phone != null">
         #{phone,jdbcType=BIGINT},
@@ -180,9 +162,6 @@
       </if>
       <if test="headImg != null">
         #{headImg,jdbcType=VARCHAR},
-      </if>
-      <if test="current != null">
-        #{current,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -210,14 +189,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.studentId != null">
-        student_id = #{record.studentId,jdbcType=BIGINT},
-      </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.relationId != null">
-        relation_id = #{record.relationId,jdbcType=BIGINT},
       </if>
       <if test="record.phone != null">
         phone = #{record.phone,jdbcType=BIGINT},
@@ -227,9 +200,6 @@
       </if>
       <if test="record.headImg != null">
         head_img = #{record.headImg,jdbcType=VARCHAR},
-      </if>
-      <if test="record.current != null">
-        current = #{record.current,jdbcType=INTEGER},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
@@ -251,13 +221,10 @@
   <update id="updateByExample" parameterType="map">
     update parent
     set id = #{record.id,jdbcType=BIGINT},
-      student_id = #{record.studentId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
-      relation_id = #{record.relationId,jdbcType=BIGINT},
       phone = #{record.phone,jdbcType=BIGINT},
       password = #{record.password,jdbcType=VARCHAR},
       head_img = #{record.headImg,jdbcType=VARCHAR},
-      current = #{record.current,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -269,14 +236,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.practice.po.Parent">
     update parent
     <set>
-      <if test="studentId != null">
-        student_id = #{studentId,jdbcType=BIGINT},
-      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="relationId != null">
-        relation_id = #{relationId,jdbcType=BIGINT},
       </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=BIGINT},
@@ -286,9 +247,6 @@
       </if>
       <if test="headImg != null">
         head_img = #{headImg,jdbcType=VARCHAR},
-      </if>
-      <if test="current != null">
-        current = #{current,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -307,13 +265,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.practice.po.Parent">
     update parent
-    set student_id = #{studentId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
-      relation_id = #{relationId,jdbcType=BIGINT},
+    set name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=BIGINT},
       password = #{password,jdbcType=VARCHAR},
       head_img = #{headImg,jdbcType=VARCHAR},
-      current = #{current,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

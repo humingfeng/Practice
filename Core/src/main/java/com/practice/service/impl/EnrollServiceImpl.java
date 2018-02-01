@@ -1,17 +1,20 @@
 package com.practice.service.impl;
 
+import com.practice.dto.StudentDTO;
 import com.practice.dto.TokenParentDTO;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.EnrollService;
+import com.practice.service.PersonnelService;
 import com.practice.utils.JwtTokenUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +34,10 @@ public class EnrollServiceImpl implements EnrollService {
     private ManageActivityMapper activityMapper;
     @Resource
     private ParentActivityLinkMapper parentActivityLinkMapper;
+    @Resource
+    private ParentStudentMapper parentStudentMapper;
+    @Resource
+    private PersonnelService personnelService;
 
     /**
      * Get student enroll info
@@ -197,5 +204,34 @@ public class EnrollServiceImpl implements EnrollService {
 
 
         return JsonResult.success(mark);
+    }
+
+    /**
+     * List my student
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult listMyStudent(String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+        parentStudentExample.createCriteria().andParentIdEqualTo(tokenParent.getId());
+
+        List<ParentStudent> parentStudents = parentStudentMapper.selectByExample(parentStudentExample);
+
+        List<StudentDTO> list = new ArrayList<>();
+
+        for (ParentStudent parentStudent : parentStudents) {
+
+            StudentDTO studentDTO = personnelService.getStudentDTO(parentStudent.getStudentId());
+
+            list.add(studentDTO);
+        }
+
+        return JsonResult.success(list);
     }
 }

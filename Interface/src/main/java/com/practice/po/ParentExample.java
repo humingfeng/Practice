@@ -165,66 +165,6 @@ public class ParentExample {
             return (Criteria) this;
         }
 
-        public Criteria andStudentIdIsNull() {
-            addCriterion("student_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIsNotNull() {
-            addCriterion("student_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdEqualTo(Long value) {
-            addCriterion("student_id =", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotEqualTo(Long value) {
-            addCriterion("student_id <>", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThan(Long value) {
-            addCriterion("student_id >", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("student_id >=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThan(Long value) {
-            addCriterion("student_id <", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThanOrEqualTo(Long value) {
-            addCriterion("student_id <=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIn(List<Long> values) {
-            addCriterion("student_id in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotIn(List<Long> values) {
-            addCriterion("student_id not in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdBetween(Long value1, Long value2) {
-            addCriterion("student_id between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotBetween(Long value1, Long value2) {
-            addCriterion("student_id not between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;
@@ -292,66 +232,6 @@ public class ParentExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdIsNull() {
-            addCriterion("relation_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdIsNotNull() {
-            addCriterion("relation_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdEqualTo(Long value) {
-            addCriterion("relation_id =", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdNotEqualTo(Long value) {
-            addCriterion("relation_id <>", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdGreaterThan(Long value) {
-            addCriterion("relation_id >", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("relation_id >=", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdLessThan(Long value) {
-            addCriterion("relation_id <", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdLessThanOrEqualTo(Long value) {
-            addCriterion("relation_id <=", value, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdIn(List<Long> values) {
-            addCriterion("relation_id in", values, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdNotIn(List<Long> values) {
-            addCriterion("relation_id not in", values, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdBetween(Long value1, Long value2) {
-            addCriterion("relation_id between", value1, value2, "relationId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationIdNotBetween(Long value1, Long value2) {
-            addCriterion("relation_id not between", value1, value2, "relationId");
             return (Criteria) this;
         }
 
@@ -552,66 +432,6 @@ public class ParentExample {
 
         public Criteria andHeadImgNotBetween(String value1, String value2) {
             addCriterion("head_img not between", value1, value2, "headImg");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentIsNull() {
-            addCriterion("current is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentIsNotNull() {
-            addCriterion("current is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentEqualTo(Integer value) {
-            addCriterion("current =", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentNotEqualTo(Integer value) {
-            addCriterion("current <>", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentGreaterThan(Integer value) {
-            addCriterion("current >", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentGreaterThanOrEqualTo(Integer value) {
-            addCriterion("current >=", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentLessThan(Integer value) {
-            addCriterion("current <", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentLessThanOrEqualTo(Integer value) {
-            addCriterion("current <=", value, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentIn(List<Integer> values) {
-            addCriterion("current in", values, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentNotIn(List<Integer> values) {
-            addCriterion("current not in", values, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentBetween(Integer value1, Integer value2) {
-            addCriterion("current between", value1, value2, "current");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentNotBetween(Integer value1, Integer value2) {
-            addCriterion("current not between", value1, value2, "current");
             return (Criteria) this;
         }
 

@@ -8,6 +8,7 @@ import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManageStudentMapper;
 import com.practice.mapper.ManageTeacherMapper;
 import com.practice.mapper.ParentMapper;
+import com.practice.mapper.ParentStudentMapper;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
@@ -41,6 +42,8 @@ public class PersonnelServiceImpl implements PersonnelService {
     private SchoolService schoolService;
     @Resource
     private CacheService cacheService;
+    @Resource
+    private ParentStudentMapper parentStudentMapper;
 
     /**
      * List Teacher
@@ -650,31 +653,31 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         ParentExample parentExample = new ParentExample();
 
-        parentExample.createCriteria()
-                .andStudentIdEqualTo(parent.getStudentId())
-                .andRelationIdEqualTo(parent.getRelationId())
-                .andDelflagEqualTo(0)
-                .andStatusEqualTo(1);
-
-        long l = parentMapper.countByExample(parentExample);
-
-        if(l>0){
-            return JsonResult.error("该学生的该亲属已经注册");
-        }
-
-        parentExample.clear();
-
+        //step1 判断手机号是否重复注册
         parentExample.createCriteria()
                 .andPhoneEqualTo(parent.getPhone())
-                .andCurrentEqualTo(1)
                 .andStatusEqualTo(1)
                 .andDelflagEqualTo(0);
 
-        l = parentMapper.countByExample(parentExample);
-
-        if(l>0){
-            return JsonResult.error("该手机号已经绑定其他学生");
+        long l1 = parentMapper.countByExample(parentExample);
+        if(l1>0){
+            return JsonResult.error("该手机号已注册");
         }
+
+        //step2 判断当前学生的亲属关系是否注册
+        ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+        parentStudentExample.createCriteria()
+                .andStudentIdEqualTo(parent.getStudentId())
+                .andRelationIdEqualTo(parent.getRelationId());
+
+        long l2 = parentStudentMapper.countByExample(parentStudentExample);
+
+        if(l2>0){
+            return JsonResult.error("该学生的该亲属已经注册");
+        }
+
+        //step3 插入家长信息
 
         parent.setId(null);
 
@@ -686,11 +689,26 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         parent.setCreateTime(new Date());
 
-        parent.setCurrent(1);
-
         parent.setPassword(CommonUtils.sha256(parent.getPassword()));
 
         parentMapper.insertSelective(parent);
+
+        //step4 插入家长和学生的关系
+        Long parentId = parent.getId();
+
+        ParentStudent parentStudent = new ParentStudent();
+
+        parentStudent.setCreateTime(new Date());
+
+        parentStudent.setStudentId(parent.getStudentId());
+
+        parentStudent.setParentId(parentId);
+
+        parentStudent.setRelationId(parent.getRelationId());
+
+        parentStudent.setIsLogin(1);
+
+        parentStudentMapper.insertSelective(parentStudent);
 
         return JsonResult.success("注册成功");
     }
@@ -738,7 +756,6 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         parentExample.createCriteria()
                 .andPhoneEqualTo(Long.valueOf(phone))
-                .andCurrentEqualTo(1)
                 .andDelflagEqualTo(0)
                 .andStatusEqualTo(1);
 
@@ -794,7 +811,6 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         parentExample.createCriteria()
                 .andPhoneEqualTo(Long.valueOf(phone))
-                .andCurrentEqualTo(1)
                 .andDelflagEqualTo(0)
                 .andStatusEqualTo(1);
 
@@ -828,24 +844,65 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         Parent parent = parentMapper.selectByPrimaryKey(id);
 
+        ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+        parentStudentExample.createCriteria().andParentIdEqualTo(id).andIsLoginEqualTo(1);
+
+        List<ParentStudent> parentStudents = parentStudentMapper.selectByExample(parentStudentExample);
+
+        ParentStudent parentStudent = parentStudents.get(0);
+
         ParentDTO parentDTO = new ParentDTO();
 
         parentDTO.setId(parent.getId());
 
         parentDTO.setName(parent.getName());
 
-        parentDTO.setStudentId(parent.getStudentId());
+        parentDTO.setStudentId(parentStudent.getStudentId());
 
         parentDTO.setPhone(parent.getPhone());
 
         parentDTO.setHeadImg(parent.getHeadImg());
 
-        parentDTO.setRelationId(parent.getRelationId());
+        parentDTO.setRelationId(parentStudent.getRelationId());
 
         parentDTO.setRelationName(dictionaryService.getDictionaryPO(parent.getRelationId()).getName());
 
-        parentDTO.setStudentName(studentMapper.selectByPrimaryKey(parent.getStudentId()).getName());
+        parentDTO.setStudentName(studentMapper.selectByPrimaryKey(parentStudent.getStudentId()).getName());
 
         return parentDTO;
+    }
+
+    /**
+     * Get student DTO
+     *
+     * @param studentId
+     */
+    @Override
+    public StudentDTO getStudentDTO(Long studentId) {
+
+        ManageStudent student = studentMapper.selectByPrimaryKey(studentId);
+
+        StudentDTO studentDTO = new StudentDTO();
+
+        studentDTO.setStudentId(student.getId());
+
+        studentDTO.setSchoolId(student.getSchoolId());
+
+        studentDTO.setSchoolName(schoolService.getSchoolPO(student.getSchoolId()).getName());
+
+        studentDTO.setClassId(student.getClassId());
+
+        studentDTO.setPeriodName(dictionaryService.getDictionaryPO(student.getPeriodId()).getName());
+
+        studentDTO.setPeriodId(student.getPeriodId());
+
+        studentDTO.setClassName(dictionaryService.getDictionaryPO(student.getClassId()).getName());
+
+        studentDTO.setClassId(student.getClassId());
+
+        studentDTO.setStudentName(student.getName());
+
+        return studentDTO;
     }
 }

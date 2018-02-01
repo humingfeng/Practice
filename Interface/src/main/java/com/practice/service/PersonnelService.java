@@ -2,6 +2,7 @@ package com.practice.service;
 
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.ParentDTO;
+import com.practice.dto.StudentDTO;
 import com.practice.dto.VerifyStudentDTO;
 import com.practice.po.ManageStudent;
 import com.practice.po.ManageTeacher;
@@ -171,4 +172,10 @@ public interface PersonnelService {
      * @return
      */
     ParentDTO getParentDTO(Long id);
+
+    /**
+     * Get student DTO
+     * @param studentId
+     */
+    StudentDTO getStudentDTO(Long studentId);
 }
