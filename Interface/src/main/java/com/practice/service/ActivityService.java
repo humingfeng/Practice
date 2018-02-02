@@ -588,11 +588,6 @@ public interface ActivityService {
      */
     ActivitySolrItemDTO getActivitySolrItemDTO(Long activityId);
 
-    /**
-     * execute activity add to solr
-     * @param text
-     */
-    void executeActivityToSolr(String text);
 
     /**
      * List online activity

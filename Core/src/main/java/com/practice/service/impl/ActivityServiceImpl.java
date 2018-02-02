@@ -13,6 +13,7 @@ import com.practice.result.JsonResult;
 import com.practice.service.*;
 import com.practice.utils.*;
 import com.practice.vo.*;
+import io.netty.util.internal.ObjectUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -786,6 +787,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
+
+
         } else {
 
             Date closeDate = TimeUtils.getDateHourFromString(manageActivity.getCloseTimeStr());
@@ -845,6 +848,27 @@ public class ActivityServiceImpl implements ActivityService {
             return JsonResult.error("信息录入不完整，请仔细检查");
         }
 
+        /**
+         * 费用 单位分
+         * @author Xushd on 2018/2/2 14:43
+         */
+        String price = manageActivity.getPrice();
+
+        BigDecimal bigDecimal = new BigDecimal(price);
+
+        if(bigDecimal.compareTo(new BigDecimal(0))==0){
+            manageActivity.setMoney(0);
+        }else{
+            BigDecimal multiply = bigDecimal.multiply(new BigDecimal(100));
+
+            manageActivity.setMoney(multiply.intValue());
+        }
+        /**
+         * 库存
+         * @author Xushd on 2018/2/2 14:45
+         */
+        manageActivity.setStock(manageActivity.getNumber());
+
         manageActivity.setCheckLeader(3);
 
         manageActivity.setCheckApply(3);
@@ -858,7 +882,6 @@ public class ActivityServiceImpl implements ActivityService {
         manageActivity.setCheckEnroll(3);
 
         manageActivity.setCheckEvaluate(3);
-
 
         manageActivity.setStatus(9);
 
@@ -2854,6 +2877,21 @@ public class ActivityServiceImpl implements ActivityService {
 
             throw new ServiceException(OperateEnum.SOLR_ADD_ERROR.getStateInfo());
         }
+        if(manageActivity.getStock()>0){
+            //创建库存队列
+
+            cacheService.clearActivityStockQueue(id);
+
+            byte[][] queues = new byte[manageActivity.getStock()][];
+
+            for (int i = 0; i < manageActivity.getStock(); ++i) {
+                byte[] serializer = SerializeUtils.serializer(new ActivitySkuDTO(id,manageActivity.getName(),manageActivity.getMoney()));
+                queues[i] = serializer;
+            }
+
+            cacheService.createActivityStockQueue(id,queues);
+
+        }
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -3036,13 +3074,6 @@ public class ActivityServiceImpl implements ActivityService {
         ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
 
 
-        Date endTime = manageActivity.getEndTime();
-
-        if (TimeUtils.lessThanNow(endTime)) {
-            return JsonResult.error("活动已结束");
-        }
-
-
         ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
 
         recordExample.createCriteria().andActivityIdEqualTo(id).andStatusGreaterThanOrEqualTo(8);
@@ -3065,6 +3096,10 @@ public class ActivityServiceImpl implements ActivityService {
 
         if (!aBoolean) {
             throw new ServiceException(OperateEnum.SOLR_DEL_ERROR.getStateInfo());
+        }
+
+        if(manageActivity.getStock()>0){
+            cacheService.clearActivityStockQueue(id);
         }
 
         return JsonResult.success(OperateEnum.SUCCESS);
@@ -3156,7 +3191,11 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setSelf(activity.getSelf());
 
-        solrItemDTO.setMoney(Float.valueOf(activity.getMoney().toString()));
+        Integer money = activity.getMoney();
+
+        BigDecimal divide = new BigDecimal(money).divide(new BigDecimal(100));
+
+        solrItemDTO.setMoney(divide.floatValue());
 
         solrItemDTO.setBeginTime(activity.getBeginTime());
 
@@ -3262,28 +3301,6 @@ public class ActivityServiceImpl implements ActivityService {
         return solrItemDTO;
     }
 
-    /**
-     * execute activity add to solr
-     *
-     * @param text
-     */
-    @Override
-    public void executeActivityToSolr(String text) {
-
-        ActivitySolrAddMessage activitySolrAddMessage = JsonUtils.jsonToPojo(text, ActivitySolrAddMessage.class);
-
-        ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(activitySolrAddMessage.getId());
-
-        if (actvitySolrItemDTO != null) {
-            Boolean aBoolean = searchService.addActivityItem(actvitySolrItemDTO);
-
-            if (aBoolean) {
-                LOGGER.info("INFO:{}", activitySolrAddMessage.getMessage() + " ADD SOLR SUCCESS");
-            } else {
-                LOGGER.info("ERROR:{}", activitySolrAddMessage.getMessage() + " ADD SOLR ERROR");
-            }
-        }
-    }
 
     /**
      * List actvity type

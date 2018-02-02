@@ -132,7 +132,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">活动费用</label>
                         <div class="layui-input-inline" style="width: 212px">
-                            <input type="text" name="money" id="money" class="layui-input" lay-verify="required|number"  maxlength="5" placeholder="请输入活动费用">
+                            <input type="text" name="price" id="money" class="layui-input" lay-verify="required|number"  maxlength="5" placeholder="请输入活动费用">
                         </div>
                     </div>
                     <div class="layui-inline" style="height: 43px;">

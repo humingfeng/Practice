@@ -57,6 +57,10 @@
           <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queries:4.7.2" />
           <element id="library" level="project" name="Maven: org.apache.lucene:lucene-sandbox:4.7.2" />
           <element id="library" level="project" name="Maven: org.apache.lucene:lucene-analyzers-common:4.7.2" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-core:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-api:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-runtime:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-collectionschema:1.0.8" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:4.3.10.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.10.RELEASE" />

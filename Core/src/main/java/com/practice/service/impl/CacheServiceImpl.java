@@ -10,11 +10,13 @@ import com.practice.po.SystemParam;
 import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
 import com.practice.utils.JsonUtils;
+import com.practice.utils.SerializeUtils;
 import com.practice.vo.ActivityDetailVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -545,5 +547,91 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void setBases(Long basesId, ManageBase bases) {
         jedisClient.hset(ConstantEnum.CACHE_BASES.getStrValue(),"KEY:"+basesId,JsonUtils.objectToJson(bases));
+    }
+
+    /**
+     * Clear activity stock queue
+     *
+     * @param id
+     */
+    @Override
+    public void clearActivityStockQueue(Long id) {
+
+        jedisClient.del(ConstantEnum.ACTIVITY_STOCK_QUEUE.getStrValue()+"KEY:"+id);
+    }
+
+    /**
+     * Create activity stock queue
+     *
+     * @param id
+     * @param queues
+     */
+    @Override
+    public void createActivityStockQueue(Long id, byte[]... queues) {
+
+        String key = ConstantEnum.ACTIVITY_STOCK_QUEUE.getStrValue()+"KEY:"+id;
+
+        jedisClient.lpush(key.getBytes(),queues);
+    }
+
+    /**
+     * Get activity stock sku
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ActivitySkuDTO getActivitySku(Long activityId) {
+
+        String key = ConstantEnum.ACTIVITY_STOCK_QUEUE.getStrValue()+"KEY:"+activityId;
+
+        byte[] rpop = jedisClient.rpop(key.getBytes());
+
+        if(rpop!=null){
+            return SerializeUtils.deserializer(rpop,ActivitySkuDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Add activity stock sku
+     *
+     * @param skuDTO
+     */
+    @Override
+    public void addActivitySku(ActivitySkuDTO skuDTO) {
+        String key = ConstantEnum.ACTIVITY_STOCK_QUEUE.getStrValue()+"KEY:"+skuDTO.getId();
+
+        jedisClient.lpush(key.getBytes(),SerializeUtils.serializer(skuDTO));
+
+    }
+
+    /**
+     * Set order delay message
+     *
+     * @param orderPayDelayMessage
+     */
+    @Override
+    public void setOrderDelayMessage(OrderPayDelayMessage orderPayDelayMessage) {
+        jedisClient.hset(ConstantEnum.ORDER_PAY_DELAY_MESSAGE.getStrValue(),orderPayDelayMessage.getOrderNum(),JsonUtils.objectToJson(orderPayDelayMessage));
+    }
+
+    /**
+     * Get order delay message
+     *
+     * @param orderNum
+     * @return
+     */
+    @Override
+    public OrderPayDelayMessage getOrderDelayMessage(String orderNum) {
+
+        String hget = jedisClient.hget(ConstantEnum.ORDER_PAY_DELAY_MESSAGE.getStrValue(), orderNum);
+
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,OrderPayDelayMessage.class);
+        }
+
+        return null;
     }
 }

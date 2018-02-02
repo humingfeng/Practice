@@ -20,15 +20,15 @@
         <property name="sessionCacheSize" value="100" />
     </bean>
 
-    <!-- 定义消息队列（Queue） -->
-    <bean id="activitySolrAddQueue" class="org.apache.activemq.command.ActiveMQQueue">
+    <!-- 支付订单 15min 延迟队列 -->
+    <bean id="payDelayQueue" class="org.apache.activemq.command.ActiveMQQueue">
         <!-- 设置消息队列的名字 -->
         <constructor-arg>
-            <value>ActivitySolrAddQueue</value>
+            <value>PayDelayQueue</value>
         </constructor-arg>
     </bean>
 
-    <!-- 定义消息队列（Queue）审核通过加入 队列 同步到 solr -->
+    <!-- 推送消息队列 -->
     <bean id="pushQueue" class="org.apache.activemq.command.ActiveMQQueue">
         <!-- 设置消息队列的名字 -->
         <constructor-arg>
@@ -36,16 +36,16 @@
         </constructor-arg>
     </bean>
 
-    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->
-    <bean id="jmsTemplateActivity" class="org.springframework.jms.core.JmsTemplate">
+    <!-- 支付延迟消息 -->
+    <bean id="jmsTemplatePayDelay" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="connectionFactory" />
-        <property name="defaultDestination" ref="activitySolrAddQueue" />
+        <property name="defaultDestination" ref="payDelayQueue" />
         <property name="receiveTimeout" value="10000" />
         <!-- true是topic，false是queue，默认是false，此处显示写出false -->
         <property name="pubSubDomain" value="false" />
     </bean>
 
-    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->
+    <!-- 推送消息。 -->
     <bean id="jmsTemplatePush" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="connectionFactory" />
         <property name="defaultDestination" ref="pushQueue" />
@@ -56,24 +56,24 @@
 
 
     <!-- 配置消息队列监听者（Queue） -->
-    <bean id="queueMessageListenerActivity" class="com.practice.listener.ActivitSlorAddListener" />
+    <bean id="listenerPayDelayMessage" class="com.practice.listener.PayDelayMessageListener" />
 
-    <bean id="queueMessageListenerPush" class="com.practice.listener.PushMessageListener" />
+    <bean id="listenerPushMessage" class="com.practice.listener.PushMessageListener" />
 
     <!--生成消费模式-->
     <!-- 显示注入消息监听容器（Queue），配置连接工厂，监听的目标是demoQueueDestination，监听器是上面定义的监听器 -->
-    <bean id="queueListenerActivite"
+    <bean id="queueListenerPayDelay"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />
-        <property name="destination" ref="activitySolrAddQueue" />
-        <property name="messageListener" ref="queueMessageListenerActivity" />
+        <property name="destination" ref="payDelayQueue" />
+        <property name="messageListener" ref="listenerPayDelayMessage" />
     </bean>
 
     <bean id="queueListenerPush"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />
         <property name="destination" ref="pushQueue" />
-        <property name="messageListener" ref="queueMessageListenerPush" />
+        <property name="messageListener" ref="listenerPushMessage" />
     </bean>
 
 

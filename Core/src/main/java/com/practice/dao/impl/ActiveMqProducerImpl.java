@@ -1,57 +1,52 @@
 package com.practice.dao.impl;
 
 import com.practice.dao.ActiveMqProducer;
+import com.practice.dto.OrderPayDelayMessage;
+import com.practice.utils.JsonUtils;
+import org.apache.activemq.ScheduledMessage;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
 import javax.annotation.Resource;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
+import javax.jms.*;
 
 /**
  * @author Xushd  2018/1/23 22:35
  */
 public class ActiveMqProducerImpl implements ActiveMqProducer {
 
-    @Resource(name="jmsTemplateActivity")
-    private JmsTemplate jmsTemplateActivity;
+    @Resource(name="jmsTemplatePayDelay")
+    private JmsTemplate jmsTemplatePayDelay;
 
     @Resource(name="jmsTemplatePush")
     private JmsTemplate jmsTemplatePush;
 
-    /**
-     * Send to add activity solr queue
-     *
-     * @param destination
-     * @param msg
-     */
+    @Resource(name="queueListenerPush")
+    private Destination queueListenerPush;
+
+    @Resource(name="queueListenerPayDelay")
+    private Destination queueListenerPayDelay;
+
     @Override
-    public void sendAddActivitySolrItemMessage(Destination destination, String msg) {
-        System.out.println("向队列" + destination.toString() + "发送了消息------------" + msg);
-        jmsTemplateActivity.send(destination, new MessageCreator() {
+    public boolean sendOrderPayDelayMessage(OrderPayDelayMessage orderPayDelayMessage) {
+
+        final long time = 15 * 60 * 1000;
+
+        String msg = JsonUtils.objectToJson(orderPayDelayMessage);
+
+        System.out.println("向队列" + queueListenerPayDelay.toString() + "发送了消息------------" + msg);
+
+        jmsTemplatePayDelay.send(queueListenerPayDelay, new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(msg);
+                TextMessage message =  session.createTextMessage(msg);
+                //设置延迟时间
+                message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, time);
+                return message;
             }
         });
+
+        return true;
     }
 
-    /**
-     * Send to push message queue
-     *
-     * @param destination
-     * @param msg
-     */
-    @Override
-    public void sendPushMessage(Destination destination, String msg) {
-        System.out.println("向队列" + destination.toString() + "发送了消息------------" + msg);
-        jmsTemplatePush.send(destination, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(msg);
-            }
-        });
-    }
 }

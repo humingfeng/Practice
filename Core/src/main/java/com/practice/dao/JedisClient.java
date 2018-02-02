@@ -81,4 +81,24 @@ public interface JedisClient {
      */
     Boolean isExit(String key);
 
+    /**
+     * 存储REDIS队列 顺序存储
+     * @param key reids键名
+     * @param value 键值
+     */
+    void lpush(byte[] key, byte[]... value);
+    /**
+     * 获取队列数据
+     * @param  key 键名
+     * @return
+     */
+    byte[] rpop(byte[] key);
+
+    /**
+     * 获取集合的长度
+     * @param key
+     * @return
+     */
+    long llen(byte[] key);
+
 }

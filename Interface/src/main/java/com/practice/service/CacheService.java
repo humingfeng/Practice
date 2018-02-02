@@ -282,4 +282,43 @@ public interface CacheService {
      * @param bases
      */
     void setBases(Long basesId,ManageBase bases);
+
+    /**
+     * Clear activity stock queue
+     * @param id
+     */
+    void clearActivityStockQueue(Long id);
+
+    /**
+     * Create activity stock queue
+     * @param id
+     * @param queues
+     */
+    void createActivityStockQueue(Long id, byte[]... queues);
+
+    /**
+     * Get activity stock sku
+     * @param activityId
+     * @return
+     */
+    ActivitySkuDTO getActivitySku(Long activityId);
+
+    /**
+     * Add activity stock sku
+     * @param skuDTO
+     */
+    void addActivitySku(ActivitySkuDTO skuDTO);
+
+    /**
+     * Set order delay message
+     * @param orderPayDelayMessage
+     */
+    void setOrderDelayMessage(OrderPayDelayMessage orderPayDelayMessage);
+
+    /**
+     * Get order delay message
+     * @param orderNum
+     * @return
+     */
+    OrderPayDelayMessage getOrderDelayMessage(String orderNum);
 }

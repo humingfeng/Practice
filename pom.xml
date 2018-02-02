@@ -294,17 +294,17 @@
                 <!--<version>${aspectjweaver}</version>-->
             <!--</dependency>-->
 
-            <!--&lt;!&ndash;protostuff 序列化依赖&ndash;&gt;-->
-            <!--<dependency>-->
-                <!--<groupId>com.dyuproject.protostuff</groupId>-->
-                <!--<artifactId>protostuff-core</artifactId>-->
-                <!--<version>${protostuff.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>com.dyuproject.protostuff</groupId>-->
-                <!--<artifactId>protostuff-runtime</artifactId>-->
-                <!--<version>${protostuff.version}</version>-->
-            <!--</dependency>-->
+            <!--protostuff 序列化依赖-->
+            <dependency>
+                <groupId>com.dyuproject.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dyuproject.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
             <!--&lt;!&ndash;googel collections&ndash;&gt;-->
             <!--<dependency>-->
                 <!--<groupId>com.google.collections</groupId>-->

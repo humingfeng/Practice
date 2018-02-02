@@ -1,7 +1,6 @@
 package com.practice.po;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -100,11 +99,15 @@ public class ManageActivity implements Serializable {
 
     private Integer number;
 
+    private Integer stock;
+
     private Integer closeType;
 
     private Date closeTime;
 
-    private BigDecimal money;
+    private Integer money;
+
+    private String price;
 
     private Integer status;
 
@@ -252,6 +255,14 @@ public class ManageActivity implements Serializable {
         this.number = number;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
     public Integer getCloseType() {
         return closeType;
     }
@@ -268,11 +279,11 @@ public class ManageActivity implements Serializable {
         this.closeTime = closeTime;
     }
 
-    public BigDecimal getMoney() {
+    public Integer getMoney() {
         return money;
     }
 
-    public void setMoney(BigDecimal money) {
+    public void setMoney(Integer money) {
         this.money = money;
     }
 
@@ -378,5 +389,13 @@ public class ManageActivity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

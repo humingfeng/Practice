@@ -29,4 +29,8 @@ public interface ManageActivityMapper {
     int updateByPrimaryKey(ManageActivity record);
 
     int updateStatusByPrimaryKeyList(@Param("ids") List<Long> ids,@Param("status") int status);
+
+    int minusStock(Long id);
+
+    int addStock(Long id);
 }

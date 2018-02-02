@@ -1,5 +1,6 @@
 package com.practice.service;
 
+import com.practice.dto.OrderPayDelayMessage;
 import com.practice.result.JsonResult;
 
 /**
@@ -20,6 +21,13 @@ public interface OrderService {
      * @param studentId
      * @param token
      * @return
+     * @throws Exception
      */
-    JsonResult createOrder(Long activityId, Long studentId, String token);
+    JsonResult createOrder(Long activityId, Long studentId, String token) throws Exception;
+
+    /**
+     * Order 15min over
+     * @param orderPayDelayMessage
+     */
+    void closeOrderPay(OrderPayDelayMessage orderPayDelayMessage);
 }
