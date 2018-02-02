@@ -2,6 +2,7 @@ package com.practice.app.controller;
 
 import com.practice.result.JsonResult;
 import com.practice.service.OrderService;
+import com.practice.utils.JsonUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,18 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "/create/order")
-    public JsonResult createOrder(Long activityId,Long studentId,@RequestAttribute String token){
+    public JsonResult createOrder(Long activityId,Long studentId,@RequestAttribute String token) throws Exception {
         return orderService.createOrder(activityId,studentId,token);
+    }
+
+    /**
+     * Get order pay info
+     * @param orderNum
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/pay/info")
+    public JsonResult getOrderPayInfo(String orderNum,@RequestAttribute String token){
+        return orderService.getOrderPayInfo(orderNum,token);
     }
 }

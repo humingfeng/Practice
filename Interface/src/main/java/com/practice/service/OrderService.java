@@ -30,4 +30,12 @@ public interface OrderService {
      * @param orderPayDelayMessage
      */
     void closeOrderPay(OrderPayDelayMessage orderPayDelayMessage);
+
+    /**
+     * Get order pay Info
+     * @param orderNum
+     * @param token
+     * @return
+     */
+    JsonResult getOrderPayInfo(String orderNum, String token);
 }

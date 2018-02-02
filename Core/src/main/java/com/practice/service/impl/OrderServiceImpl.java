@@ -410,4 +410,16 @@ public class OrderServiceImpl implements OrderService {
 
 
     }
+
+    /**
+     * Get order pay Info
+     *
+     * @param orderNum
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult getOrderPayInfo(String orderNum, String token) {
+        return null;
+    }
 }
