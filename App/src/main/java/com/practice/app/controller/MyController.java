@@ -4,6 +4,7 @@ import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.EnrollService;
+import com.practice.service.PersonnelService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ public class MyController {
     private ActivityService activityService;
     @Resource
     private EnrollService enrollService;
+    @Resource
+    private PersonnelService personnelService;
     /**
      * List my collect
      * @param token
@@ -63,5 +66,16 @@ public class MyController {
     @RequestMapping(value = "/student/enroll/info/{id}")
     public JsonResult getStudentEnrollInfo(@PathVariable Long id,@RequestAttribute String token){
         return enrollService.getStudentEnrollInfo(id,token);
+    }
+
+    /**
+     * Bind push id
+     * @param token
+     * @param pushId
+     * @return
+     */
+    @RequestMapping(value = "/bind/push/{pushId}")
+    public JsonResult bindPushId(@RequestAttribute String token,@PathVariable String pushId){
+        return personnelService.updateParentPushId(token,pushId);
     }
 }

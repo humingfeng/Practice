@@ -38,4 +38,12 @@ public interface OrderService {
      * @return
      */
     JsonResult getOrderPayInfo(String orderNum, String token);
+
+    /**
+     * List my order
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    JsonResult listMyOrder(String token, Integer pageIndex);
 }

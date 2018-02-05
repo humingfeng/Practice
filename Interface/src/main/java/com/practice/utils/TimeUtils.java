@@ -169,6 +169,10 @@ public class TimeUtils {
         return dt.toDate();
     }
 
+    public static Date getDateAfterMinutes(Date date,Integer minutes){
+        DateTime dt = new DateTime(date).plusMinutes(minutes);
+        return dt.toDate();
+    }
     /**
      * Get Time form string hour
      * @param time
@@ -235,6 +239,40 @@ public class TimeUtils {
         Minutes minutes = Minutes.minutesBetween(dateTime1, dateTime2);
 
         return minutes.getMinutes();
+    }
+
+    /**
+     * Before now string
+     * @param date
+     * @return
+     */
+    public static String getBeforeNowString(Date date){
+        Date now = new Date();
+        long diff = now.getTime() - date.getTime();
+
+        long diffYear = diff / (24 * 60 * 60 * 1000  ) / 365  ;
+        if(diffYear>0){
+            return diffYear+"年前";
+        }
+        long diffMoth = diff / (24 * 60 * 60 * 1000 ) / 30;
+        if(diffMoth>0){
+            return diffMoth+"月前";
+        }
+        //Day
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+        if(diffDays>0){
+            return diffDays+"天前";
+        }
+        long diffHours = diff / (60 * 60 * 1000) % 24;
+        if(diffHours>0){
+            return diffHours+"小时前";
+        }
+        long diffMinutes = diff / (60 * 1000) % 60;
+        if(diffMinutes>0){
+            return diffMinutes+"分钟前";
+        }
+        return "刚刚";
+
     }
 
 //    /**

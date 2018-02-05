@@ -7,6 +7,7 @@
     <result column="phone" jdbcType="BIGINT" property="phone" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="push_id" jdbcType="VARCHAR" property="pushId" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, phone, password, head_img, status, delflag, update_time, create_time
+    id, name, phone, password, head_img, push_id, status, delflag, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ParentExample" resultMap="BaseResultMap">
     select
@@ -105,13 +106,13 @@
   </delete>
   <insert id="insert" parameterType="com.practice.po.Parent">
     insert into parent (id, name, phone, 
-      password, head_img, status, 
-      delflag, update_time, create_time
-      )
+      password, head_img, push_id, 
+      status, delflag, update_time, 
+      create_time)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=BIGINT}, 
-      #{password,jdbcType=VARCHAR}, #{headImg,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      #{password,jdbcType=VARCHAR}, #{headImg,jdbcType=VARCHAR}, #{pushId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.Parent">
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
@@ -133,6 +134,9 @@
       </if>
       <if test="headImg != null">
         head_img,
+      </if>
+      <if test="pushId != null">
+        push_id,
       </if>
       <if test="status != null">
         status,
@@ -162,6 +166,9 @@
       </if>
       <if test="headImg != null">
         #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="pushId != null">
+        #{pushId,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -201,6 +208,9 @@
       <if test="record.headImg != null">
         head_img = #{record.headImg,jdbcType=VARCHAR},
       </if>
+      <if test="record.pushId != null">
+        push_id = #{record.pushId,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -225,6 +235,7 @@
       phone = #{record.phone,jdbcType=BIGINT},
       password = #{record.password,jdbcType=VARCHAR},
       head_img = #{record.headImg,jdbcType=VARCHAR},
+      push_id = #{record.pushId,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -248,6 +259,9 @@
       <if test="headImg != null">
         head_img = #{headImg,jdbcType=VARCHAR},
       </if>
+      <if test="pushId != null">
+        push_id = #{pushId,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -269,6 +283,7 @@
       phone = #{phone,jdbcType=BIGINT},
       password = #{password,jdbcType=VARCHAR},
       head_img = #{headImg,jdbcType=VARCHAR},
+      push_id = #{pushId,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

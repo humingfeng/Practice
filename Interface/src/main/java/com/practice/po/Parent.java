@@ -22,6 +22,8 @@ public class Parent implements Serializable{
 
     private String headImg;
 
+    private String pushId;
+
     private Integer status;
 
     private Integer delflag;
@@ -84,6 +86,14 @@ public class Parent implements Serializable{
 
     public void setHeadImg(String headImg) {
         this.headImg = headImg == null ? null : headImg.trim();
+    }
+
+    public String getPushId() {
+        return pushId;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId == null ? null : pushId.trim();
     }
 
     public Integer getStatus() {

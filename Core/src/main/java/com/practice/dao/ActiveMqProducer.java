@@ -7,5 +7,10 @@ import com.practice.dto.OrderPayDelayMessage;
  */
 public interface ActiveMqProducer {
 
+    /**
+     * Send order pay delay message
+     * @param orderPayDelayMessage
+     * @return
+     */
     boolean sendOrderPayDelayMessage(OrderPayDelayMessage orderPayDelayMessage);
 }

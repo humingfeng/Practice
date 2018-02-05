@@ -1,18 +1,18 @@
 package com.practice.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
-import com.practice.service.ActivityService;
-import com.practice.service.CacheService;
-import com.practice.service.DictionaryService;
-import com.practice.service.OrderService;
+import com.practice.service.*;
 import com.practice.utils.JwtTokenUtil;
 import com.practice.utils.OrderNumUtil;
 import com.practice.utils.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    Logger LOGGER  = LoggerFactory.getLogger(OrderServiceImpl.class);
+    Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Resource
     private ActivityService activityService;
@@ -51,9 +51,12 @@ public class OrderServiceImpl implements OrderService {
     private ParentActivityLinkMapper parentActivityLinkMapper;
     @Resource
     private ActiveMqProducer activeMqProducer;
+    @Resource
+    private SchoolService schoolService;
 
     @Value("${SERVER.ID}")
     private String SERVERID;
+
     /**
      * Get order preview info
      *
@@ -67,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
 
         ActivitySolrItemDTO solrItemDTO = cacheService.getActvitySolrItemDTO(activityId);
-        if(solrItemDTO == null){
+        if (solrItemDTO == null) {
             solrItemDTO = activityService.getActivitySolrItemDTO(activityId);
         }
 
@@ -110,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderPreviewDTO.setTime(solrItemDTO.getTime());
 
-        orderPreviewDTO.setBeginAndEnd(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime())+" - "+TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
+        orderPreviewDTO.setBeginAndEnd(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime()) + " - " + TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
 
 
         return JsonResult.success(orderPreviewDTO);
@@ -129,49 +132,47 @@ public class OrderServiceImpl implements OrderService {
     public JsonResult createOrder(Long activityId, Long studentId, String token) throws Exception {
 
 
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
 
-            TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+        ManageActivity activity = activityService.getActivity(activityId);
 
-            ManageActivity activity = activityService.getActivity(activityId);
+        ManageStudent student = studentMapper.selectByPrimaryKey(studentId);
 
-            ManageStudent student = studentMapper.selectByPrimaryKey(studentId);
+        //是否有未支付订单
+        ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
 
-            //是否有未支付订单
-            ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+        linkExample.createCriteria()
+                .andParentIdEqualTo(tokenParent.getId())
+                .andStatusEqualTo(0)
+                .andDelflagEqualTo(0);
 
-            linkExample.createCriteria()
-                    .andActivityIdEqualTo(activityId)
-                    .andParentIdEqualTo(tokenParent.getId())
-                    .andStatusEqualTo(0)
-                    .andDelflagEqualTo(0);
+        long l1 = parentActivityLinkMapper.countByExample(linkExample);
+        if (l1 > 0) {
+            return JsonResult.error("您有未支付订单，请先支付后，再报名");
+        }
 
-            long l1 = parentActivityLinkMapper.countByExample(linkExample);
-            if(l1>0){
-                return JsonResult.error("您有未支付订单，请先支付后，再报名");
+
+        //STEP1 判断活动是否报名结束 或则 名额
+
+        ActivitySkuDTO skuDTO = new ActivitySkuDTO();
+
+        Integer closeType = activity.getCloseType();
+        if (closeType == 1) {
+            //时间
+            Date closeTime = activity.getCloseTime();
+            if (TimeUtils.lessThanNow(closeTime)) {
+                return JsonResult.error("报名时间已过");
+            }
+        } else {
+            //名额
+
+            skuDTO = cacheService.getActivitySku(activityId);
+
+            if (skuDTO == null) {
+                return JsonResult.error("名额已满");
             }
 
-
-            //STEP1 判断活动是否报名结束 或则 名额
-
-            ActivitySkuDTO skuDTO = new ActivitySkuDTO();
-
-            Integer closeType = activity.getCloseType();
-            if(closeType==1){
-                //时间
-                Date closeTime = activity.getCloseTime();
-                if(TimeUtils.lessThanNow(closeTime)){
-                    return JsonResult.error("报名时间已过");
-                }
-            }else{
-                //名额
-
-                skuDTO =  cacheService.getActivitySku(activityId);
-
-                if(skuDTO==null){
-                    return JsonResult.error("名额已满");
-                }
-
-            }
+        }
         int mark = 0;
 
         try {
@@ -181,10 +182,11 @@ public class OrderServiceImpl implements OrderService {
             linkExample.createCriteria()
                     .andStudentIdEqualTo(studentId)
                     .andActivityIdEqualTo(activityId)
-                    .andDelflagEqualTo(0);
+                    .andDelflagEqualTo(0)
+                    .andStatusEqualTo(1);
 
             long l = parentActivityLinkMapper.countByExample(linkExample);
-            if(l>0){
+            if (l > 0) {
                 return JsonResult.error("已经报过名了，请勿充重复报名");
             }
 
@@ -206,11 +208,11 @@ public class OrderServiceImpl implements OrderService {
             record.setParentName(tokenParent.getName());
 
 
-            if(activity.getMoney()==0){
+            if (activity.getMoney() == 0) {
                 //免费
                 record.setStatus(8);
 
-            }else{
+            } else {
                 record.setStatus(9);
                 mark = 1;
             }
@@ -233,10 +235,10 @@ public class OrderServiceImpl implements OrderService {
             order.setPrice(activity.getMoney());
 
             Date date = new Date();
-            if(mark==0){
+            if (mark == 0) {
                 order.setStatus(2);
                 order.setPayTime(date);
-            }else{
+            } else {
                 order.setStatus(1);
             }
 
@@ -264,9 +266,9 @@ public class OrderServiceImpl implements OrderService {
             parentActivityLink.setCreateTime(new Date());
 
             parentActivityLink.setOrderNum(String.valueOf(orderNum));
-            if(mark==0){
+            if (mark == 0) {
                 parentActivityLink.setStatus(1);
-            }else{
+            } else {
                 parentActivityLink.setStatus(0);
             }
 
@@ -276,16 +278,16 @@ public class OrderServiceImpl implements OrderService {
 
             parentActivityLinkMapper.insertSelective(parentActivityLink);
 
-            if(skuDTO!=null){
+            if (skuDTO != null) {
                 //更新 activity 的 库存
                 int i = activityMapper.minusStock(skuDTO.getId());
-                if(i==0){
+                if (i == 0) {
                     cacheService.addActivitySku(skuDTO);
                     throw new Exception("库存异常");
                 }
             }
 
-            if(mark==1){
+            if (mark == 1) {
 
                 // 发送一个 15min 延迟 的消息
 
@@ -305,13 +307,13 @@ public class OrderServiceImpl implements OrderService {
 
             }
 
-            return JsonResult.success(String.valueOf(orderNum),mark);
+            return JsonResult.success(String.valueOf(orderNum), mark);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
 
             //还回库存
-            if(skuDTO!=null){
+            if (skuDTO != null) {
                 cacheService.addActivitySku(skuDTO);
             }
 
@@ -340,7 +342,7 @@ public class OrderServiceImpl implements OrderService {
 
         Long activityId = orderPayDelayMessage.getActivityId();
 
-        if(orderInfo.getStatus()==1){
+        if (orderInfo.getStatus() == 1) {
             //如果 订单的状态 还是等待支付 关闭订单
             OrderInfo order = new OrderInfo();
 
@@ -374,7 +376,7 @@ public class OrderServiceImpl implements OrderService {
 
             link.setStatus(3);
 
-            parentActivityLinkMapper.updateByExampleSelective(link,linkExample);
+            parentActivityLinkMapper.updateByExampleSelective(link, linkExample);
 
 
             OrderPayDelayMessage orderDelayMessage = cacheService.getOrderDelayMessage(orderInfo.getOrderNum());
@@ -388,7 +390,7 @@ public class OrderServiceImpl implements OrderService {
             //判断是否需要还回库存
             ManageActivity manageActivity = activityMapper.selectByPrimaryKey(activityId);
 
-            if(manageActivity.getNumber()!=0){
+            if (manageActivity.getNumber() != 0) {
 
                 activityMapper.addStock(activityId);
 
@@ -404,7 +406,7 @@ public class OrderServiceImpl implements OrderService {
 
             }
 
-            LOGGER.info("订单15分钟 支付检测 {}",orderInfo.getOrderNum() + TimeUtils.getNowTime());
+            LOGGER.info("订单15分钟 支付检测 {}", orderInfo.getOrderNum() + TimeUtils.getNowTime());
 
         }
 
@@ -420,6 +422,154 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public JsonResult getOrderPayInfo(String orderNum, String token) {
-        return null;
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+
+        linkExample.createCriteria()
+                .andOrderNumEqualTo(orderNum)
+                .andParentIdEqualTo(tokenParent.getId())
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(0);
+
+        long l = parentActivityLinkMapper.countByExample(linkExample);
+
+        if (l == 0) {
+            return JsonResult.error("订单状态异常");
+        }
+
+
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+
+        orderInfoExample.createCriteria().andOrderNumEqualTo(orderNum);
+
+        List<OrderInfo> orderInfos = orderMapper.selectByExample(orderInfoExample);
+
+        OrderInfo orderInfo = orderInfos.get(0);
+
+        OrderPayInfoDTO orderPayInfoDTO = new OrderPayInfoDTO();
+
+        orderPayInfoDTO.setOrderNum(orderNum);
+
+        orderPayInfoDTO.setOrderName(orderInfo.getOrderName());
+
+        Integer price = orderInfo.getPrice();
+
+        String priceStr = new BigDecimal(price).divide(new BigDecimal(100)).toPlainString();
+
+        orderPayInfoDTO.setPrice(priceStr);
+
+        Long enrollId = orderInfo.getEnrollId();
+
+        ManageActivityEnrollRecord record = enrollRecordMapper.selectByPrimaryKey(enrollId);
+
+        orderPayInfoDTO.setStudentName(record.getName());
+
+        orderPayInfoDTO.setSchoolName(schoolService.getSchoolPO(record.getSchoolId()).getName());
+
+        orderPayInfoDTO.setPeriodName(dictionaryService.getDictionaryPO(record.getPeriodId()).getName());
+
+        orderPayInfoDTO.setClassName(dictionaryService.getDictionaryPO(record.getClassId()).getName());
+
+        orderPayInfoDTO.setActiviyId(orderInfo.getActivityId());
+
+        orderPayInfoDTO.setCreateTime(TimeUtils.getDateString(orderInfo.getCreateTime()));
+
+        Date dateAfterMinutes = TimeUtils.getDateAfterMinutes(orderInfo.getCreateTime(), 15);
+
+        orderPayInfoDTO.setOverTime(TimeUtils.getDateString(dateAfterMinutes));
+
+        orderPayInfoDTO.setPhone(String.valueOf(tokenParent.getPhone()));
+
+        return JsonResult.success(orderPayInfoDTO);
+    }
+
+    /**
+     * List my order
+     *
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public JsonResult listMyOrder(String token, Integer pageIndex) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        PageHelper.startPage(pageIndex,10);
+
+        OrderInfoExample example = new OrderInfoExample();
+
+        example.createCriteria().andUserIdEqualTo(tokenParent.getId());
+
+        example.setOrderByClause("create_time desc");
+
+        List<OrderInfo> orderInfos = orderMapper.selectByExample(example);
+
+        List<OrderListItemDTO> list = new ArrayList<>();
+
+        for (OrderInfo orderInfo : orderInfos) {
+
+            OrderListItemDTO itemDTO = new OrderListItemDTO();
+
+            itemDTO.setOrderNum(orderInfo.getOrderNum());
+
+            itemDTO.setOrderName(orderInfo.getOrderName());
+
+            Integer price = orderInfo.getPrice();
+
+            String priceStr = new BigDecimal(price).divide(new BigDecimal(100)).toPlainString();
+            itemDTO.setPrice(priceStr);
+
+            String beforeNowString = TimeUtils.getBeforeNowString(orderInfo.getCreateTime());
+
+            itemDTO.setCreateTime(beforeNowString);
+
+            itemDTO.setStatus(orderInfo.getStatus());
+
+            ManageActivityEnrollRecord record = enrollRecordMapper.selectByPrimaryKey(orderInfo.getEnrollId());
+
+            String name = record.getName();
+
+            String schoolName = schoolService.getSchoolPO(record.getSchoolId()).getName();
+
+            String periodName = dictionaryService.getDictionaryPO(record.getPeriodId()).getName();
+
+            String className = dictionaryService.getDictionaryPO(record.getClassId()).getName();
+
+            List<String> des = new ArrayList<>();
+
+            des.add(name);
+
+            des.add(schoolName);
+
+            des.add(periodName);
+
+            des.add(className);
+
+            itemDTO.setDescription(StringUtils.join(des,"-"));
+
+            ActivitySolrItemDTO solrItemDTO = activityService.getActivitySolrItemDTO(orderInfo.getActivityId());
+
+            itemDTO.setImgCover(solrItemDTO.getImgCover());
+
+            list.add(itemDTO);
+
+        }
+
+        PageInfo<OrderInfo> orderInfoPageInfo = new PageInfo<>(orderInfos);
+
+        PageResult<OrderListItemDTO> result = new PageResult<>();
+
+        result.setPages(orderInfoPageInfo.getPages());
+
+        result.setList(list);
+
+        result.setTotal((int) orderInfoPageInfo.getTotal());
+
+        result.setPageNum(pageIndex);
+
+        return JsonResult.success(result);
     }
 }

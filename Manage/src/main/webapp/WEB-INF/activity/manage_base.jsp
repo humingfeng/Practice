@@ -227,6 +227,8 @@
                             if(!data.money){
                                 $("#money").attr("disabled","disabled").removeAttr("lay-verify").val("");
                                 $("#free").attr("checked","checked");
+                            }else{
+                                $("#money").val(data.price)
                             }
                             if(data.closeType==2){
                                 $("#closeTime").val('').attr("disabled","disabled").removeAttr("lay-verify");

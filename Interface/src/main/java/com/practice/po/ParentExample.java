@@ -435,6 +435,76 @@ public class ParentExample {
             return (Criteria) this;
         }
 
+        public Criteria andPushIdIsNull() {
+            addCriterion("push_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdIsNotNull() {
+            addCriterion("push_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdEqualTo(String value) {
+            addCriterion("push_id =", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotEqualTo(String value) {
+            addCriterion("push_id <>", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdGreaterThan(String value) {
+            addCriterion("push_id >", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdGreaterThanOrEqualTo(String value) {
+            addCriterion("push_id >=", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLessThan(String value) {
+            addCriterion("push_id <", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLessThanOrEqualTo(String value) {
+            addCriterion("push_id <=", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLike(String value) {
+            addCriterion("push_id like", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotLike(String value) {
+            addCriterion("push_id not like", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdIn(List<String> values) {
+            addCriterion("push_id in", values, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotIn(List<String> values) {
+            addCriterion("push_id not in", values, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdBetween(String value1, String value2) {
+            addCriterion("push_id between", value1, value2, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotBetween(String value1, String value2) {
+            addCriterion("push_id not between", value1, value2, "pushId");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

@@ -52,4 +52,15 @@ public class OrderController {
     public JsonResult getOrderPayInfo(String orderNum,@RequestAttribute String token){
         return orderService.getOrderPayInfo(orderNum,token);
     }
+
+    /**
+     * List my order
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @RequestMapping(value = "/my/list/{pageIndex}")
+    public JsonResult listOrder(@RequestAttribute String token,@PathVariable Integer pageIndex){
+        return orderService.listMyOrder(token,pageIndex);
+    }
 }

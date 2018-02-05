@@ -908,6 +908,9 @@ public class ActivityServiceImpl implements ActivityService {
         if (manageActivity.getCloseType() == 1) {
             manageActivity.setCloseTimeStr(TimeUtils.getDateString(manageActivity.getCloseTime()));
         }
+        String price = new BigDecimal(manageActivity.getMoney()).divide(new BigDecimal(100)).toPlainString();
+
+        manageActivity.setPrice(price);
 
         Date beginTime = manageActivity.getBeginTime();
 
@@ -988,6 +991,32 @@ public class ActivityServiceImpl implements ActivityService {
             manageActivity.setEndTime(dateEnd);
 
         }
+
+        /**
+         * 费用 单位分
+         * @author Xushd on 2018/2/2 14:43
+         */
+        String price = manageActivity.getPrice();
+
+        if(StringUtils.isNotBlank(price)){
+            BigDecimal bigDecimal = new BigDecimal(price);
+
+            if(bigDecimal.compareTo(new BigDecimal(0))==0){
+                manageActivity.setMoney(0);
+            }else{
+                BigDecimal multiply = bigDecimal.multiply(new BigDecimal(100));
+
+                manageActivity.setMoney(multiply.intValue());
+            }
+        }else{
+            manageActivity.setMoney(0);
+        }
+
+        /**
+         * 库存
+         * @author Xushd on 2018/2/2 14:45
+         */
+        manageActivity.setStock(manageActivity.getNumber());
 
         manageActivity.setUpdateUser(tokeUser.getId());
 
@@ -2877,6 +2906,9 @@ public class ActivityServiceImpl implements ActivityService {
 
             throw new ServiceException(OperateEnum.SOLR_ADD_ERROR.getStateInfo());
         }
+
+        manageActivity = activityMapper.selectByPrimaryKey(id);
+
         if(manageActivity.getStock()>0){
             //创建库存队列
 
@@ -3101,6 +3133,9 @@ public class ActivityServiceImpl implements ActivityService {
         if(manageActivity.getStock()>0){
             cacheService.clearActivityStockQueue(id);
         }
+        cacheService.clearActivitySolrItemDTO(id);
+
+        cacheService.clearActivityDetail(id);
 
         return JsonResult.success(OperateEnum.SUCCESS);
     }
@@ -3405,7 +3440,8 @@ public class ActivityServiceImpl implements ActivityService {
 
             detailVO.setIntroduce(introduce.getDetail());
 
-            detailVO.setPrice(activity.getMoney().toString());
+            String price = new BigDecimal(activity.getMoney()).divide(new BigDecimal(100)).toPlainString();
+            detailVO.setPrice(price);
 
             detailVO.setSign(activity.getSign());
 

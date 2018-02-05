@@ -1,8 +1,5 @@
 package com.practice.listener;
 
-import com.practice.service.ActivityService;
-
-import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;

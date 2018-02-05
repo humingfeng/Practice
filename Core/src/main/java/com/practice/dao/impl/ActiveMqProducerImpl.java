@@ -21,11 +21,11 @@ public class ActiveMqProducerImpl implements ActiveMqProducer {
     @Resource(name="jmsTemplatePush")
     private JmsTemplate jmsTemplatePush;
 
-    @Resource(name="queueListenerPush")
-    private Destination queueListenerPush;
+    @Resource(name="pushQueue")
+    private Destination pushQueue;
 
-    @Resource(name="queueListenerPayDelay")
-    private Destination queueListenerPayDelay;
+    @Resource(name="payDelayQueue")
+    private Destination payDelayQueue;
 
     @Override
     public boolean sendOrderPayDelayMessage(OrderPayDelayMessage orderPayDelayMessage) {
@@ -34,9 +34,9 @@ public class ActiveMqProducerImpl implements ActiveMqProducer {
 
         String msg = JsonUtils.objectToJson(orderPayDelayMessage);
 
-        System.out.println("向队列" + queueListenerPayDelay.toString() + "发送了消息------------" + msg);
+        System.out.println("向队列" + payDelayQueue.toString() + "发送了消息------------" + msg);
 
-        jmsTemplatePayDelay.send(queueListenerPayDelay, new MessageCreator() {
+        jmsTemplatePayDelay.send(payDelayQueue, new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
                 TextMessage message =  session.createTextMessage(msg);

@@ -178,4 +178,12 @@ public interface PersonnelService {
      * @param studentId
      */
     StudentDTO getStudentDTO(Long studentId);
+
+    /**
+     * Update parent push id
+     * @param token
+     * @param pushId
+     * @return
+     */
+    JsonResult updateParentPushId(String token, String pushId);
 }

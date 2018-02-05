@@ -905,4 +905,29 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         return studentDTO;
     }
+
+    /**
+     * Update parent push id
+     *
+     * @param token
+     * @param pushId
+     * @return
+     */
+    @Override
+    public JsonResult updateParentPushId(String token, String pushId) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        Parent parent = new Parent();
+
+        parent.setId(tokenParent.getId());
+
+        parent.setPushId(pushId);
+
+        parent.setUpdateTime(new Date());
+
+        parentMapper.updateByPrimaryKeySelective(parent);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
 }

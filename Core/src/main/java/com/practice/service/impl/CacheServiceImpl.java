@@ -524,6 +524,16 @@ public class CacheServiceImpl implements CacheService {
     }
 
     /**
+     * Clear activity detail
+     *
+     * @param id
+     */
+    @Override
+    public void clearActivityDetail(Long id) {
+        jedisClient.hdel(ConstantEnum.ACTIVITY_DETAIL.getStrValue(),"KEY:"+id);
+    }
+
+    /**
      * Get bases
      *
      * @param baseId

@@ -270,6 +270,11 @@ public interface CacheService {
     void setActivityDetail(Long id,ActivityDetailVO detailVO);
 
     /**
+     * Clear activity detail
+     * @param id
+     */
+    void clearActivityDetail(Long id);
+    /**
      * Get bases
      * @param baseId
      * @return
@@ -321,4 +326,6 @@ public interface CacheService {
      * @return
      */
     OrderPayDelayMessage getOrderDelayMessage(String orderNum);
+
+
 }
