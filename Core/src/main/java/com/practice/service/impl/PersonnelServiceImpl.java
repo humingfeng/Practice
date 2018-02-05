@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -929,5 +930,132 @@ public class PersonnelServiceImpl implements PersonnelService {
         parentMapper.updateByPrimaryKeySelective(parent);
 
         return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+
+    /**
+     * List parent
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public JsonResult listParent(PageSearchParam param) {
+
+        PageHelper.startPage(param.getPageIndex(),param.getPageSize());
+
+
+        String key1="name",key2 = "phone";
+
+        ParentExample parentExample = new ParentExample();
+
+        ParentExample.Criteria criteria = parentExample.createCriteria().andDelflagEqualTo(0);
+
+        if(param.getFiled(key1)!=null){
+            criteria.andNameLike(CommonUtils.getLikeSql(param.getFiled(key1)));
+        }
+        if(param.getFiled(key2)!=null){
+            criteria.andPhoneEqualTo(Long.valueOf(param.getFiled(key2)));
+        }
+        parentExample.setOrderByClause("create_time desc");
+
+        List<Parent> parents = parentMapper.selectByExample(parentExample);
+
+        PageInfo<Parent> parentPageInfo = new PageInfo<>(parents);
+
+        PageResult<Parent> parentPageResult = new PageResult<>(parentPageInfo);
+
+        return JsonResult.success(parentPageResult);
+    }
+
+    /**
+     * Get parent
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public JsonResult getParent(Long id) {
+        return null;
+    }
+
+    /**
+     * Update parent
+     *
+     * @param parent
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult updateParent(Parent parent, String token) {
+
+        parentMapper.updateByPrimaryKeySelective(parent);
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
+
+    /**
+     * Del parent
+     *
+     * @param id
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult delParent(Long id, String token) {
+        return null;
+    }
+
+    /**
+     * List parent student
+     *
+     * @param parentId
+     * @return
+     */
+    @Override
+    public JsonResult listParentStudent(Long parentId) {
+
+        ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+        parentStudentExample.createCriteria().andParentIdEqualTo(parentId);
+
+        List<ParentStudent> parentStudents = parentStudentMapper.selectByExample(parentStudentExample);
+
+        Parent parent = parentMapper.selectByPrimaryKey(parentId);
+
+        ParentStudentDTO parentStudentDTO = new ParentStudentDTO();
+
+        parentStudentDTO.setParentId(parentId);
+
+        parentStudentDTO.setParentName(parent.getName());
+
+        parentStudentDTO.setPhone(parent.getPhone());
+
+        List<ParentStudentItemDTO> list = new ArrayList<>();
+
+        for (ParentStudent parentStudent : parentStudents) {
+
+            ManageStudent student = studentMapper.selectByPrimaryKey(parentStudent.getStudentId());
+
+            ParentStudentItemDTO itemDTO = new ParentStudentItemDTO();
+
+            itemDTO.setBindTime(TimeUtils.getDateString(parentStudent.getCreateTime()));
+
+            itemDTO.setStudentName(student.getName());
+
+            itemDTO.setSchoolName(schoolService.getSchoolPO(student.getSchoolId()).getName());
+
+            itemDTO.setPeriodName(dictionaryService.getDictionaryPO(student.getPeriodId()).getName());
+
+            itemDTO.setClassName(dictionaryService.getDictionaryPO(student.getClassId()).getName());
+
+            itemDTO.setRelation(dictionaryService.getDictionaryPO(parentStudent.getRelationId()).getName());
+
+            list.add(itemDTO);
+        }
+
+        parentStudentDTO.setList(list);
+
+        return JsonResult.success(parentStudentDTO);
     }
 }

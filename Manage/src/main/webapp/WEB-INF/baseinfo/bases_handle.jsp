@@ -29,7 +29,7 @@
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="aid" id="areaId" lay-verify="required">
+                        <select name="aid" id="areaId" >
                             <option value="">请选择县/区</option>
                         </select>
                     </div>
@@ -38,6 +38,14 @@
                     <label class="layui-form-label">基地名称</label>
                     <div class="layui-input-block">
                         <input type="text" name="name" class="layui-input" lay-verify="required" maxlength="150"  placeholder="请输入基地名称">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标签</label>
+                    <div class="layui-input-block">
+                        <select name="tag" id="tag" lay-verify="required">
+                            <option value="">请选择标签</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -132,6 +140,13 @@
         var url = "/auth/baseinfo/bases/add";
 
         load = app.showLoading();
+
+        app.get('/auth/system/dictionary/type/BASE_TAG').then(d=>{
+            layui.each(d.data,function(index,item) {
+                $("#tag").append("<option value='" + item.id + "' >" + item.name + "</option>");
+            })
+        });
+
         app.get('/auth/baseinfo/province/list').then(d=>{
             layui.each(d.data,function(index,item){
                 $("#proviceId").append("<option value='"+item.pid+"' >"+item.name+"</option>");

@@ -1265,6 +1265,76 @@ public class ManageActivityExample {
             return (Criteria) this;
         }
 
+        public Criteria andMoneyDescIsNull() {
+            addCriterion("money_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescIsNotNull() {
+            addCriterion("money_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescEqualTo(String value) {
+            addCriterion("money_desc =", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescNotEqualTo(String value) {
+            addCriterion("money_desc <>", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescGreaterThan(String value) {
+            addCriterion("money_desc >", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescGreaterThanOrEqualTo(String value) {
+            addCriterion("money_desc >=", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescLessThan(String value) {
+            addCriterion("money_desc <", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescLessThanOrEqualTo(String value) {
+            addCriterion("money_desc <=", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescLike(String value) {
+            addCriterion("money_desc like", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescNotLike(String value) {
+            addCriterion("money_desc not like", value, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescIn(List<String> values) {
+            addCriterion("money_desc in", values, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescNotIn(List<String> values) {
+            addCriterion("money_desc not in", values, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescBetween(String value1, String value2) {
+            addCriterion("money_desc between", value1, value2, "moneyDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyDescNotBetween(String value1, String value2) {
+            addCriterion("money_desc not between", value1, value2, "moneyDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

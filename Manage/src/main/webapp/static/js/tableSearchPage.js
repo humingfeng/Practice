@@ -175,6 +175,7 @@ layui.define(['app','form','table','laypage'], exports => {
                         }else{
                             _this.removeClass('layui-form-onswitch');
                         }
+                        _this.data('status',status);
                     },e=>{app.layerMessageE(e)}).finally(()=>{app.closeLoading(load)});
                 }
                 else {

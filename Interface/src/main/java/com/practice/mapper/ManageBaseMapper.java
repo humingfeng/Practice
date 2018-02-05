@@ -16,15 +16,21 @@ public interface ManageBaseMapper {
 
     int insertSelective(ManageBase record);
 
+    List<ManageBase> selectByExampleWithBLOBs(ManageBaseExample example);
+
     List<ManageBase> selectByExample(ManageBaseExample example);
 
     ManageBase selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") ManageBase record, @Param("example") ManageBaseExample example);
 
+    int updateByExampleWithBLOBs(@Param("record") ManageBase record, @Param("example") ManageBaseExample example);
+
     int updateByExample(@Param("record") ManageBase record, @Param("example") ManageBaseExample example);
 
     int updateByPrimaryKeySelective(ManageBase record);
+
+    int updateByPrimaryKeyWithBLOBs(ManageBase record);
 
     int updateByPrimaryKey(ManageBase record);
 }

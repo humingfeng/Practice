@@ -13,6 +13,7 @@ import com.practice.result.JsonResult;
 import com.practice.service.AreaService;
 import com.practice.service.BasesService;
 import com.practice.service.CacheService;
+import com.practice.service.DictionaryService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +38,8 @@ public class BasesServiceImpl implements BasesService {
     private ManageActivityMapper activityMapper;
     @Resource
     private CacheService cacheService;
+    @Resource
+    private DictionaryService dictionaryService;
 
 
     /**
@@ -78,6 +81,10 @@ public class BasesServiceImpl implements BasesService {
             manageBase.setCity(areaService.getCity(manageBase.getCid()).getName());
 
             manageBase.setProv(areaService.getProvice(manageBase.getPid()).getName());
+
+            manageBase.setTagName(dictionaryService.getDictionaryPO(manageBase.getTag()).getName());
+
+
         }
 
         manageBaseExample.setOrderByClause("update_time desc");

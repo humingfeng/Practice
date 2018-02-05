@@ -139,6 +139,12 @@
                         <input type="checkbox" id="free" lay-filter="free" lay-skin="primary" title="免费">
                     </div>
                 </div>
+                <div class="layui-form-item layui-form-text" id="money_desc_item">
+                    <label class="layui-form-label">费用说明</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="费用说明" class="layui-textarea" id="money_desc" maxlength="500" name="moneyDesc" lay-verify="required"></textarea>
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">截止方式</label>
@@ -227,6 +233,9 @@
                             if(!data.money){
                                 $("#money").attr("disabled","disabled").removeAttr("lay-verify").val("");
                                 $("#free").attr("checked","checked");
+                                $("#money_desc_item").hide();
+
+                                $("#money_desc").removeAttr("lay-verify");
                             }else{
                                 $("#money").val(data.price)
                             }
@@ -308,8 +317,16 @@
         form.on('checkbox(free)', function(data){
             if(data.elem.checked){
                 $("#money").attr("disabled","disabled").removeAttr("lay-verify");
+
+                $("#money_desc_item").hide();
+
+                $("#money_desc").removeAttr("lay-verify");
             }else{
                 $("#money").removeAttr("disabled").attr("lay-verify","required|number");
+
+                $("#money_desc_item").show();
+
+                $("#money_desc").attr("lay-verify","required");
             }
             $("#money").val('');
         });

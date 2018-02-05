@@ -21,6 +21,7 @@
     <result column="close_type" jdbcType="INTEGER" property="closeType" />
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
     <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="money_desc" jdbcType="VARCHAR" property="moneyDesc" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="check_leader" jdbcType="INTEGER" property="checkLeader" />
     <result column="check_apply" jdbcType="INTEGER" property="checkApply" />
@@ -96,8 +97,9 @@
   <sql id="Base_Column_List">
     id, type_id, classify_id, theme_id, name, organize_id, base_id, duration, duration_type, 
     valid_time, begin_time, end_time, self, sign, number, stock, close_type, close_time, 
-    money, status, check_leader, check_apply, check_sign, check_supervise, check_task, 
-    check_introduce, check_enroll, check_evaluate, delflag, reason, update_user, update_time
+    money, money_desc, status, check_leader, check_apply, check_sign, check_supervise, 
+    check_task, check_introduce, check_enroll, check_evaluate, delflag, reason, update_user, 
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ManageActivityExample" resultMap="BaseResultMap">
     select
@@ -136,22 +138,24 @@
       valid_time, begin_time, end_time, 
       self, sign, number, 
       stock, close_type, close_time, 
-      money, status, check_leader, 
-      check_apply, check_sign, check_supervise, 
-      check_task, check_introduce, check_enroll, 
-      check_evaluate, delflag, reason, 
-      update_user, update_time)
+      money, money_desc, status, 
+      check_leader, check_apply, check_sign, 
+      check_supervise, check_task, check_introduce, 
+      check_enroll, check_evaluate, delflag, 
+      reason, update_user, update_time
+      )
     values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{classifyId,jdbcType=BIGINT}, 
       #{themeId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{organizeId,jdbcType=BIGINT}, 
       #{baseId,jdbcType=BIGINT}, #{duration,jdbcType=INTEGER}, #{durationType,jdbcType=INTEGER}, 
       #{validTime,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{self,jdbcType=INTEGER}, #{sign,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
       #{stock,jdbcType=INTEGER}, #{closeType,jdbcType=INTEGER}, #{closeTime,jdbcType=TIMESTAMP}, 
-      #{money,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{checkLeader,jdbcType=INTEGER}, 
-      #{checkApply,jdbcType=INTEGER}, #{checkSign,jdbcType=INTEGER}, #{checkSupervise,jdbcType=INTEGER}, 
-      #{checkTask,jdbcType=INTEGER}, #{checkIntroduce,jdbcType=INTEGER}, #{checkEnroll,jdbcType=INTEGER}, 
-      #{checkEvaluate,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, 
-      #{updateUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+      #{money,jdbcType=INTEGER}, #{moneyDesc,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{checkLeader,jdbcType=INTEGER}, #{checkApply,jdbcType=INTEGER}, #{checkSign,jdbcType=INTEGER}, 
+      #{checkSupervise,jdbcType=INTEGER}, #{checkTask,jdbcType=INTEGER}, #{checkIntroduce,jdbcType=INTEGER}, 
+      #{checkEnroll,jdbcType=INTEGER}, #{checkEvaluate,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, 
+      #{reason,jdbcType=VARCHAR}, #{updateUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageActivity">
     insert into manage_activity
@@ -212,6 +216,9 @@
       </if>
       <if test="money != null">
         money,
+      </if>
+      <if test="moneyDesc != null">
+        money_desc,
       </if>
       <if test="status != null">
         status,
@@ -310,6 +317,9 @@
       </if>
       <if test="money != null">
         #{money,jdbcType=INTEGER},
+      </if>
+      <if test="moneyDesc != null">
+        #{moneyDesc,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -418,6 +428,9 @@
       <if test="record.money != null">
         money = #{record.money,jdbcType=INTEGER},
       </if>
+      <if test="record.moneyDesc != null">
+        money_desc = #{record.moneyDesc,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -483,6 +496,7 @@
       close_type = #{record.closeType,jdbcType=INTEGER},
       close_time = #{record.closeTime,jdbcType=TIMESTAMP},
       money = #{record.money,jdbcType=INTEGER},
+      money_desc = #{record.moneyDesc,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       check_leader = #{record.checkLeader,jdbcType=INTEGER},
       check_apply = #{record.checkApply,jdbcType=INTEGER},
@@ -557,6 +571,9 @@
       <if test="money != null">
         money = #{money,jdbcType=INTEGER},
       </if>
+      <if test="moneyDesc != null">
+        money_desc = #{moneyDesc,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -619,6 +636,7 @@
       close_type = #{closeType,jdbcType=INTEGER},
       close_time = #{closeTime,jdbcType=TIMESTAMP},
       money = #{money,jdbcType=INTEGER},
+      money_desc = #{moneyDesc,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       check_leader = #{checkLeader,jdbcType=INTEGER},
       check_apply = #{checkApply,jdbcType=INTEGER},

@@ -5,17 +5,20 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="link_phone" jdbcType="VARCHAR" property="linkPhone" />
+    <result column="tag" jdbcType="BIGINT" property="tag" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
     <result column="cid" jdbcType="BIGINT" property="cid" />
     <result column="aid" jdbcType="BIGINT" property="aid" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="address_coordinate" jdbcType="VARCHAR" property="addressCoordinate" />
     <result column="img_cover" jdbcType="VARCHAR" property="imgCover" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.practice.po.ManageBase">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,18 +79,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, link_phone, pid, cid, aid, address, address_coordinate, img_cover, description,
+    id, name, link_phone, tag, pid, cid, aid, address, address_coordinate, img_cover, 
     status, delflag, update_time, update_user
   </sql>
-  <select id="selectByExample" parameterType="com.practice.po.ManageBaseExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.practice.po.ManageBaseExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
-
-    id, name, link_phone, pid, cid, aid, address, address_coordinate, img_cover,
-    status, delflag, update_time, update_user
-
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from manage_base
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -96,9 +101,25 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.practice.po.ManageBaseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manage_base
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from manage_base
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -114,15 +135,15 @@
   </delete>
   <insert id="insert" parameterType="com.practice.po.ManageBase">
     insert into manage_base (id, name, link_phone, 
-      pid, cid, aid, address, 
-      address_coordinate, img_cover, description, 
+      tag, pid, cid, aid, 
+      address, address_coordinate, img_cover, 
       status, delflag, update_time, 
-      update_user)
+      update_user, description)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{linkPhone,jdbcType=VARCHAR}, 
-      #{pid,jdbcType=BIGINT}, #{cid,jdbcType=BIGINT}, #{aid,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, 
-      #{addressCoordinate,jdbcType=VARCHAR}, #{imgCover,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{tag,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{cid,jdbcType=BIGINT}, #{aid,jdbcType=BIGINT}, 
+      #{address,jdbcType=VARCHAR}, #{addressCoordinate,jdbcType=VARCHAR}, #{imgCover,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=BIGINT})
+      #{updateUser,jdbcType=BIGINT}, #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageBase">
     insert into manage_base
@@ -135,6 +156,9 @@
       </if>
       <if test="linkPhone != null">
         link_phone,
+      </if>
+      <if test="tag != null">
+        tag,
       </if>
       <if test="pid != null">
         pid,
@@ -154,9 +178,6 @@
       <if test="imgCover != null">
         img_cover,
       </if>
-      <if test="description != null">
-        description,
-      </if>
       <if test="status != null">
         status,
       </if>
@@ -169,6 +190,9 @@
       <if test="updateUser != null">
         update_user,
       </if>
+      <if test="description != null">
+        description,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +203,9 @@
       </if>
       <if test="linkPhone != null">
         #{linkPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=BIGINT},
       </if>
       <if test="pid != null">
         #{pid,jdbcType=BIGINT},
@@ -198,9 +225,6 @@
       <if test="imgCover != null">
         #{imgCover,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
@@ -212,6 +236,9 @@
       </if>
       <if test="updateUser != null">
         #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -233,6 +260,9 @@
       <if test="record.linkPhone != null">
         link_phone = #{record.linkPhone,jdbcType=VARCHAR},
       </if>
+      <if test="record.tag != null">
+        tag = #{record.tag,jdbcType=BIGINT},
+      </if>
       <if test="record.pid != null">
         pid = #{record.pid,jdbcType=BIGINT},
       </if>
@@ -251,9 +281,6 @@
       <if test="record.imgCover != null">
         img_cover = #{record.imgCover,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null">
-        description = #{record.description,jdbcType=VARCHAR},
-      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -266,7 +293,31 @@
       <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=BIGINT},
       </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update manage_base
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      link_phone = #{record.linkPhone,jdbcType=VARCHAR},
+      tag = #{record.tag,jdbcType=BIGINT},
+      pid = #{record.pid,jdbcType=BIGINT},
+      cid = #{record.cid,jdbcType=BIGINT},
+      aid = #{record.aid,jdbcType=BIGINT},
+      address = #{record.address,jdbcType=VARCHAR},
+      address_coordinate = #{record.addressCoordinate,jdbcType=VARCHAR},
+      img_cover = #{record.imgCover,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      delflag = #{record.delflag,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=BIGINT},
+      description = #{record.description,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -276,13 +327,13 @@
     set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       link_phone = #{record.linkPhone,jdbcType=VARCHAR},
+      tag = #{record.tag,jdbcType=BIGINT},
       pid = #{record.pid,jdbcType=BIGINT},
       cid = #{record.cid,jdbcType=BIGINT},
       aid = #{record.aid,jdbcType=BIGINT},
       address = #{record.address,jdbcType=VARCHAR},
       address_coordinate = #{record.addressCoordinate,jdbcType=VARCHAR},
       img_cover = #{record.imgCover,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -299,6 +350,9 @@
       </if>
       <if test="linkPhone != null">
         link_phone = #{linkPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=BIGINT},
       </if>
       <if test="pid != null">
         pid = #{pid,jdbcType=BIGINT},
@@ -318,9 +372,6 @@
       <if test="imgCover != null">
         img_cover = #{imgCover,jdbcType=VARCHAR},
       </if>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
-      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -333,20 +384,41 @@
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=BIGINT},
       </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageBase">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.practice.po.ManageBase">
     update manage_base
     set name = #{name,jdbcType=VARCHAR},
       link_phone = #{linkPhone,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=BIGINT},
       pid = #{pid,jdbcType=BIGINT},
       cid = #{cid,jdbcType=BIGINT},
       aid = #{aid,jdbcType=BIGINT},
       address = #{address,jdbcType=VARCHAR},
       address_coordinate = #{addressCoordinate,jdbcType=VARCHAR},
       img_cover = #{imgCover,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      delflag = #{delflag,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.practice.po.ManageBase">
+    update manage_base
+    set name = #{name,jdbcType=VARCHAR},
+      link_phone = #{linkPhone,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=BIGINT},
+      pid = #{pid,jdbcType=BIGINT},
+      cid = #{cid,jdbcType=BIGINT},
+      aid = #{aid,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR},
+      address_coordinate = #{addressCoordinate,jdbcType=VARCHAR},
+      img_cover = #{imgCover,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

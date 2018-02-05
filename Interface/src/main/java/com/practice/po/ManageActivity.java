@@ -109,6 +109,8 @@ public class ManageActivity implements Serializable {
 
     private String price;
 
+    private String moneyDesc;
+
     private Integer status;
 
     private Integer checkLeader;
@@ -285,6 +287,14 @@ public class ManageActivity implements Serializable {
 
     public void setMoney(Integer money) {
         this.money = money;
+    }
+
+    public String getMoneyDesc() {
+        return moneyDesc;
+    }
+
+    public void setMoneyDesc(String moneyDesc) {
+        this.moneyDesc = moneyDesc == null ? null : moneyDesc.trim();
     }
 
     public Integer getStatus() {

@@ -83,7 +83,6 @@
                 </div>
                 <div class="layui-form-item">
                     <button class="layui-btn" lay-submit="return false" lay-filter="submit">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     <button class="layui-btn layui-btn-warm close">关闭</button>
                 </div>
             </div>
@@ -132,7 +131,7 @@
         });
 
         form.verify({
-            score: [/^[1-9]\d+([.]{1}[0-9]){0,1}$|^[0]+([.]{1}[0-9]){0,1}$/, '请输入正整数，或一位小数'],
+            score: [/^[1-9]\d+([.]{1}[0-9]){0,1}$|^[0]+([.]{1}[0-9]){1,1}$|^[1-9]$/, '请输入正整数，或一位小数'],
             limitum: [/^[0-9]\d*$/, '请输入正确的数值']
         });
 

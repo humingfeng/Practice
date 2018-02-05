@@ -2021,6 +2021,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         for (ManageActivityQuestion manageActivityQuestion : manageActivityQuestions) {
 
+
             manageActivityQuestion.setTypeName(dictionaryService.getDictionaryPO(manageActivityQuestion.getTypeId()).getName());
         }
 
@@ -2064,6 +2065,10 @@ public class ActivityServiceImpl implements ActivityService {
         activityQuestion.setAnswerText(question.getAnswerText());
 
         activityQuestion.setClassify(question.getClassify());
+
+        if(question.getClassify()== 3){
+            activityQuestion.setPhotoNum(question.getPhotoNum());
+        }
 
         activityQuestion.setStatus(1);
 
@@ -2147,6 +2152,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
         }
 
+
         ManageActivityQuestion activityQuestion = new ManageActivityQuestion();
 
         activityQuestion.setId(question.getId());
@@ -2160,6 +2166,10 @@ public class ActivityServiceImpl implements ActivityService {
         activityQuestion.setQuestion(question.getQuestion());
 
         activityQuestion.setClassify(question.getClassify());
+
+        if(question.getClassify()== 3){
+            activityQuestion.setPhotoNum(question.getPhotoNum());
+        }
 
         if (question.getClassify() == 1) {
 
@@ -2342,9 +2352,13 @@ public class ActivityServiceImpl implements ActivityService {
 
             questionDTO.setList(list);
 
-        } else {
+        } else if(classify == 2){
 
             questionDTO.setAnswerText(question.getAnswerText());
+
+        } else{
+
+            questionDTO.setPhotoNum(question.getPhotoNum());
         }
 
         return JsonResult.success(questionDTO);

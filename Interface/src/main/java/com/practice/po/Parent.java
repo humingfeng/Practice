@@ -1,5 +1,8 @@
 package com.practice.po;
 
+
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,8 +31,9 @@ public class Parent implements Serializable{
 
     private Integer delflag;
 
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     public Long getId() {

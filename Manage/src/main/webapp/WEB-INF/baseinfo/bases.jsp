@@ -51,6 +51,7 @@
         <tr>
             <th>ID</th>
             <th>基地名称</th>
+            <th>标签</th>
             <th>省市区</th>
             <th>联系方式</th>
             <th>状态</th>
@@ -63,6 +64,9 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>{{ item.name }}</td>
+                <td>
+                    <span class="layui-badge">{{ item.tagName }}</span>
+                </td>
                 <td>{{ item.prov}}/{{ item.city }}/{{ item.area }}</td>
                 <td>{{ item.linkPhone }}</td>
                 <td>{{# if (item.status) { }}

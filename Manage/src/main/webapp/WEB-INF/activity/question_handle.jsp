@@ -34,6 +34,7 @@
                 <div class="layui-input-block">
                     <input type="radio" name="classify" value="1" title="选择题">
                     <input type="radio" name="classify" value="2" title="主观题">
+                    <input type="radio" name="classify" value="3" title="拍照题">
                 </div>
             </div>
             <div id="content1">
@@ -42,9 +43,11 @@
             <div id="content2">
 
             </div>
+            <div id="content3">
+
+            </div>
             <div class="layui-form-item">
                 <button class="layui-btn" lay-submit="return false" lay-filter="submit">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 <button class="layui-btn layui-btn-warm do-action" data-type="backToList">返回</button>
             </div>
         </div>
@@ -81,6 +84,22 @@
             </div>
         </div>
     </script>
+    <script id="tpl_photo" type="text/html">
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片数量限制</label>
+            <div class="layui-input-block">
+                <select class="layui-select" name="photoNum" lay-verify="required">
+                    <option value="">请选则图片数量限制</option>
+                    <option value="1">1张</option>
+                    <option value="2">2张</option>
+                    <option value="3">3张</option>
+                    <option value="4">4张</option>
+                    <option value="5">5张</option>
+                    <option value="6">6张</option>
+                </select>
+            </div>
+        </div>
+    </script>
     <script type="text/javascript">
     layui.config({base:"/static/js/"}).use(['app','form','jsonToForm','laytpl'],function(){
         var $ = layui.$,form = layui.form,app = layui.app,laytpl = layui.laytpl;
@@ -90,6 +109,7 @@
             load = app.showLoading(),
             tpl_option = laytpl($('#tpl_option').html()),
             tpl_answer = laytpl($('#tpl_answer').html()),
+            tpl_photo = laytpl($('#tpl_photo').html()),
             option = [{id:0,optionMark:'',text:'',correct:0}];
 
         app.get('/auth/system/dictionary/type/QUESTION_TYPE').then(d=>{
@@ -99,35 +119,36 @@
                 $("#typeId").append("<option value='"+item.id+"' >"+item.name+"</option>");
             })
 
-
-
             if(id){
                 url = "/auth/activity/question/update";
                 app.get('/auth/activity/question/obj/'+id).then(d=>{
 
-                    $("#content2").empty();
-                    $("#content1").empty();
+                $("#content2").empty();
+                $("#content1").empty();
 
-                    if(d.data.classify==2){
-                        tpl_answer.render([],function(html){
-                            $("#content2").append(html);
-                            form.render();
-                        })
-                    }else{
-                        var item = d.data.list;
+                if(d.data.classify == 2){
+                    tpl_answer.render([],function(html){
+                        $("#content2").append(html);
 
-                        $("#content1").append($('<div class="layui-form-item"><div class="layui-input-inline">' +
-                            '<button class="layui-btn layui-btn-warm" id="plus">添加选项</button></div></div>'));
-                        tpl_option.render(item, function(html){
-                            $("#content1").append(html);
-                            form.render();
-                        });
+                    })
+                }else if(d.data.classify == 1){
+                    var item = d.data.list;
+                    $("#content1").append($('<div class="layui-form-item"><div class="layui-input-inline">' +
+                        '<button class="layui-btn layui-btn-warm" id="plus">添加选项</button></div></div>'));
+                    tpl_option.render(item, function(html){
+                        $("#content1").append(html);
 
-                    }
+                    });
+                }else if(d.data.classify == 3){
+                    tpl_photo.render([],function(html){
+                        $("#content3").append(html);
 
-                    $("#form").initForm(d.data);
+                    });
+                }
 
-                    form.render();
+                $("#form").initForm(d.data);
+
+                form.render();
                 },e=>{}).finally(_=>{app.closeLoading(load);});
             }else{
                 form.render('select');
@@ -139,6 +160,7 @@
             var value = data.elem.value;
             $("#content2").empty();
             $("#content1").empty();
+            $("#content3").empty();
             if(value==1){
                 $("#content1").append($('<div class="layui-form-item"><div class="layui-input-inline">' +
                     '<button class="layui-btn layui-btn-warm" id="plus">添加选项</button></div></div>'));
@@ -147,12 +169,19 @@
                     form.render();
                 });
 
-            }else{
+            }else if(value==2){
 
                 tpl_answer.render([],function(html){
                     $("#content2").append(html);
                     form.render();
                 })
+            }else{
+
+                tpl_photo.render([],function(html){
+                    $("#content3").append(html);
+                    form.render();
+                });
+
             }
 
         })
@@ -216,6 +245,7 @@
 
                 data.field.options = JSON.stringify(items);
             }
+
 
 
             app.post(url,data.field).then(d=>{

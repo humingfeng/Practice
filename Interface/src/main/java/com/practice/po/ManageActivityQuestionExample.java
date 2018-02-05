@@ -425,6 +425,66 @@ public class ManageActivityQuestionExample {
             return (Criteria) this;
         }
 
+        public Criteria andPhotoNumIsNull() {
+            addCriterion("photo_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumIsNotNull() {
+            addCriterion("photo_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumEqualTo(Integer value) {
+            addCriterion("photo_num =", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumNotEqualTo(Integer value) {
+            addCriterion("photo_num <>", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumGreaterThan(Integer value) {
+            addCriterion("photo_num >", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("photo_num >=", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumLessThan(Integer value) {
+            addCriterion("photo_num <", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumLessThanOrEqualTo(Integer value) {
+            addCriterion("photo_num <=", value, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumIn(List<Integer> values) {
+            addCriterion("photo_num in", values, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumNotIn(List<Integer> values) {
+            addCriterion("photo_num not in", values, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumBetween(Integer value1, Integer value2) {
+            addCriterion("photo_num between", value1, value2, "photoNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhotoNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("photo_num not between", value1, value2, "photoNum");
+            return (Criteria) this;
+        }
+
         public Criteria andClassifyIsNull() {
             addCriterion("classify is null");
             return (Criteria) this;

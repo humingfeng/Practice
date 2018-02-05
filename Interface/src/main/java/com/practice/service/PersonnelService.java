@@ -186,4 +186,41 @@ public interface PersonnelService {
      * @return
      */
     JsonResult updateParentPushId(String token, String pushId);
+
+    /**
+     * List parent
+     * @param param
+     * @return
+     */
+    JsonResult listParent(PageSearchParam param);
+
+    /**
+     * Get parent
+     * @param id
+     * @return
+     */
+    JsonResult getParent(Long id);
+
+    /**
+     * Update parent
+     * @param parent
+     * @param token
+     * @return
+     */
+    JsonResult updateParent(Parent parent, String token);
+
+    /**
+     * Del parent
+     * @param id
+     * @param token
+     * @return
+     */
+    JsonResult delParent(Long id, String token);
+
+    /**
+     * List parent student
+     * @param parentId
+     * @return
+     */
+    JsonResult listParentStudent(Long parentId);
 }

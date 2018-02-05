@@ -20,6 +20,7 @@ public enum DicParentEnum {
     NATION_TYPE(78L, "民族", "NATION_TYPE"),
     TEACHER_TYPE(150L, "教师职务", "TEACHER_TYPE"),
     RELATIONS(160L, "关系", "RELATIONS"),
+    BASE_TAG(168L, "基地标签", "BASE_TAG"),
     PERIOD(3L, "学段", "PERIOD");
 
     private Long id;

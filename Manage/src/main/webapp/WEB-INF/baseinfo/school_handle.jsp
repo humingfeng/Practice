@@ -29,7 +29,7 @@
                         </select>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="areaId" id="areaId" lay-verify="required" lay-filter="areaId">
+                        <select name="areaId" id="areaId"  lay-filter="areaId">
                             <option value="">请选择县/区</option>
                         </select>
                     </div>
@@ -151,10 +151,13 @@
                         $("#areaId").val(0);
                         if($("#proviceId").val()) getEduList($("#proviceId").val(),cid,0);
 
-
                     }
 
                     form.render('select');
+
+                    if(cid==0){
+                        getEduList($("#proviceId").val(),0,0);
+                    }
                 },e=>{}).finally(_=>{resolve();});
             });
 

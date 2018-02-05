@@ -1,18 +1,17 @@
 package com.practice.manage.controller;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.po.ManageStudent;
 import com.practice.po.ManageTeacher;
+import com.practice.po.Parent;
 import com.practice.result.JsonResult;
 import com.practice.service.PersonnelService;
 import com.practice.service.SchoolService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -207,5 +206,74 @@ public class PersonnelController {
                                         String classId,
                                         String rows){
         return personnelService.addStudentList(token,schoolId,periodId,classId,rows);
+    }
+
+    /**
+     * Index parent
+     * @return
+     */
+    @RequestMapping(value = "/parent")
+    public String indexParent(){
+        return "personnel/parent";
+    }
+
+    /**
+     * List parent
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/parent/list")
+    @ResponseBody
+    public JsonResult ajaxParentList(PageSearchParam param){
+
+        return personnelService.listParent(param);
+    }
+
+    /**
+     * Get parent
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/parent/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult ajaxParent(@PathVariable Long id){
+        return personnelService.getParent(id);
+    }
+
+    /**
+     * Update parent
+     * @param parent
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/parent/update",method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult ajaxParentUpdate(Parent parent,@RequestAttribute String token){
+        return personnelService.updateParent(parent,token);
+    }
+
+    /**
+     *
+     * @param id
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/parent/delete/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult ajaxParentDelete(@PathVariable Long id,@RequestAttribute String token){
+
+        return personnelService.delParent(id,token);
+    }
+
+    /**
+     * List parent student
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = "/parent/student/list/{parentId}")
+    @ResponseBody
+    public JsonResult ajaxParentStudentList(@PathVariable Long parentId){
+
+        return personnelService.listParentStudent(parentId);
     }
 }

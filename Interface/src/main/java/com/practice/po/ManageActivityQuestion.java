@@ -29,6 +29,8 @@ public class ManageActivityQuestion implements Serializable {
 
     private Long answerId;
 
+    private Integer photoNum;
+
     private Integer classify;
 
     private Integer status;
@@ -77,6 +79,14 @@ public class ManageActivityQuestion implements Serializable {
 
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
+    }
+
+    public Integer getPhotoNum() {
+        return photoNum;
+    }
+
+    public void setPhotoNum(Integer photoNum) {
+        this.photoNum = photoNum;
     }
 
     public Integer getClassify() {

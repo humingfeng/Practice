@@ -45,6 +45,10 @@ public class ManageBase implements Serializable{
 
     private String linkPhone;
 
+    private Long tag;
+
+    private String tagName;
+
     private Long pid;
 
     private Long cid;
@@ -57,8 +61,6 @@ public class ManageBase implements Serializable{
 
     private String imgCover;
 
-    private String description;
-
     private Integer status;
 
     private Integer delflag;
@@ -66,6 +68,16 @@ public class ManageBase implements Serializable{
     private Date updateTime;
 
     private Long updateUser;
+
+    private String description;
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 
     public Long getId() {
         return id;
@@ -89,6 +101,14 @@ public class ManageBase implements Serializable{
 
     public void setLinkPhone(String linkPhone) {
         this.linkPhone = linkPhone == null ? null : linkPhone.trim();
+    }
+
+    public Long getTag() {
+        return tag;
+    }
+
+    public void setTag(Long tag) {
+        this.tag = tag;
     }
 
     public Long getPid() {
@@ -139,14 +159,6 @@ public class ManageBase implements Serializable{
         this.imgCover = imgCover == null ? null : imgCover.trim();
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -177,5 +189,13 @@ public class ManageBase implements Serializable{
 
     public void setUpdateUser(Long updateUser) {
         this.updateUser = updateUser;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 }

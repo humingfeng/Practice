@@ -70,11 +70,20 @@ public class AreaServiceImpl implements AreaService {
         if (list == null) {
 
             CityExample cityExample = new CityExample();
+            /**
+             * 添加 省/直辖市 - 直属
+             * @author Xushd on 2018/2/5 11:04
+             */
             cityExample.createCriteria().andProvinceIdEqualTo(pid);
 
             List<City> cities = cityMapper.selectByExample(cityExample);
 
+            City city_zs = cityMapper.selectByPrimaryKey(390L);
+
+
             list = new ArrayList<>();
+
+            list.add(new CityDTO(city_zs.getCityId(), city_zs.getCity()));
 
             for (City city : cities) {
                 list.add(new CityDTO(city.getCityId(), city.getCity())) ;
@@ -99,14 +108,23 @@ public class AreaServiceImpl implements AreaService {
         List<AreaDTO> areaList = cacheService.getAreaList(cid);
         if(areaList==null){
 
+            areaList = new ArrayList<>();
 
             AreaExample areaExample = new AreaExample();
 
-            areaExample.createCriteria().andCityIdEqualTo(cid);
+            /**
+             * 添加 市/区 - 直属
+             * @author Xushd on 2018/2/5 11:04
+             */
+            areaExample.createCriteria()
+                    .andCityIdEqualTo(cid);
 
             List<Area> areas = areaMapper.selectByExample(areaExample);
+            if(cid!=0L){
+                Area area = areaMapper.selectByPrimaryKey(2801L);
 
-            areaList = new ArrayList<>();
+                areaList.add(new AreaDTO(area.getAreaId(),area.getArea()));
+            }
 
             for (Area area : areas) {
                 areaList.add(new AreaDTO(area.getAreaId(),area.getArea()));

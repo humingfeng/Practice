@@ -20,10 +20,20 @@ public class QuestionDTO implements Serializable {
 
     private Integer classify;
 
+    private Integer photoNum;
+
     private List<QuestionItemDTO> list;
 
 
     public QuestionDTO() {
+    }
+
+    public Integer getPhotoNum() {
+        return photoNum;
+    }
+
+    public void setPhotoNum(Integer photoNum) {
+        this.photoNum = photoNum;
     }
 
     public Integer getClassify() {
