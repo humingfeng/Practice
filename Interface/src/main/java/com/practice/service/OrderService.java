@@ -1,7 +1,10 @@
 package com.practice.service;
 
 import com.practice.dto.OrderPayDelayMessage;
+import com.practice.po.OrderInfo;
 import com.practice.result.JsonResult;
+
+import java.util.Map;
 
 /**
  * @author Xushd on 2018/1/30 15:24
@@ -46,4 +49,24 @@ public interface OrderService {
      * @return
      */
     JsonResult listMyOrder(String token, Integer pageIndex);
+
+    /**
+     * Get order pay status
+     * @param orderNum
+     * @return
+     */
+    JsonResult getOrderPayStatus(String orderNum);
+
+    /**
+     * Update order and insert record
+     * @param params
+     */
+    void updateAndRecordPayInfo(Map<String, String> params);
+
+    /**
+     * Get order Info
+     * @param orderNum
+     * @return
+     */
+    OrderInfo getOderInfoByOrderNum(String orderNum);
 }

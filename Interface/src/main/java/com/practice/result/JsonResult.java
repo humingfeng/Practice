@@ -66,6 +66,10 @@ public class JsonResult implements Serializable{
         return new JsonResult();
     }
 
+    public static JsonResult build(Integer code,String message,Object data){
+        return new JsonResult(code,message,data);
+    }
+
     public static JsonResult success(String message) {
         return new JsonResult(ConstantEnum.JSONRESULT_STATUS_SUCCESS.getIntValue(),message,null);
     }

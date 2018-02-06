@@ -11,14 +11,11 @@
     <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="core_provider" />
 
-    <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
-
     <!-- 使用zookeeper注册中心暴露服务地址 即zookeeper的所在服务器ip地址和端口号 -->
     <dubbo:registry address="${DUBBO.REGISTRY.ADDRESS}" />
 
     <!-- 用dubbo协议在20880端口暴露服务 -->
-    <!--<dubbo:protocol name="dubbo" host="192.168.99.162" port="20880"/>-->
+    <dubbo:protocol name="dubbo" host="192.168.99.162" port="20880"/>
 
     <dubbo:provider timeout="30000" />
     <!-- 声明需要暴露的服务接口 -->
@@ -98,5 +95,9 @@
     <!--orderService-->
     <bean id="orderService" class="com.practice.service.impl.OrderServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.OrderService" ref="orderService"></dubbo:service>
+
+    <!--payService-->
+    <bean id="payService" class="com.practice.service.impl.PayServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.PayService" ref="payService"></dubbo:service>
 
 </beans>

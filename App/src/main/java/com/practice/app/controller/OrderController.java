@@ -1,12 +1,11 @@
 package com.practice.app.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.practice.result.JsonResult;
 import com.practice.service.OrderService;
+import com.practice.service.PayService;
 import com.practice.utils.JsonUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -19,7 +18,8 @@ public class OrderController {
 
     @Resource
     private OrderService orderService;
-
+    @Resource
+    private PayService payService;
     /**
      * Get order preview
      * @param activityId
@@ -62,5 +62,38 @@ public class OrderController {
     @RequestMapping(value = "/my/list/{pageIndex}")
     public JsonResult listOrder(@RequestAttribute String token,@PathVariable Integer pageIndex){
         return orderService.listMyOrder(token,pageIndex);
+    }
+
+    /**
+     * Get order pay string
+     * @param orderNum
+     * @param method
+     * @return
+     */
+    @RequestMapping(value = "/pay/{method}/infostring/{orderNum}")
+    public JsonResult getOrderPayString(@PathVariable String orderNum,@PathVariable Integer method){
+        if(method==1){
+            String aliPayOrderString = payService.getAliPayOrderString(orderNum);
+
+            if(aliPayOrderString==null){
+                return JsonResult.error("支付宝订单创建失败，请联系客服");
+            }else{
+                return JsonResult.build(200,"OK",aliPayOrderString);
+            }
+
+        }else{
+            return JsonResult.success();
+        }
+
+    }
+
+    /**
+     * Get order pay status
+     * @param orderNum
+     * @return
+     */
+    @RequestMapping(value = "/pay/result/{orderNum}")
+    public JsonResult getOrderPayStatus(@PathVariable String orderNum){
+        return orderService.getOrderPayStatus(orderNum);
     }
 }

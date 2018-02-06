@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Xushd on 2018/2/1 14:38
@@ -53,6 +55,8 @@ public class OrderServiceImpl implements OrderService {
     private ActiveMqProducer activeMqProducer;
     @Resource
     private SchoolService schoolService;
+    @Resource
+    private AlipayRecordMapper alipayRecordMapper;
 
     @Value("${SERVER.ID}")
     private String SERVERID;
@@ -154,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
 
         //STEP1 判断活动是否报名结束 或则 名额
 
-        ActivitySkuDTO skuDTO = new ActivitySkuDTO();
+        ActivitySkuDTO skuDTO = null;
 
         Integer closeType = activity.getCloseType();
         if (closeType == 1) {
@@ -163,6 +167,7 @@ public class OrderServiceImpl implements OrderService {
             if (TimeUtils.lessThanNow(closeTime)) {
                 return JsonResult.error("报名时间已过");
             }
+
         } else {
             //名额
 
@@ -376,6 +381,8 @@ public class OrderServiceImpl implements OrderService {
 
             link.setStatus(3);
 
+            link.setUpdateTime(new Date());
+
             parentActivityLinkMapper.updateByExampleSelective(link, linkExample);
 
 
@@ -571,5 +578,198 @@ public class OrderServiceImpl implements OrderService {
         result.setPageNum(pageIndex);
 
         return JsonResult.success(result);
+    }
+
+    /**
+     * Get order pay status
+     *
+     * @param orderNum
+     * @return
+     */
+    @Override
+    public JsonResult getOrderPayStatus(String orderNum) {
+
+        Integer orderStatusOk = 2;
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+
+        orderInfoExample.createCriteria().andOrderNumEqualTo(orderNum);
+
+        List<OrderInfo> orderInfos = orderMapper.selectByExample(orderInfoExample);
+
+        OrderInfo orderInfo = orderInfos.get(0);
+
+        if(orderInfo.getStatus().equals(orderStatusOk)){
+
+            return JsonResult.success("支付成功");
+
+        }else{
+            /**
+             * 2s 后重试
+             */
+            try {
+                TimeUnit.SECONDS.sleep(2);
+
+                List<OrderInfo> list = orderMapper.selectByExample(orderInfoExample);
+
+                OrderInfo info = list.get(0);
+
+                if(info.getStatus().equals(orderStatusOk)){
+
+                    return JsonResult.success("支付成功");
+
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return JsonResult.error("订单未支付");
+
+        }
+    }
+
+    /**
+     * Update order and insert record
+     *
+     * @param params
+     */
+    @Override
+    public void updateAndRecordPayInfo(Map<String, String> params) {
+
+        String key = "trade_status",KEY_SUCCESS = "TRADE_SUCCESS";
+        String orderNumKey = "out_trade_no";
+        if(params.get(key).equals(KEY_SUCCESS)){
+
+            String orderNum = params.get(orderNumKey);
+
+            OrderInfoExample orderInfoExample = new OrderInfoExample();
+
+            orderInfoExample.createCriteria().andOrderNumEqualTo(orderNum);
+
+            List<OrderInfo> orderInfos = orderMapper.selectByExample(orderInfoExample);
+
+            if(orderInfos.size()>0){
+
+                OrderInfo orderInfo = orderInfos.get(0);
+
+                OrderInfo info = new OrderInfo();
+                info.setPayMethod(1);
+                info.setPayTime(new Date());
+                info.setStatus(2);
+                info.setId(orderInfo.getId());
+
+                orderMapper.updateByPrimaryKeySelective(info);
+
+                ManageActivityEnrollRecord record = new ManageActivityEnrollRecord();
+
+                record.setId(orderInfo.getEnrollId());
+
+                record.setStatus(8);
+
+                record.setUpdateTime(new Date());
+
+                enrollRecordMapper.updateByPrimaryKeySelective(record);
+
+                ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+
+                linkExample.createCriteria()
+                        .andOrderNumEqualTo(orderInfo.getOrderNum());
+
+                ParentActivityLink link = new ParentActivityLink();
+
+                link.setStatus(1);
+
+                link.setUpdateTime(new Date());
+
+                parentActivityLinkMapper.updateByExampleSelective(link, linkExample);
+
+
+                AlipayRecord alipayRecord = new AlipayRecord();
+
+                alipayRecord.setGmCreate(params.get("gmt_create"));
+
+                alipayRecord.setCharset(params.get("charset"));
+
+                alipayRecord.setSellerEmail(params.get("seller_email"));
+
+                alipayRecord.setSubject(params.get("subject"));
+
+                alipayRecord.setSign(params.get("sign"));
+
+                alipayRecord.setBody(params.get("body"));
+
+                alipayRecord.setBuyerId(params.get("buyer_id"));
+
+                alipayRecord.setInvoiceAmount(params.get("invoice_amount"));
+
+                alipayRecord.setNotifyId(params.get("notify_id"));
+
+                alipayRecord.setNotifyType(params.get("notify_type"));
+
+                alipayRecord.setTradeStatus(params.get("trade_status"));
+
+                alipayRecord.setReceiptAmount(params.get("receipt_amount"));
+
+                alipayRecord.setAppId(params.get("app_id"));
+
+                alipayRecord.setBuyerPayAmount(params.get("buyer_pay_amount"));
+
+                alipayRecord.setSignType(params.get("sign_type"));
+
+                alipayRecord.setSellerId(params.get("seller_id"));
+
+                alipayRecord.setGmtPayment(params.get("gmt_payment"));
+
+                alipayRecord.setNotifyTime(params.get("notify_time"));
+
+                alipayRecord.setVersion(params.get("version"));
+
+                alipayRecord.setOutTradeNo(params.get("out_trade_no"));
+
+                alipayRecord.setTotalAmount(params.get("total_amount"));
+
+                alipayRecord.setTradeNo(params.get("trade_no"));
+
+                alipayRecord.setAuthAppId(params.get("auth_app_id"));
+
+                alipayRecord.setBuyerLogonId(params.get("buyer_logon_id"));
+
+                alipayRecord.setPointAmount(params.get("point_amount"));
+
+                alipayRecord.setId(null);
+
+                alipayRecord.setCreateTime(new Date());
+
+                alipayRecordMapper.insertSelective(alipayRecord);
+
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Get order Info
+     *
+     * @param orderNum
+     * @return
+     */
+    @Override
+    public OrderInfo getOderInfoByOrderNum(String orderNum) {
+
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+
+        orderInfoExample.createCriteria().andOrderNumEqualTo(orderNum);
+
+        List<OrderInfo> orderInfos = orderMapper.selectByExample(orderInfoExample);
+
+        if(orderInfos.size()>0){
+            return orderInfos.get(0);
+        }
+
+        return null;
+
+
     }
 }
