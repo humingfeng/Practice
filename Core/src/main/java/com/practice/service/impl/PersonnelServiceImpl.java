@@ -1058,4 +1058,15 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         return JsonResult.success(parentStudentDTO);
     }
+
+    /**
+     * Get parent PO
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public Parent getParentPO(Long userId) {
+        return parentMapper.selectByPrimaryKey(userId);
+    }
 }

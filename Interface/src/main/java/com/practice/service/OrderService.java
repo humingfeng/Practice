@@ -1,6 +1,8 @@
 package com.practice.service;
 
+import com.github.pagehelper.page.PageParams;
 import com.practice.dto.OrderPayDelayMessage;
+import com.practice.dto.PageSearchParam;
 import com.practice.po.OrderInfo;
 import com.practice.result.JsonResult;
 
@@ -69,4 +71,18 @@ public interface OrderService {
      * @return
      */
     OrderInfo getOderInfoByOrderNum(String orderNum);
+
+    /**
+     * List order
+     * @param param
+     * @return
+     */
+    JsonResult listOrder(PageSearchParam param);
+
+    /**
+     * Get order detail
+     * @param id
+     * @return
+     */
+    JsonResult getOrderInfoDetail(Long id);
 }

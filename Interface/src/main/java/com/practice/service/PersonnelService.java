@@ -223,4 +223,11 @@ public interface PersonnelService {
      * @return
      */
     JsonResult listParentStudent(Long parentId);
+
+    /**
+     * Get parent PO
+     * @param userId
+     * @return
+     */
+    Parent getParentPO(Long userId);
 }
