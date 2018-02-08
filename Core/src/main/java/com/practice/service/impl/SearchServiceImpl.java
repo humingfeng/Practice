@@ -109,7 +109,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         if(queryDTO.getClassifyId()!=0L){
-            query.addFilterQuery("classify_id:"+queryDTO.getTypeId());
+            query.addFilterQuery("classify_id:"+queryDTO.getClassifyId());
         }
 
         if(queryDTO.getThemeId()!=0L){

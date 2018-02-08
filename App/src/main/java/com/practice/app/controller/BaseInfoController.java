@@ -215,5 +215,16 @@ public class BaseInfoController {
         ManageBase basesPO = basesService.getBasesPO(basesId);
         return JsonResult.success(basesPO);
     }
+
+    /**
+     * Get theme by classify id
+     * @param classifyId
+     * @return
+     */
+    @RequestMapping(value = "/theme/{classifyId}")
+    public JsonResult getThemeByClassify(@PathVariable Long classifyId){
+        //return activityService.listThemeCache(classifyId);
+        return null;
+    }
 }
 
