@@ -671,4 +671,41 @@ public class CacheServiceImpl implements CacheService {
     public void setTheme(Long classifyId, List<KeyValueDTO> list) {
         jedisClient.hset(ConstantEnum.ACTIVITY_THEME.getStrValue(),"KEY:"+classifyId,JsonUtils.objectToJson(list));
     }
+
+    /**
+     * Get filter period
+     *
+     * @return
+     */
+    @Override
+    public FilterPeriodDTO getFilterPeriod() {
+
+        String s = jedisClient.get(ConstantEnum.FILTER_PERIOD.getStrValue());
+
+        if(StringUtils.isNotBlank(s)){
+            return JsonUtils.jsonToPojo(s,FilterPeriodDTO.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set filter period
+     *
+     * @param filterPeriodDTO
+     */
+    @Override
+    public void setFilterPeriod(FilterPeriodDTO filterPeriodDTO) {
+
+        jedisClient.set(ConstantEnum.FILTER_PERIOD.getStrValue(),JsonUtils.objectToJson(filterPeriodDTO));
+    }
+
+    /**
+     * Add activity like
+     * @param id
+     */
+    @Override
+    public void addActivityLike(Long id) {
+        jedisClient.incr(ConstantEnum.ACTIVITY_LIKE.getStrValue()+":KEY:"+id);
+    }
 }

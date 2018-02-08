@@ -2,6 +2,7 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dto.FilterPeriodDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.TokenUserDTO;
@@ -215,5 +216,53 @@ public class DictionaryServiceImpl implements DictionaryService {
             list.add(new KeyValueDTO(manageDictionary.getId(),manageDictionary.getName()));
         }
         return list;
+    }
+
+    /**
+     * Get filter period
+     *
+     * @return
+     */
+    @Override
+    public JsonResult getFilterPeriod() {
+
+        FilterPeriodDTO filterPeriodDTO = cacheService.getFilterPeriod();
+
+        if(filterPeriodDTO==null){
+
+            List<ManageDictionary> manageDictionaries = dictionaryMapper.selectByParentId(DicParentEnum.PERIOD.getId());
+
+            List<KeyValueDTO> sList = new ArrayList<>();
+
+            List<KeyValueDTO> mList = new ArrayList<>();
+
+            List<KeyValueDTO> xList = new ArrayList<>();
+
+            for (ManageDictionary manageDictionary : manageDictionaries) {
+
+                if(manageDictionary.getParam().equals("小学")){
+                    sList.add(new KeyValueDTO(manageDictionary.getId(),manageDictionary.getName()));
+                }
+                if(manageDictionary.getParam().equals("初中")){
+                    mList.add(new KeyValueDTO(manageDictionary.getId(),manageDictionary.getName()));
+                }
+                if(manageDictionary.getParam().equals("高中")){
+                    xList.add(new KeyValueDTO(manageDictionary.getId(),manageDictionary.getName()));
+                }
+            }
+
+            filterPeriodDTO = new FilterPeriodDTO();
+
+            filterPeriodDTO.setxList(xList);
+
+            filterPeriodDTO.setmList(mList);
+
+            filterPeriodDTO.setsList(sList);
+
+            cacheService.setFilterPeriod(filterPeriodDTO);
+        }
+
+
+        return JsonResult.success(filterPeriodDTO);
     }
 }

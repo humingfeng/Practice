@@ -121,15 +121,15 @@ public class SearchServiceImpl implements SearchService {
         }
 
         if(queryDTO.getBaseId()!=0L){
-            query.addFilterQuery("base_id:"+queryDTO.getBaseId());
+            query.addFilterQuery("base_id:{ 0 TO *]");
         }
 
         if(queryDTO.getFree()==1){
-            query.addFilterQuery("monry:0");
+            query.addFilterQuery("money:0");
         }
 
         if(queryDTO.getSelf()!=0){
-            query.addFilterQuery("self:"+queryDTO.getSelf());
+            query.addFilterQuery("self:1");
         }
 
         if(queryDTO.getApply()!=0L){
@@ -146,7 +146,7 @@ public class SearchServiceImpl implements SearchService {
         }
         //是否开启 签到模式  1 是 2否
         if(queryDTO.getSign()!=0){
-            query.addFilterQuery("sign:"+queryDTO.getSign());
+            query.addFilterQuery("sign:1");
         }
 
         //1 关注度 2开始时间最近 3价格低到高 4 活动时短到长

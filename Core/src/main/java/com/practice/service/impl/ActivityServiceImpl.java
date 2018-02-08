@@ -3282,6 +3282,10 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setEnroll(0);
 
+        solrItemDTO.setStatus(activity.getStatus());
+
+        solrItemDTO.setSupervise(activity.getCheckSupervise());
+
         solrItemDTO.setNumber(activity.getNumber());
 
         String typeName = typeMapper.selectByPrimaryKey(activity.getTypeId()).getName();
@@ -3576,6 +3580,10 @@ public class ActivityServiceImpl implements ActivityService {
             collect.setParentId(tokenParent.getId());
 
             collectMapper.insertSelective(collect);
+
+            cacheService.addActivityLike(id);
+
+            //TODO 发送一条消息 修改solr
         }
 
 

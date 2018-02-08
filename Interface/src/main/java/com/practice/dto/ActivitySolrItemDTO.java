@@ -70,7 +70,27 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private String pinyin;
 
+    private Integer status;
+
+    private Integer supervise;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public ActivitySolrItemDTO() {
+    }
+
+    public Integer getSupervise() {
+        return supervise;
+    }
+
+    public void setSupervise(Integer supervise) {
+        this.supervise = supervise;
     }
 
     public Long getId() {

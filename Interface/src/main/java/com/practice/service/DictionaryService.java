@@ -70,4 +70,11 @@ public interface DictionaryService {
      * @return
      */
     List<KeyValueDTO> listDicByEnumFromCache(DicParentEnum dicParentEnum);
+
+    /**
+     * Get filter period
+     * @return
+     */
+    JsonResult getFilterPeriod();
+
 }

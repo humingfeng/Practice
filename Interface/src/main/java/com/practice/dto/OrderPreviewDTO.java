@@ -35,6 +35,15 @@ public class OrderPreviewDTO implements Serializable {
 
     private String apply;
 
+    private String moneyDesc;
+
+    public String getMoneyDesc() {
+        return moneyDesc;
+    }
+
+    public void setMoneyDesc(String moneyDesc) {
+        this.moneyDesc = moneyDesc;
+    }
 
     public OrderPreviewDTO() {
     }

@@ -225,5 +225,14 @@ public class BaseInfoController {
     public JsonResult getThemeByClassify(@PathVariable Long classifyId){
         return activityService.listThemeCache(classifyId);
     }
+
+    /**
+     * Get filter period
+     * @return
+     */
+    @RequestMapping(value = "/filter/period")
+    public JsonResult getFilterPeriod(){
+        return dictionaryService.getFilterPeriod();
+    }
 }
 

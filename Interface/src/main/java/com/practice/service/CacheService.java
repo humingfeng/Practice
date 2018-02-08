@@ -341,4 +341,23 @@ public interface CacheService {
      * @param list
      */
     void setTheme(Long classifyId, List<KeyValueDTO> list);
+
+    /**
+     * Get filter period
+     * @return
+     */
+    FilterPeriodDTO getFilterPeriod();
+
+    /**
+     * Set filter period
+     * @param filterPeriodDTO
+     */
+    void setFilterPeriod(FilterPeriodDTO filterPeriodDTO);
+
+    /**
+     * Add activity like
+     * @param id
+     */
+    void addActivityLike(Long id);
+
 }

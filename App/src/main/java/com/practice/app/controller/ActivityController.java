@@ -42,23 +42,11 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/list/{searchParam}")
-    public JsonResult listActivity(@PathVariable String searchParam, String query, @RequestAttribute String token){
-
-        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
-
-        Long studentId = tokenParent.getStudentId();
-
-        ManageStudent studentPO = personnelService.getStudentPO(studentId);
-
-        School schoolPO = schoolService.getSchoolPO(studentPO.getSchoolId());
+    public JsonResult listActivity(@PathVariable String searchParam, String query){
 
         SolrQueryDTO solrQueryDTO = new SolrQueryDTO();
 
         solrQueryDTO.init(searchParam,query);
-
-        solrQueryDTO.setPid(schoolPO.getProviceId());
-
-        solrQueryDTO.setCid(schoolPO.getCityId());
 
         PageResult<ActivitySearchVO> searchResult = searchService.getSearchResult(solrQueryDTO);
 

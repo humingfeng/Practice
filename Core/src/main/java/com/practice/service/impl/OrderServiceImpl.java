@@ -123,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderPreviewDTO.setBeginAndEnd(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime()) + " - " + TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
 
+        orderPreviewDTO.setMoneyDesc(activityMapper.selectByPrimaryKey(activityId).getMoneyDesc());
 
         return JsonResult.success(orderPreviewDTO);
     }
