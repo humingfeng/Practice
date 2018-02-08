@@ -314,14 +314,13 @@
         var tpl = laytpl($("#tpl").html());
 
         app.get('/auth/verify/activity/view/${id}').then(d => {
-            console.log(d);
 
             tpl.render(d.data, function (html) {
                 $("#content").html(html);
             });
         }, e => {
             app.layerMessageE(e)
-        }).finally(_ => {
+        }).finally(() => {
             app.closeLoading(load)
         })
 

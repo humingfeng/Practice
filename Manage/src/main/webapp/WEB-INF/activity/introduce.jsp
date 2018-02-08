@@ -224,7 +224,7 @@
 
             }
             form.on("submit(submit)",data=>{
-                if(!data.field.aid)data.field.areaId=0;
+                if(!data.field.aid)data.field.aid=0;
                 if(!data.field.imgCover){
 
                     $("#cover").css("border-color","#FF5722");

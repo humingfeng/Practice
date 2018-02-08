@@ -160,7 +160,7 @@
                 }else{
                     app.layerDel('确定将 '+item.userName +' 设置为主负责人?',_=>{
                         load = app.showLoading();
-                        app.post('//auth/activityleader/main/'+item.id+'/${activityId}/1').then(d=>{
+                        app.post('/auth/activity/leader/main/'+item.id+'/${activityId}/1').then(d=>{
                             app.layerMessageS(d.message);
                             initList()
                          },e=>{app.layerMessageE(e)}).finally(_=>{app.closeLoading(load)});

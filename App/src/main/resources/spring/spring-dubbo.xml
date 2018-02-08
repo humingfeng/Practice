@@ -43,4 +43,6 @@
 
     <dubbo:reference id="orderService" interface="com.practice.service.OrderService"/>
 
+    <dubbo:reference id="payService" interface="com.practice.service.PayService"/>
+
 </beans>

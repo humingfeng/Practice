@@ -2760,7 +2760,7 @@ public class ActivityServiceImpl implements ActivityService {
                     if (questionIds.size() == 0) {
                         errors.add("[" + task.getTitle() + "] 任务没有设置题目");
                     }
-                    if (questionIds.size() != limitNum) {
+                    if (questionIds.size() < limitNum) {
                         errors.add("[" + task.getTitle() + "] 任务题目数小于任务最低完成个数");
                     }
 

@@ -1,5 +1,7 @@
 package com.practice.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,13 +24,44 @@ public class OrderInfo implements Serializable{
 
     private Integer status;
 
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date payTime;
 
     private Integer payMethod;
 
     private Long userId;
+
+    private String userName;
+
+    private String priceStr;
+
+    private String methodName;
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getPriceStr() {
+        return priceStr;
+    }
+
+    public void setPriceStr(String priceStr) {
+        this.priceStr = priceStr;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getId() {
         return id;

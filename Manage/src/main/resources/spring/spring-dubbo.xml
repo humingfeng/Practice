@@ -47,6 +47,10 @@
 
     <dubbo:reference id="runService" interface="com.practice.service.RunService"/>
 
+    <dubbo:reference id="payService" interface="com.practice.service.PayService"/>
+
+    <dubbo:reference id="orderService" interface="com.practice.service.OrderService"/>
+
 
 
 

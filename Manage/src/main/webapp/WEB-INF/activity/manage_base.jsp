@@ -174,6 +174,7 @@
         </div>
     </div>
 </fieldset>
+
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript">
     layui.config({base:"/static/js/"}).use(['app','form','jsonToForm','laydate'],function(){

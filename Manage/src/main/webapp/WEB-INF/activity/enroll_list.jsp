@@ -50,9 +50,10 @@
                 <div class="layui-input-inline">
                     <select name="status">
                         <option value="">请选择状态</option>
-                        <option value="8">待确认</option>
-                        <option value="9">已确认</option>
-                        <option value="4">取消</option>
+                        <option value="8">已确认</option>
+                        <option value="9">待确认</option>
+                        <option value="4">用户取消</option>
+                        <option value="5">支付超时取消</option>
                     </select>
                 </div>
             </div>
@@ -69,9 +70,16 @@
 </div>
 <script type="text/html" id="statusTpl">
     {{#  if(d.status === 9){ }}
+    <span class="layui-badge layui-bg-orange">待确定</span>
+    {{#  } }}
+    {{#  if(d.status === 8){ }}
     <span class="layui-badge layui-bg-green">已确认</span>
-    {{#  } else { }}
-    <span class="layui-badge layui-bg-orange">待确认</span>
+    {{#  } }}
+    {{#  if(d.status === 5){ }}
+    <span class="layui-badge layui-bg-danger">订单超时取消</span>
+    {{#  } }}
+    {{#  if(d.status === 4){ }}
+    <span class="layui-badge layui-bg-danger">用户取消</span>
     {{#  } }}
 </script>
 <script type="text/javascript" src="/static/layui/layui.js"></script>
