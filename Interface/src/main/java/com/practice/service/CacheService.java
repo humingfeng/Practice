@@ -328,4 +328,17 @@ public interface CacheService {
     OrderPayDelayMessage getOrderDelayMessage(String orderNum);
 
 
+    /**
+     * Get themes
+     * @param classifyId
+     * @return
+     */
+    List<KeyValueDTO> getTheme(Long classifyId);
+
+    /**
+     * Set themes
+     * @param classifyId
+     * @param list
+     */
+    void setTheme(Long classifyId, List<KeyValueDTO> list);
 }

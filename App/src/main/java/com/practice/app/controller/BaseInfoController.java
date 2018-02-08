@@ -223,8 +223,7 @@ public class BaseInfoController {
      */
     @RequestMapping(value = "/theme/{classifyId}")
     public JsonResult getThemeByClassify(@PathVariable Long classifyId){
-        //return activityService.listThemeCache(classifyId);
-        return null;
+        return activityService.listThemeCache(classifyId);
     }
 }
 

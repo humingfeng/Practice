@@ -720,6 +720,32 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     /**
+     * List theme usable  by classifyid
+     *
+     * @param classifyId
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> listThemeUsablePO(Long classifyId) {
+        ManageActivityThemeExample themeExample = new ManageActivityThemeExample();
+
+        themeExample.createCriteria()
+                .andClassifyIdEqualTo(classifyId)
+                .andStatusEqualTo(1)
+                .andDelflagEqualTo(0);
+
+        List<ManageActivityTheme> manageActivityThemes = themeMapper.selectByExample(themeExample);
+
+        List<KeyValueDTO> list = new ArrayList<>();
+
+        for (ManageActivityTheme manageActivityTheme : manageActivityThemes) {
+            list.add(new KeyValueDTO(manageActivityTheme.getId(), manageActivityTheme.getName()));
+        }
+
+        return list;
+    }
+
+    /**
      * List activity manage
      *
      * @param param
@@ -3649,4 +3675,30 @@ public class ActivityServiceImpl implements ActivityService {
     public ManageActivity getActivity(Long activityId) {
         return activityMapper.selectByPrimaryKey(activityId);
     }
+
+    /**
+     * List theme by classifyId
+     *
+     * @param classifyId
+     * @return
+     */
+    @Override
+    public JsonResult listThemeCache(Long classifyId) {
+
+        List<KeyValueDTO> list = cacheService.getTheme(classifyId);
+
+        if(list==null){
+
+            list = this.listThemeUsablePO(classifyId);
+
+            cacheService.setTheme(classifyId,list);
+
+        }
+        return JsonResult.success(list);
+
+    }
+
+
+
+
 }

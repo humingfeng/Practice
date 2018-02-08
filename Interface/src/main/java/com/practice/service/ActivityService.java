@@ -646,4 +646,19 @@ public interface ActivityService {
      * @return
      */
     ManageActivity getActivity(Long activityId);
+
+    /**
+     * List theme by classifyId
+     * @param classifyId
+     * @return
+     */
+    JsonResult listThemeCache(Long classifyId);
+
+    /**
+     * List theme usable  by classifyid
+     * @param classifyId
+     * @return
+     */
+    List<KeyValueDTO> listThemeUsablePO(Long classifyId);
+
 }

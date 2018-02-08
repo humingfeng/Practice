@@ -644,4 +644,31 @@ public class CacheServiceImpl implements CacheService {
 
         return null;
     }
+
+    /**
+     * Get themes
+     *
+     * @param classifyId
+     * @return
+     */
+    @Override
+    public List<KeyValueDTO> getTheme(Long classifyId) {
+
+        String hget = jedisClient.hget(ConstantEnum.ACTIVITY_THEME.getStrValue(), "KEY:" + classifyId);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToList(hget,KeyValueDTO.class);
+        }
+        return null;
+    }
+
+    /**
+     * Set themes
+     *
+     * @param classifyId
+     * @param list
+     */
+    @Override
+    public void setTheme(Long classifyId, List<KeyValueDTO> list) {
+        jedisClient.hset(ConstantEnum.ACTIVITY_THEME.getStrValue(),"KEY:"+classifyId,JsonUtils.objectToJson(list));
+    }
 }
