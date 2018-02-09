@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author Xushd on 2018/1/24 14:37
  */
-public class ActivitySearchVO implements Serializable{
+public class ActivityListItemVO implements Serializable{
 
     private Long id;
 
@@ -45,20 +45,20 @@ public class ActivitySearchVO implements Serializable{
 
     private Integer collect;
 
-    public Integer getCollect() {
-        return collect;
-    }
-
-    public void setCollect(Integer collect) {
-        this.collect = collect;
-    }
-
     public Integer getSelf() {
         return self;
     }
 
     public void setSelf(Integer self) {
         this.self = self;
+    }
+
+    public Integer getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Integer collect) {
+        this.collect = collect;
     }
 
     public Integer getSupervise() {
@@ -77,7 +77,7 @@ public class ActivitySearchVO implements Serializable{
         this.status = status;
     }
 
-    public ActivitySearchVO() {
+    public ActivityListItemVO() {
     }
 
     public String getTime() {

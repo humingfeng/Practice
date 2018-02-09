@@ -95,6 +95,9 @@
                     {{# if (item.status==2) { }}
                     <span class="layui-badge">报名中</span>
                     {{# } }}
+                    {{# if (item.status==1) { }}
+                    <span class="layui-badge layui-bg-green">进行中</span>
+                    {{# } }}
                     {{# if (item.status==5) { }}
                     <span class="layui-badge layui-bg-gray">活动已结束</span>
                     {{# } }}
@@ -159,6 +162,20 @@
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs layui-btn-danger offline" data-id="{{item.id}}">
                             下线
+                        </a>
+                    </div>
+                    {{# } }}
+                    {{# if(item.status==1){ }}
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs  do-action layui-btn-normal"
+                           data-type="handle" data-url="/auth/jump/activity/activity_view?id={{item.id}}" data-name="活动预览">
+                            预览
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <a class="layui-btn layui-btn-xs  do-action"
+                           data-type="handle" data-url="/auth/jump/activity/enroll_list?id={{item.id}}" data-name="报名列表">
+                            人员列表
                         </a>
                     </div>
                     {{# } }}

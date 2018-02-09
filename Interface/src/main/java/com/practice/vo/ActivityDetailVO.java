@@ -65,7 +65,27 @@ public class ActivityDetailVO implements Serializable {
 
     private List<String> applys;
 
+    private Integer status;
+
+    private String moneyDesc;
+
     public ActivityDetailVO() {
+    }
+
+    public String getMoneyDesc() {
+        return moneyDesc;
+    }
+
+    public void setMoneyDesc(String moneyDesc) {
+        this.moneyDesc = moneyDesc;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getMyEnroll() {

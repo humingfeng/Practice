@@ -5,17 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.practice.dto.*;
 import com.practice.enums.AuthEnum;
 import com.practice.enums.OperateEnum;
-import com.practice.mapper.ManageStudentMapper;
-import com.practice.mapper.ManageTeacherMapper;
-import com.practice.mapper.ParentMapper;
-import com.practice.mapper.ParentStudentMapper;
+import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
-import com.practice.service.CacheService;
-import com.practice.service.DictionaryService;
-import com.practice.service.PersonnelService;
-import com.practice.service.SchoolService;
+import com.practice.service.*;
 import com.practice.utils.*;
+import com.practice.vo.ActivityListItemVO;
+import com.practice.vo.ActivitySearchVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +41,10 @@ public class PersonnelServiceImpl implements PersonnelService {
     private CacheService cacheService;
     @Resource
     private ParentStudentMapper parentStudentMapper;
-
+    @Resource
+    private ParentActivityLinkMapper parentActivityLinkMapper;
+    @Resource
+    private ActivityService activityService;
     /**
      * List Teacher
      *
@@ -1068,5 +1067,57 @@ public class PersonnelServiceImpl implements PersonnelService {
     @Override
     public Parent getParentPO(Long userId) {
         return parentMapper.selectByPrimaryKey(userId);
+    }
+
+    /**
+     * List parent enroll activity
+     *
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public JsonResult listParentEnrollActivity(String token, int pageIndex) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        PageHelper.startPage(pageIndex,10);
+
+        ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+
+        linkExample.createCriteria()
+                .andParentIdEqualTo(tokenParent.getId())
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        linkExample.setOrderByClause(" create_time desc ");
+
+        List<ParentActivityLink> parentActivityLinks = parentActivityLinkMapper.selectByExample(linkExample);
+
+        PageInfo<ParentActivityLink> pageInfo = new PageInfo<>(parentActivityLinks);
+
+        List<ActivityListItemVO> list = new ArrayList<>();
+
+        for (ParentActivityLink parentActivityLink : parentActivityLinks) {
+
+            Long activityId = parentActivityLink.getActivityId();
+
+            ActivityListItemVO itemVO = activityService.getActivityListItemDTO(activityId);
+
+            list.add(itemVO);
+
+        }
+
+        PageResult<ActivityListItemVO> pageResult = new PageResult<>();
+
+        pageResult.setList(list);
+
+        pageResult.setPageNum(pageIndex);
+
+        pageResult.setTotal((int) pageInfo.getTotal());
+
+        pageResult.setPageNum(pageInfo.getPageSize());
+
+        return JsonResult.success(pageResult);
     }
 }

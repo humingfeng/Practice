@@ -42,4 +42,12 @@ public interface SolrDao {
      * @return
      */
     Boolean updateActivityEnroll(Long activityId,Integer enroll);
+
+    /**
+     * Update activity collect
+     * @param id
+     * @param collectCount
+     * @return
+     */
+    Boolean updateActivityCollect(Long id, int collectCount);
 }

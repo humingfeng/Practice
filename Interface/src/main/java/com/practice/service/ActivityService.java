@@ -1,12 +1,10 @@
 package com.practice.service;
 
-import com.practice.dto.ActivitySolrItemDTO;
-import com.practice.dto.KeyValueDTO;
-import com.practice.dto.PageSearchParam;
-import com.practice.dto.QuestionDTO;
+import com.practice.dto.*;
 import com.practice.exception.ServiceException;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
+import com.practice.vo.ActivityListItemVO;
 
 import java.util.List;
 
@@ -661,4 +659,16 @@ public interface ActivityService {
      */
     List<KeyValueDTO> listThemeUsablePO(Long classifyId);
 
+    /**
+     * Get Activity list item VO
+     * @param activityId
+     * @return
+     */
+    ActivityListItemVO getActivityListItemDTO(Long activityId);
+
+    /**
+     * Update Solr
+     * @param solrUpdateMessage
+     */
+    void excuteSolrUpdate(SolrUpdateMessage solrUpdateMessage);
 }

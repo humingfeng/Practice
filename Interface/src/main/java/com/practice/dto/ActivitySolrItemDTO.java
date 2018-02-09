@@ -48,6 +48,9 @@ public class ActivitySolrItemDTO implements Serializable{
 
     private Integer closeType;
 
+    /**
+     *   评分用
+     */
     private Long like;
 
     private Integer number;
@@ -73,6 +76,19 @@ public class ActivitySolrItemDTO implements Serializable{
     private Integer status;
 
     private Integer supervise;
+
+    /**
+     * 收藏
+     */
+    private Integer collect;
+
+    public Integer getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Integer collect) {
+        this.collect = collect;
+    }
 
     public Integer getStatus() {
         return status;

@@ -230,4 +230,12 @@ public interface PersonnelService {
      * @return
      */
     Parent getParentPO(Long userId);
+
+    /**
+     * List parent enroll activity
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    JsonResult listParentEnrollActivity(String token, int pageIndex);
 }

@@ -192,4 +192,29 @@ public class SearchServiceImpl implements SearchService {
 
         return activitySearchVOPageResult;
     }
+
+    /**
+     * Update solr collect
+     *
+     * @param id
+     * @param collectCount
+     * @return
+     */
+    @Override
+    public boolean updateCollectCount(Long id, long collectCount) {
+        return solrDao.updateActivityCollect(id,(int) collectCount);
+    }
+
+    /**
+     * Update solr enroll
+     *
+     * @param id
+     * @param enrolledCount
+     * @return
+     */
+    @Override
+    public boolean updateEnrollCount(Long id, long enrolledCount) {
+
+        return solrDao.updateActivityEnroll(id, (int) enrolledCount);
+    }
 }

@@ -30,4 +30,20 @@ public interface SearchService {
      * @return
      */
     PageResult<ActivitySearchVO> getSearchResult(SolrQueryDTO queryDTO);
+
+    /**
+     * Update solr collect
+     * @param id
+     * @param collectCount
+     * @return
+     */
+    boolean updateCollectCount(Long id, long collectCount);
+
+    /**
+     * Update solr enroll
+     * @param id
+     * @param enrolledCount
+     * @return
+     */
+    boolean updateEnrollCount(Long id, long enrolledCount);
 }

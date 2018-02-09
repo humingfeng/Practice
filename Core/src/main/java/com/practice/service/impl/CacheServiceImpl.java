@@ -701,11 +701,42 @@ public class CacheServiceImpl implements CacheService {
     }
 
     /**
-     * Add activity like
+     * Add activity like return no num
      * @param id
+     * @return
      */
     @Override
-    public void addActivityLike(Long id) {
+    public Integer addActivityLike(Long id) {
         jedisClient.incr(ConstantEnum.ACTIVITY_LIKE.getStrValue()+":KEY:"+id);
+
+        return this.getActivityLike(id);
+
+
+    }
+
+    /**
+     * Get activity like
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public Integer getActivityLike(Long activityId) {
+        String s = jedisClient.get(ConstantEnum.ACTIVITY_LIKE.getStrValue() + ":KEY:" + activityId);
+        if(StringUtils.isBlank(s)){
+            return 0;
+        }else{
+            return Integer.valueOf(s);
+        }
+    }
+
+    /**
+     * Set solr update message
+     *
+     * @param solrUpdateMessage
+     */
+    @Override
+    public void setSolrUpdateMessage(SolrUpdateMessage solrUpdateMessage) {
+        jedisClient.hset(ConstantEnum.SOLR_UPDATE_MESSAGE.getStrValue(),"KEY:"+solrUpdateMessage.getId(),JsonUtils.objectToJson(solrUpdateMessage));
     }
 }

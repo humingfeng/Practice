@@ -3,6 +3,7 @@ package com.practice.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
 import com.practice.enums.DicParentEnum;
 import com.practice.enums.OperateEnum;
@@ -104,6 +105,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Value("${PARENET_DIR}")
     private String PARENET_DIR;
 
+    @Value("${LIKE.BASE}")
+    private String LIKEBASE;
+
+    @Resource
+    private ActiveMqProducer activeMqProducer;
 
     /**
      * 获取OSS对象参数
@@ -3278,9 +3284,18 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setCloseTime(activity.getCloseTime());
 
-        solrItemDTO.setLike(0L);
+        Integer like = cacheService.getActivityLike(activityId);
 
-        solrItemDTO.setEnroll(0);
+        solrItemDTO.setLike(Long.valueOf(like));
+
+
+        long enrolledCount = enrollRecordMapper.getEnrolledCount(activityId);
+
+        solrItemDTO.setEnroll((int) enrolledCount);
+
+        long collectCount = collectMapper.getCollectCount(activityId);
+
+        solrItemDTO.setCollect((int) collectCount);
 
         solrItemDTO.setStatus(activity.getStatus());
 
@@ -3513,15 +3528,21 @@ public class ActivityServiceImpl implements ActivityService {
             }
             detailVO.setApplys(listApply);
 
+
+
             cacheService.setActivityDetail(id,detailVO);
         }
 
+        ManageActivity manageActivity = activityMapper.selectByPrimaryKey(id);
+
+        detailVO.setStatus(manageActivity.getStatus());
+
+        detailVO.setMoneyDesc(manageActivity.getMoneyDesc());
+
+
         //报名数
-        ManageActivityEnrollRecordExample enrollRecordExample = new ManageActivityEnrollRecordExample();
 
-        enrollRecordExample.createCriteria().andActivityIdEqualTo(id).andStatusGreaterThanOrEqualTo(8);
-
-        long l = enrollRecordMapper.countByExample(enrollRecordExample);
+        long l = enrollRecordMapper.getEnrolledCount(id);
 
         detailVO.setEnroll((int) l);
 
@@ -3529,13 +3550,15 @@ public class ActivityServiceImpl implements ActivityService {
         detailVO.setMyEnroll(0);
 
 
+
+
+        long l1 = collectMapper.getCollectCount(id);
+
+        detailVO.setCollect((int) l1);
+
         ManageActivityCollectExample collectExample = new ManageActivityCollectExample();
 
         collectExample.createCriteria().andActivityIdEqualTo(id);
-
-        long l1 = collectMapper.countByExample(collectExample);
-
-        detailVO.setCollect((int) l1);
 
         collectExample.clear();
 
@@ -3548,6 +3571,7 @@ public class ActivityServiceImpl implements ActivityService {
         }else{
             detailVO.setMyConllect(1);
         }
+
 
 
         return JsonResult.success(detailVO);
@@ -3581,9 +3605,22 @@ public class ActivityServiceImpl implements ActivityService {
 
             collectMapper.insertSelective(collect);
 
-            cacheService.addActivityLike(id);
+            //发送消息 更新solr
+            SolrUpdateMessage solrUpdateMessage = new SolrUpdateMessage();
 
-            //TODO 发送一条消息 修改solr
+            solrUpdateMessage.setType(2);
+
+            solrUpdateMessage.setId(id);
+
+            solrUpdateMessage.setStatus(1);
+
+            solrUpdateMessage.setCreateTime(new Date());
+
+            activeMqProducer.sendSolrUpdateMessage(solrUpdateMessage);
+
+            cacheService.setSolrUpdateMessage(solrUpdateMessage);
+
+
         }
 
 
@@ -3603,49 +3640,13 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<Long> activityIds = collectMapper.listActivityIdsByParentId(tokenParent.getId());
 
-        List<ActivitySearchVO> list = new ArrayList<>();
+        List<ActivityListItemVO> list = new ArrayList<>();
 
         for (Long activityId : activityIds) {
 
-            ActivitySolrItemDTO solrItemDTO = cacheService.getActvitySolrItemDTO(activityId);
-            if(solrItemDTO == null){
-                solrItemDTO = this.getActivitySolrItemDTO(activityId);
-            }
-            ActivitySearchVO searchVO = new ActivitySearchVO();
+            ActivityListItemVO activityListItemDTO = this.getActivityListItemDTO(activityId);
 
-            searchVO.setId(activityId);
-            searchVO.setName(solrItemDTO.getName());
-            searchVO.setImgCover(solrItemDTO.getImgCover());
-            BigDecimal minutes = new BigDecimal(solrItemDTO.getDuration());
-
-            BigDecimal hour = minutes.divide(new BigDecimal(60), 1, BigDecimal.ROUND_DOWN);
-
-            searchVO.setDuration(hour.toString());
-
-            searchVO.setBeginTime(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime()));
-
-            searchVO.setEndTime(TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
-
-            searchVO.setNumber(solrItemDTO.getNumber());
-
-            long l = enrollRecordMapper.getEnrolledCount(activityId);
-            searchVO.setEnrolled((int) l);
-
-            l = collectMapper.getCollectCount(activityId);
-
-            searchVO.setLike((int) l);
-
-            searchVO.setSign(solrItemDTO.getSign());
-
-            searchVO.setDurationType(solrItemDTO.getDurationType());
-
-            searchVO.setCloseType(solrItemDTO.getCloseType());
-
-            searchVO.setCloseTime(TimeUtils.getDateStringShort(solrItemDTO.getCloseTime()));
-
-            searchVO.setTime(solrItemDTO.getTime());
-
-            list.add(searchVO);
+            list.add(activityListItemDTO);
 
         }
 
@@ -3707,6 +3708,118 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
+    /**
+     * Get Activity list item VO
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ActivityListItemVO getActivityListItemDTO(Long activityId) {
+
+        ManageActivity activity = activityMapper.selectByPrimaryKey(activityId);
+
+        ActivityListItemVO itemVO = new ActivityListItemVO();
+
+        itemVO.setId(activityId);
+
+        itemVO.setName(activity.getName());
+
+        List<ManageActivityIntroduce> manageActivityIntroduces = introduceMapper.selectByActivityId(activityId);
+
+        if(manageActivityIntroduces.size()>0){
+            itemVO.setImgCover(manageActivityIntroduces.get(0).getImgCover());
+        }else{
+            itemVO.setImgCover("");
+        }
 
 
+        String price = new BigDecimal(activity.getMoney()).divide(new BigDecimal(100)).toPlainString();
+
+        itemVO.setPrice(price);
+
+        itemVO.setBeginTime(TimeUtils.getDateString(activity.getBeginTime()));
+
+        itemVO.setEndTime(TimeUtils.getDateString(activity.getEndTime()));
+
+        itemVO.setNumber(activity.getNumber());
+
+        String ducation = new BigDecimal(activity.getDuration()).divide(new BigDecimal(60)).toPlainString();
+
+        itemVO.setDuration(ducation);
+
+        long l = enrollRecordMapper.getEnrolledCount(activityId);
+
+        itemVO.setEnrolled((int) l);
+
+        long collectCount = collectMapper.getCollectCount(activityId);
+
+        itemVO.setCollect((int) collectCount);
+
+        itemVO.setSelf(activity.getSelf());
+
+        Integer likeCount = cacheService.getActivityLike(activityId);
+
+        itemVO.setLike(likeCount);
+
+        itemVO.setSign(activity.getSign());
+
+        itemVO.setDurationType(activity.getDurationType());
+
+        itemVO.setCloseType(activity.getCloseType());
+
+        itemVO.setCloseTime(TimeUtils.getDateString(activity.getCloseTime()));
+
+        itemVO.setTime(activity.getValidTime());
+
+        itemVO.setStatus(activity.getStatus());
+
+        itemVO.setSupervise(activity.getCheckSupervise());
+
+        return itemVO;
+    }
+
+
+    /**
+     * Update Solr
+     *
+     * @param solrUpdateMessage
+     */
+    @Override
+    public void excuteSolrUpdate(SolrUpdateMessage solrUpdateMessage) {
+
+        /**
+         * 更新like
+         */
+        if(solrUpdateMessage.getType()==1){
+            //TODO 评分
+        }
+        /**
+         * 更新collect
+         */
+        if(solrUpdateMessage.getType()==2){
+
+            long collectCount = collectMapper.getCollectCount(solrUpdateMessage.getId());
+
+            if(searchService.updateCollectCount(solrUpdateMessage.getId(),collectCount)){
+
+                solrUpdateMessage.setUpdateTime(new Date());
+                solrUpdateMessage.setStatus(2);
+                cacheService.setSolrUpdateMessage(solrUpdateMessage);
+            }
+
+        }
+        /**
+         * 更新enroll
+         */
+        if(solrUpdateMessage.getType()==3){
+            long enrolledCount = enrollRecordMapper.getEnrolledCount(solrUpdateMessage.getId());
+
+            if(searchService.updateEnrollCount(solrUpdateMessage.getId(),enrolledCount)){
+                solrUpdateMessage.setUpdateTime(new Date());
+                solrUpdateMessage.setStatus(2);
+                cacheService.setSolrUpdateMessage(solrUpdateMessage);
+            }
+        }
+    }
 }

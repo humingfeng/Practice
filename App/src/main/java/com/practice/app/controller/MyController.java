@@ -5,6 +5,7 @@ import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.EnrollService;
 import com.practice.service.PersonnelService;
+import com.practice.utils.JsonUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,5 +78,14 @@ public class MyController {
     @RequestMapping(value = "/bind/push/{pushId}")
     public JsonResult bindPushId(@RequestAttribute String token,@PathVariable String pushId){
         return personnelService.updateParentPushId(token,pushId);
+    }
+
+    /**
+     * List my enroll activity
+     * @return
+     */
+    @RequestMapping(value = "/list/enroll/activity/{pageIndex}")
+    public JsonResult listMyEnrollActivity(@PathVariable int pageIndex,@RequestAttribute String token){
+        return personnelService.listParentEnrollActivity(token,pageIndex);
     }
 }

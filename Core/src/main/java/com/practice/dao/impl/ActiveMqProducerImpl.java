@@ -2,6 +2,7 @@ package com.practice.dao.impl;
 
 import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.OrderPayDelayMessage;
+import com.practice.dto.SolrUpdateMessage;
 import com.practice.utils.JsonUtils;
 import org.apache.activemq.ScheduledMessage;
 import org.springframework.jms.core.JmsTemplate;
@@ -21,11 +22,17 @@ public class ActiveMqProducerImpl implements ActiveMqProducer {
     @Resource(name="jmsTemplatePush")
     private JmsTemplate jmsTemplatePush;
 
+    @Resource(name = "jmsTemplateSolr")
+    private JmsTemplate jmsTemplateSolr;
+
     @Resource(name="pushQueue")
     private Destination pushQueue;
 
     @Resource(name="payDelayQueue")
     private Destination payDelayQueue;
+
+    @Resource(name = "solrUpdateQueue")
+    private Destination solrUpdateQueue;
 
     @Override
     public boolean sendOrderPayDelayMessage(OrderPayDelayMessage orderPayDelayMessage) {
@@ -49,4 +56,24 @@ public class ActiveMqProducerImpl implements ActiveMqProducer {
         return true;
     }
 
+    /**
+     * Send solr update message
+     *
+     * @param solrUpdateMessage
+     */
+    @Override
+    public void sendSolrUpdateMessage(SolrUpdateMessage solrUpdateMessage) {
+
+        String msg = JsonUtils.objectToJson(solrUpdateMessage);
+
+        System.out.println("向队列" + solrUpdateQueue.toString() + "发送了消息------------" + msg);
+
+        jmsTemplateSolr.send(solrUpdateQueue, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createTextMessage(msg);
+            }
+        });
+
+    }
 }

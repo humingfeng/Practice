@@ -112,6 +112,12 @@ public class SolrDaoImpl implements SolrDao {
 
             entries.setField("close_type", actvitySolrItemDTO.getCloseType());
 
+            entries.setField("status", actvitySolrItemDTO.getStatus());
+
+            entries.setField("supervise", actvitySolrItemDTO.getSupervise());
+
+            entries.setField("collect", actvitySolrItemDTO.getCollect());
+
 
 
             httpSolrServer.add(entries);
@@ -213,6 +219,14 @@ public class SolrDaoImpl implements SolrDao {
 
                 activitySearchVO.setLike(Integer.valueOf(String.valueOf(result.get("like"))));
 
+                activitySearchVO.setStatus(Integer.valueOf(String.valueOf(result.get("status"))));
+
+                activitySearchVO.setSupervise(Integer.valueOf(String.valueOf(result.get("supervise"))));
+
+                activitySearchVO.setSelf(Integer.valueOf(String.valueOf(result.get("self"))));
+
+                activitySearchVO.setCollect(Integer.valueOf(String.valueOf(result.get("collect"))));
+
                 rows.add(activitySearchVO);
 
             }
@@ -275,6 +289,36 @@ public class SolrDaoImpl implements SolrDao {
             SolrInputDocument doc = new SolrInputDocument();
             doc.addField("id", activityId);
             doc.addField("enroll", update);
+            httpSolrServer.add(doc);
+            httpSolrServer.commit();
+
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Update activity collect
+     *
+     * @param id
+     * @param collectCount
+     * @return
+     */
+    @Override
+    public Boolean updateActivityCollect(Long id, int collectCount) {
+        httpSolrServer.setBaseURL(solrConllectionUrl);
+
+        try {
+
+            Map<String, Integer> update = new HashMap<>(1);
+            update.put("set", collectCount);
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("id", id);
+            doc.addField("collect", update);
             httpSolrServer.add(doc);
             httpSolrServer.commit();
 

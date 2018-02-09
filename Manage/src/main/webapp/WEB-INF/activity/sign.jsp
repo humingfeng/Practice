@@ -26,7 +26,7 @@
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">
         活动签到设置
         <div class="layui-form layui-inline" style="margin-left: 20px;">
-            <input type="checkbox" title="开启" <c:if test="${status!=2}">checked</c:if>  lay-filter="close"/>
+            <input type="checkbox" title="开启" <c:if test="${status==1}">checked</c:if>  lay-filter="close"/>
         </div>
     </blockquote>
 
@@ -100,7 +100,7 @@
         </div>
 
     </div>
-    <div class="layui-layer-shade" style="<c:if test="${status!=0}"> display: none;</c:if> z-index: 19891014; background-color: rgb(0, 0, 0); opacity: 0.3;"></div>
+    <div class="layui-layer-shade" style="<c:if test="${status==1}"> display: none;</c:if> z-index: 19891014; background-color: rgb(0, 0, 0); opacity: 0.3;"></div>
 </fieldset>
 <script type="text/javascript" src="/static/layui/layui.js"></script>
 <script type="text/javascript">
