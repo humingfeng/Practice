@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
-import com.practice.enums.DicParentEnum;
 import com.practice.enums.OperateEnum;
 import com.practice.exception.ServiceException;
 import com.practice.mapper.*;
@@ -14,7 +13,6 @@ import com.practice.result.JsonResult;
 import com.practice.service.*;
 import com.practice.utils.*;
 import com.practice.vo.*;
-import io.netty.util.internal.ObjectUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -3284,10 +3282,12 @@ public class ActivityServiceImpl implements ActivityService {
 
         solrItemDTO.setCloseTime(activity.getCloseTime());
 
-        Integer like = cacheService.getActivityLike(activityId);
+        /**
+         * 默认 5分好评
+         */
+        String activityScore = cacheService.getActivityScore(activityId);
 
-        solrItemDTO.setLike(Long.valueOf(like));
-
+        solrItemDTO.setScore(Float.valueOf(activityScore));
 
         long enrolledCount = enrollRecordMapper.getEnrolledCount(activityId);
 
@@ -3546,7 +3546,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         detailVO.setEnroll((int) l);
 
-
+        /**
+         * 我是否报名不做判断，因为 用户可能有多个孩子
+         */
         detailVO.setMyEnroll(0);
 
 
@@ -3738,9 +3740,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         itemVO.setPrice(price);
 
-        itemVO.setBeginTime(TimeUtils.getDateString(activity.getBeginTime()));
+        itemVO.setBeginTime(TimeUtils.getDateStringShort(activity.getBeginTime()));
 
-        itemVO.setEndTime(TimeUtils.getDateString(activity.getEndTime()));
+        itemVO.setEndTime(TimeUtils.getDateStringShort(activity.getEndTime()));
 
         itemVO.setNumber(activity.getNumber());
 
@@ -3758,9 +3760,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         itemVO.setSelf(activity.getSelf());
 
-        Integer likeCount = cacheService.getActivityLike(activityId);
+        String score = cacheService.getActivityScore(activityId);
 
-        itemVO.setLike(likeCount);
+        itemVO.setScore(score);
 
         itemVO.setSign(activity.getSign());
 
@@ -3768,9 +3770,19 @@ public class ActivityServiceImpl implements ActivityService {
 
         itemVO.setCloseType(activity.getCloseType());
 
-        itemVO.setCloseTime(TimeUtils.getDateString(activity.getCloseTime()));
+        itemVO.setCloseTime(TimeUtils.getDateStringShort(activity.getCloseTime()));
 
-        itemVO.setTime(activity.getValidTime());
+        String validTime = activity.getValidTime();
+
+        if (StringUtils.isNotBlank(validTime)) {
+            String[] split = validTime.split(" - ");
+            String time1 = split[0].substring(0, 5);
+            String time2 = split[1].substring(0, 5);
+            itemVO.setTime(time1 + " - " + time2);
+
+        } else {
+            itemVO.setTime("");
+        }
 
         itemVO.setStatus(activity.getStatus());
 
@@ -3788,16 +3800,17 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void excuteSolrUpdate(SolrUpdateMessage solrUpdateMessage) {
 
+        Integer keyLike = 1,keyCollect = 2,keyEnroll = 3,keyStatus = 4;
         /**
          * 更新like
          */
-        if(solrUpdateMessage.getType()==1){
+        if(solrUpdateMessage.getType().equals(keyLike)){
             //TODO 评分
         }
         /**
          * 更新collect
          */
-        if(solrUpdateMessage.getType()==2){
+        if(solrUpdateMessage.getType().equals(keyCollect)){
 
             long collectCount = collectMapper.getCollectCount(solrUpdateMessage.getId());
 
@@ -3812,10 +3825,24 @@ public class ActivityServiceImpl implements ActivityService {
         /**
          * 更新enroll
          */
-        if(solrUpdateMessage.getType()==3){
+        if(solrUpdateMessage.getType().equals(keyEnroll)){
             long enrolledCount = enrollRecordMapper.getEnrolledCount(solrUpdateMessage.getId());
 
             if(searchService.updateEnrollCount(solrUpdateMessage.getId(),enrolledCount)){
+                solrUpdateMessage.setUpdateTime(new Date());
+                solrUpdateMessage.setStatus(2);
+                cacheService.setSolrUpdateMessage(solrUpdateMessage);
+            }
+        }
+
+        /**
+         * 更新status
+         */
+        if(solrUpdateMessage.getType().equals(keyStatus)){
+
+            ManageActivity activity = activityMapper.selectByPrimaryKey(solrUpdateMessage.getId());
+
+            if(searchService.updateStatus(solrUpdateMessage.getId(),activity.getStatus())){
                 solrUpdateMessage.setUpdateTime(new Date());
                 solrUpdateMessage.setStatus(2);
                 cacheService.setSolrUpdateMessage(solrUpdateMessage);

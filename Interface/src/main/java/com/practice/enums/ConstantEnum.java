@@ -28,6 +28,7 @@ public enum ConstantEnum {
     ACTIVITY_DETAIL("ACTIVITY_DETAIL"),
     ACTIVITY_STOCK_QUEUE("ACTIVITY_STOCK_QUEUE"),
     ACTIVITY_LIKE("ACTIVITY_LIKE"),
+    ACTIVITY_MESSAGE_ITEM("ACTIVITY_MESSAGE_ITEM"),
 
     ORDER_PAY_DELAY_MESSAGE("ORDER_PAY_DELAY_MESSAGE"),
     SOLR_UPDATE_MESSAGE("SOLR_UPDATE_MESSAGE"),
@@ -52,6 +53,12 @@ public enum ConstantEnum {
      */
     PHONE_VERIFY_CODE("PHONE_VERIFY_CODE"),
 
+
+    /**
+     * Status Activity Message
+     */
+    ENROLL_SUCCESS("恭喜您，报名成功！"),
+    PAY_SUCCESS("恭喜您，支付成功"),
 
     /**
      * default head img

@@ -1,6 +1,7 @@
 package com.practice.dao;
 
 import com.practice.dto.OrderPayDelayMessage;
+import com.practice.dto.PushMessageDTO;
 import com.practice.dto.SolrUpdateMessage;
 
 /**
@@ -20,4 +21,10 @@ public interface ActiveMqProducer {
      * @param solrUpdateMessage
      */
     void sendSolrUpdateMessage(SolrUpdateMessage solrUpdateMessage);
+
+    /**
+     * Send push message
+     * @param pushMessageDTO
+     */
+    void sendPushMessage(PushMessageDTO pushMessageDTO);
 }

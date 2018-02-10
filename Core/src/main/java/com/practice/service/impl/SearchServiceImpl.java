@@ -153,9 +153,10 @@ public class SearchServiceImpl implements SearchService {
         Integer soft = queryDTO.getSoft();
         switch (soft){
             case 0:
+                query.addSort("publish_time", SolrQuery.ORDER.desc);
                 break;
             case 1:
-                query.addSort("like", SolrQuery.ORDER.desc);
+                query.addSort("score", SolrQuery.ORDER.desc);
                 break;
             case 2:
                 query.addSort("begin_time", SolrQuery.ORDER.asc);
@@ -216,5 +217,17 @@ public class SearchServiceImpl implements SearchService {
     public boolean updateEnrollCount(Long id, long enrolledCount) {
 
         return solrDao.updateActivityEnroll(id, (int) enrolledCount);
+    }
+
+    /**
+     * Update solr status
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    @Override
+    public boolean updateStatus(Long id, Integer status) {
+        return solrDao.updateActivityStatus(id,status);
     }
 }

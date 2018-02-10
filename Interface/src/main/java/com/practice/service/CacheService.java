@@ -357,20 +357,34 @@ public interface CacheService {
     /**
      * Add activity like
      * @param id
+     * @param score
      * @return
      */
-    Integer addActivityLike(Long id);
+    void setActivityLike(Long id,String score);
 
     /**
      * Get activity like
      * @param activityId
      * @return
      */
-    Integer getActivityLike(Long activityId);
+    String getActivityScore(Long activityId);
 
     /**
      * Set solr update message
      * @param solrUpdateMessage
      */
     void setSolrUpdateMessage(SolrUpdateMessage solrUpdateMessage);
+
+    /**
+     * Set activity message DTO
+     * @param itemDTO
+     */
+    void setActivityMessageItem(MessageListItemDTO itemDTO);
+
+    /**
+     * Get activity message DTO
+     * @param id
+     * @return
+     */
+    MessageListItemDTO getActivityMessageItem(Long id);
 }

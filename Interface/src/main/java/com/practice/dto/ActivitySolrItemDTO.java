@@ -51,7 +51,7 @@ public class ActivitySolrItemDTO implements Serializable{
     /**
      *   评分用
      */
-    private Long like;
+    private Float score;
 
     private Integer number;
 
@@ -269,12 +269,12 @@ public class ActivitySolrItemDTO implements Serializable{
         this.closeType = closeType;
     }
 
-    public Long getLike() {
-        return like;
+    public Float getScore() {
+        return score;
     }
 
-    public void setLike(Long like) {
-        this.like = like;
+    public void setScore(Float score) {
+        this.score = score;
     }
 
     public Integer getNumber() {
@@ -380,7 +380,7 @@ public class ActivitySolrItemDTO implements Serializable{
                 ", endTime=" + endTime +
                 ", closeTime=" + closeTime +
                 ", closeType=" + closeType +
-                ", like=" + like +
+                ", score=" + score +
                 ", number=" + number +
                 ", sign=" + sign +
                 ", enroll=" + enroll +

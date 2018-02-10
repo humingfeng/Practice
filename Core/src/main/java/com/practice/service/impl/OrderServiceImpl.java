@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageParams;
 import com.practice.dao.ActiveMqProducer;
 import com.practice.dto.*;
+import com.practice.enums.ConstantEnum;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
@@ -14,6 +15,7 @@ import com.practice.service.*;
 import com.practice.utils.JwtTokenUtil;
 import com.practice.utils.OrderNumUtil;
 import com.practice.utils.TimeUtils;
+import com.practice.vo.ActivityDetailVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +63,8 @@ public class OrderServiceImpl implements OrderService {
     private AlipayRecordMapper alipayRecordMapper;
     @Resource
     private PersonnelService personnelService;
+    @Resource
+    private ActivityMessageMapper activityMessageMapper;
 
     @Value("${SERVER.ID}")
     private String SERVERID;
@@ -76,6 +80,15 @@ public class OrderServiceImpl implements OrderService {
     public JsonResult getOrderInfoPreview(Long activityId, String token) {
 
         TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ManageActivity activity = activityMapper.selectByPrimaryKey(activityId);
+
+        Integer key1 = 2,key2 = 5,key3 = 1;
+        if(activity.getStatus().equals(key1)||activity.getStatus().equals(key2)||activity.getStatus().equals(key3)){
+
+            return JsonResult.error("报名已结束");
+        }
+
 
         ActivitySolrItemDTO solrItemDTO = cacheService.getActvitySolrItemDTO(activityId);
         if (solrItemDTO == null) {
@@ -123,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderPreviewDTO.setBeginAndEnd(TimeUtils.getDateStringShort(solrItemDTO.getBeginTime()) + " - " + TimeUtils.getDateStringShort(solrItemDTO.getEndTime()));
 
-        orderPreviewDTO.setMoneyDesc(activityMapper.selectByPrimaryKey(activityId).getMoneyDesc());
+        orderPreviewDTO.setMoneyDesc(activity.getMoneyDesc());
 
         return JsonResult.success(orderPreviewDTO);
     }
@@ -315,6 +328,49 @@ public class OrderServiceImpl implements OrderService {
 
                 cacheService.setOrderDelayMessage(orderPayDelayMessage);
 
+            }else{
+                // 发送报名成功推送消息
+
+                ActivityMessage activityMessage = new ActivityMessage();
+
+                activityMessage.setMsgTitle(activity.getName());
+
+                activityMessage.setMsgContent(ConstantEnum.ENROLL_SUCCESS.getStrValue());
+
+                ActivityDetailVO activityDetail = cacheService.getActivityDetail(activityId);
+
+                activityMessage.setMsgCover(activityDetail.getImgCover());
+
+                activityMessage.setPushStatus(1);
+
+                activityMessage.setStatus(1);
+
+                activityMessage.setType(1);
+
+                activityMessage.setActivityId(activityId);
+
+                activityMessage.setCreateTime(new Date());
+
+                activityMessage.setCreateUser(0L);
+
+                activityMessage.setReceiverId(tokenParent.getId());
+
+                activityMessage.setReceiverType(1);
+
+                activityMessageMapper.insertSelective(activityMessage);
+
+
+                PushMessageDTO pushMessageDTO = new PushMessageDTO();
+
+                pushMessageDTO.setMsgId(activityMessage.getId());
+
+                pushMessageDTO.setCreateTime(TimeUtils.getNowTime());
+
+                pushMessageDTO.setStatus(1);
+
+                pushMessageDTO.setType(1);
+
+                activeMqProducer.sendPushMessage(pushMessageDTO);
             }
 
             return JsonResult.success(String.valueOf(orderNum), mark);
@@ -746,6 +802,48 @@ public class OrderServiceImpl implements OrderService {
                 alipayRecord.setCreateTime(new Date());
 
                 alipayRecordMapper.insertSelective(alipayRecord);
+
+
+                ActivityMessage activityMessage = new ActivityMessage();
+
+                ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(orderInfo.getActivityId());
+
+                activityMessage.setMsgTitle(actvitySolrItemDTO.getName());
+
+                activityMessage.setMsgContent(ConstantEnum.ENROLL_SUCCESS.getStrValue());
+
+                activityMessage.setMsgCover(actvitySolrItemDTO.getImgCover());
+
+                activityMessage.setPushStatus(1);
+
+                activityMessage.setStatus(1);
+
+                activityMessage.setType(1);
+
+                activityMessage.setActivityId(orderInfo.getActivityId());
+
+                activityMessage.setCreateTime(new Date());
+
+                activityMessage.setCreateUser(0L);
+
+                activityMessage.setReceiverId(orderInfo.getUserId());
+
+                activityMessage.setReceiverType(1);
+
+                activityMessageMapper.insertSelective(activityMessage);
+
+
+                PushMessageDTO pushMessageDTO = new PushMessageDTO();
+
+                pushMessageDTO.setMsgId(activityMessage.getId());
+
+                pushMessageDTO.setCreateTime(TimeUtils.getNowTime());
+
+                pushMessageDTO.setStatus(1);
+
+                pushMessageDTO.setType(1);
+
+                activeMqProducer.sendPushMessage(pushMessageDTO);
 
 
             }

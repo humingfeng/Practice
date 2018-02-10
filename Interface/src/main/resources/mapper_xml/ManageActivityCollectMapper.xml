@@ -179,7 +179,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="listActivityIdsByParentId" resultType="java.lang.String">
+  <select id="listActivityIdsByParentId" resultType="java.lang.Long">
     SELECT activity_id FROM manage_activity_collect
     WHERE parent_id = #{parentId,jdbcType=BIGINT}
   </select>

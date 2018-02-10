@@ -100,4 +100,8 @@
     <bean id="payService" class="com.practice.service.impl.PayServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.PayService" ref="payService"></dubbo:service>
 
+    <!--messageService-->
+    <bean id="messageService" class="com.practice.service.impl.MessageServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.MessageService" ref="messageService"></dubbo:service>
+
 </beans>

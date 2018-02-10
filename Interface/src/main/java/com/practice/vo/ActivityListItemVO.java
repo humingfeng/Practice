@@ -25,7 +25,7 @@ public class ActivityListItemVO implements Serializable{
 
     private Integer enrolled;
 
-    private Integer like;
+    private String score;
 
     private Integer sign;
 
@@ -192,12 +192,12 @@ public class ActivityListItemVO implements Serializable{
         this.enrolled = enrolled;
     }
 
-    public Integer getLike() {
-        return like;
+    public String getScore() {
+        return score;
     }
 
-    public void setLike(Integer like) {
-        this.like = like;
+    public void setScore(String score) {
+        this.score = score;
     }
 
     @Override
@@ -212,7 +212,7 @@ public class ActivityListItemVO implements Serializable{
                 ", endTime='" + endTime + '\'' +
                 ", number=" + number +
                 ", enrolled=" + enrolled +
-                ", like=" + like +
+                ", score=" + score +
                 ", sign=" + sign +
                 ", ducationType=" + durationType +
                 ", closeType=" + closeType +

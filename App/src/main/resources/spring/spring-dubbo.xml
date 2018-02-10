@@ -45,4 +45,6 @@
 
     <dubbo:reference id="payService" interface="com.practice.service.PayService"/>
 
+    <dubbo:reference id="messageService" interface="com.practice.service.MessageService"/>
+
 </beans>

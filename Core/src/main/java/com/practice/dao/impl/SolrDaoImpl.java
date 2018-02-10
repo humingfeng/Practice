@@ -86,7 +86,7 @@ public class SolrDaoImpl implements SolrDao {
 
             entries.setField("close_time", actvitySolrItemDTO.getCloseTime());
 
-            entries.setField("like", actvitySolrItemDTO.getLike());
+            entries.setField("score", actvitySolrItemDTO.getScore());
 
             entries.setField("type_name", actvitySolrItemDTO.getTypeName());
 
@@ -118,7 +118,7 @@ public class SolrDaoImpl implements SolrDao {
 
             entries.setField("collect", actvitySolrItemDTO.getCollect());
 
-
+            entries.setField("publish_time",new Date());
 
             httpSolrServer.add(entries);
 
@@ -217,7 +217,7 @@ public class SolrDaoImpl implements SolrDao {
 
                 activitySearchVO.setEnrolled(Integer.valueOf(String.valueOf(result.get("enroll"))));
 
-                activitySearchVO.setLike(Integer.valueOf(String.valueOf(result.get("like"))));
+                activitySearchVO.setScore(String.valueOf(result.get("score")));
 
                 activitySearchVO.setStatus(Integer.valueOf(String.valueOf(result.get("status"))));
 
@@ -319,6 +319,36 @@ public class SolrDaoImpl implements SolrDao {
             SolrInputDocument doc = new SolrInputDocument();
             doc.addField("id", id);
             doc.addField("collect", update);
+            httpSolrServer.add(doc);
+            httpSolrServer.commit();
+
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Update activity status
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    @Override
+    public boolean updateActivityStatus(Long id, Integer status) {
+        httpSolrServer.setBaseURL(solrConllectionUrl);
+
+        try {
+
+            Map<String, Integer> update = new HashMap<>(1);
+            update.put("set", status);
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("id", id);
+            doc.addField("status", update);
             httpSolrServer.add(doc);
             httpSolrServer.commit();
 

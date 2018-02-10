@@ -9,7 +9,7 @@ import java.util.Date;
 public class SolrUpdateMessage implements Serializable{
 
     /**
-     * 1 更新like 2 更新collect 3 更新enroll
+     * 1 更新like 2 更新collect 3 更新enroll 4 status
      */
     private Integer type;
 

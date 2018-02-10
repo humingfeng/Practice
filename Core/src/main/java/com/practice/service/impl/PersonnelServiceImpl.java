@@ -1116,7 +1116,7 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         pageResult.setTotal((int) pageInfo.getTotal());
 
-        pageResult.setPageNum(pageInfo.getPageSize());
+        pageResult.setPages(pageInfo.getPages());
 
         return JsonResult.success(pageResult);
     }

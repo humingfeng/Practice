@@ -6,8 +6,6 @@ import com.practice.enums.ConstantEnum;
 import com.practice.enums.DicParentEnum;
 import com.practice.po.ManageBase;
 import com.practice.po.ManageDictionary;
-import com.practice.po.SystemParam;
-import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
 import com.practice.utils.JsonUtils;
 import com.practice.utils.SerializeUtils;
@@ -16,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -703,15 +700,12 @@ public class CacheServiceImpl implements CacheService {
     /**
      * Add activity like return no num
      * @param id
+     * @param score
      * @return
      */
     @Override
-    public Integer addActivityLike(Long id) {
-        jedisClient.incr(ConstantEnum.ACTIVITY_LIKE.getStrValue()+":KEY:"+id);
-
-        return this.getActivityLike(id);
-
-
+    public void setActivityLike(Long id,String score) {
+        jedisClient.hset(ConstantEnum.ACTIVITY_LIKE.getStrValue(),"KEY:"+id,score);
     }
 
     /**
@@ -721,12 +715,12 @@ public class CacheServiceImpl implements CacheService {
      * @return
      */
     @Override
-    public Integer getActivityLike(Long activityId) {
-        String s = jedisClient.get(ConstantEnum.ACTIVITY_LIKE.getStrValue() + ":KEY:" + activityId);
+    public String getActivityScore(Long activityId) {
+        String s = jedisClient.hget(ConstantEnum.ACTIVITY_LIKE.getStrValue(),"KEY:" + activityId);
         if(StringUtils.isBlank(s)){
-            return 0;
+            return "5.0";
         }else{
-            return Integer.valueOf(s);
+            return s;
         }
     }
 
@@ -738,5 +732,32 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void setSolrUpdateMessage(SolrUpdateMessage solrUpdateMessage) {
         jedisClient.hset(ConstantEnum.SOLR_UPDATE_MESSAGE.getStrValue(),"KEY:"+solrUpdateMessage.getId(),JsonUtils.objectToJson(solrUpdateMessage));
+    }
+
+    /**
+     * Set activity message DTO
+     *
+     * @param itemDTO
+     */
+    @Override
+    public void setActivityMessageItem(MessageListItemDTO itemDTO) {
+        jedisClient.hset(ConstantEnum.ACTIVITY_MESSAGE_ITEM.getStrValue(),"KEY:"+itemDTO.getMsgId(),JsonUtils.objectToJson(itemDTO));
+    }
+
+    /**
+     * Get activity message DTO
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public MessageListItemDTO getActivityMessageItem(Long id) {
+
+        String hget = jedisClient.hget(ConstantEnum.ACTIVITY_MESSAGE_ITEM.getStrValue(), "KEY:" + id);
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,MessageListItemDTO.class);
+        }
+
+        return null;
     }
 }

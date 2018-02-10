@@ -46,4 +46,12 @@ public interface SearchService {
      * @return
      */
     boolean updateEnrollCount(Long id, long enrolledCount);
+
+    /**
+     * Update solr status
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean updateStatus(Long id, Integer status);
 }

@@ -2,14 +2,10 @@ package com.practice.app.controller;
 
 import com.practice.dto.PageResult;
 import com.practice.dto.SolrQueryDTO;
-import com.practice.dto.TokenParentDTO;
 import com.practice.po.ManageActivityEnroll;
-import com.practice.po.ManageStudent;
-import com.practice.po.School;
-import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
-import com.practice.service.*;
-import com.practice.utils.JwtTokenUtil;
+import com.practice.service.ActivityService;
+import com.practice.service.SearchService;
 import com.practice.vo.ActivitySearchVO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -28,13 +24,7 @@ public class ActivityController {
     @Resource
     private SearchService searchService;
     @Resource
-    private SchoolService schoolService;
-    @Resource
-    private PersonnelService personnelService;
-    @Resource
     private ActivityService activityService;
-    @Resource
-    private EnrollService enrollService;
 
     /**
      * Activity list by search param

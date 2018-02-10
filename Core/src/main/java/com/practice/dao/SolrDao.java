@@ -39,6 +39,7 @@ public interface SolrDao {
     /**
      * Update activity enroll
      * @param activityId
+     * @param enroll
      * @return
      */
     Boolean updateActivityEnroll(Long activityId,Integer enroll);
@@ -50,4 +51,12 @@ public interface SolrDao {
      * @return
      */
     Boolean updateActivityCollect(Long id, int collectCount);
+
+    /**
+     * Update activity status
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean updateActivityStatus(Long id, Integer status);
 }
