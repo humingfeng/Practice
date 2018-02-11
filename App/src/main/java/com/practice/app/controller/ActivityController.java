@@ -6,6 +6,7 @@ import com.practice.po.ManageActivityEnroll;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.SearchService;
+import com.practice.service.TaskService;
 import com.practice.vo.ActivitySearchVO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -25,6 +26,8 @@ public class ActivityController {
     private SearchService searchService;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private TaskService taskService;
 
     /**
      * Activity list by search param
@@ -90,5 +93,12 @@ public class ActivityController {
         ManageActivityEnroll activityEnroll = activityService.getActivityEnroll(activityId);
         return JsonResult.success(activityEnroll);
     }
+
+    @RequestMapping(value = "/task/{activityId}")
+    public JsonResult getActivityTask(@PathVariable Long activityId,@RequestAttribute String token){
+
+        return taskService.getActivityTask(activityId,token);
+    }
+
 
 }

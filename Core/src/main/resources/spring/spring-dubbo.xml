@@ -104,4 +104,8 @@
     <bean id="messageService" class="com.practice.service.impl.MessageServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.MessageService" ref="messageService"></dubbo:service>
 
+    <!--taskService-->
+    <bean id="taskService" class="com.practice.service.impl.TaskServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.TaskService" ref="taskService"></dubbo:service>
+
 </beans>

@@ -47,4 +47,6 @@
 
     <dubbo:reference id="messageService" interface="com.practice.service.MessageService"/>
 
+    <dubbo:reference id="taskService" interface="com.practice.service.TaskService"/>
+
 </beans>
