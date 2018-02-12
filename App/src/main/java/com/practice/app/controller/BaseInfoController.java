@@ -1,5 +1,6 @@
 package com.practice.app.controller;
 
+import com.practice.app.service.UploadService;
 import com.practice.dto.AppBaseDataDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.enums.DicParentEnum;
@@ -8,10 +9,8 @@ import com.practice.po.ManageBase;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -39,6 +38,8 @@ public class BaseInfoController {
     private ActivityService activityService;
     @Resource
     private BasesService basesService;
+    @Resource
+    private UploadService uploadService;
 
     /**
      * List province
@@ -234,5 +235,18 @@ public class BaseInfoController {
     public JsonResult getFilterPeriod(){
         return dictionaryService.getFilterPeriod();
     }
+
+    /**
+     * Upload img
+     * @param file
+     * @return
+     */
+    @RequestMapping(value ="/upload/photo/appimg/")
+    public JsonResult uploadPhoto(@RequestParam(value = "file", required = false) MultipartFile file){
+
+        return uploadService.uploadImg(file,"appimg/");
+    }
+
+
 }
 

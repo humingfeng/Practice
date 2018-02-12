@@ -107,6 +107,8 @@ public class TaskServiceImpl implements TaskService {
 
             TaskQuestionDTO taskQuestionDTO = new TaskQuestionDTO();
 
+            taskQuestionDTO.setQuestionId(questionId);
+
             taskQuestionDTO.setActivityId(task.getActivityId());
 
             taskQuestionDTO.setTaskId(taskId);
@@ -119,8 +121,16 @@ public class TaskServiceImpl implements TaskService {
 
             if(question.getClassify()==3){
                 taskQuestionDTO.setPhotoNum(question.getPhotoNum());
+
+                List<String> answers = new ArrayList<>();
+
+                for (int i = 0; i < question.getPhotoNum(); i++) {
+                     answers.add("");
+                }
+                taskQuestionDTO.setAnswers(answers);
             }
 
+            taskQuestionDTO.setAnswer("");
             if(question.getClassify()==1){
 
                 optionExample.clear();

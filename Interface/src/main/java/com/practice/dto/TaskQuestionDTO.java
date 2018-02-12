@@ -15,7 +15,7 @@ public class TaskQuestionDTO implements Serializable{
 
     private Long taskId;
 
-    private String questionId;
+    private Long questionId;
 
     private String questionStr;
     /**
@@ -32,7 +32,27 @@ public class TaskQuestionDTO implements Serializable{
 
     private Integer photoNum;
 
+    private String answer;
+
+    private List<String> answers;
+
     public TaskQuestionDTO() {
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public List<String> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<String> answers) {
+        this.answers = answers;
     }
 
     public Long getActivityId() {
@@ -51,11 +71,11 @@ public class TaskQuestionDTO implements Serializable{
         this.taskId = taskId;
     }
 
-    public String getQuestionId() {
+    public Long getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Long questionId) {
         this.questionId = questionId;
     }
 

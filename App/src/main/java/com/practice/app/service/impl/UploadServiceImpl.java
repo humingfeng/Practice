@@ -1,9 +1,10 @@
-package com.practice.manage.service.impl;
+package com.practice.app.service.impl;
 
+import com.practice.app.service.UploadService;
 import com.practice.enums.OperateEnum;
-import com.practice.manage.service.UploadService;
 import com.practice.result.JsonResult;
 import com.practice.utils.FileUploadUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Xushd  2017/12/31 17:50
+ * @author Xushd on 2018/2/12 16:58
  */
-@Service
 public class UploadServiceImpl implements UploadService {
+
 
     @Value("${ENDPOINT}")
     private String ENDPOINT;
@@ -51,9 +52,8 @@ public class UploadServiceImpl implements UploadService {
         return param;
     }
 
-
     /**
-     * 上传图片
+     * img upload
      *
      * @param file
      * @param dir
@@ -85,7 +85,4 @@ public class UploadServiceImpl implements UploadService {
             return JsonResult.error(OperateEnum.FAILE);
         }
     }
-
-
-
 }
