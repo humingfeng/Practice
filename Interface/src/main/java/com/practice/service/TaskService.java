@@ -13,4 +13,12 @@ public interface TaskService {
      * @return
      */
     JsonResult getActivityTask(Long activityId, String token);
+
+    /**
+     * Get activity Task question
+     * @param taskId
+     * @param token
+     * @return
+     */
+    JsonResult getActivityTaskQuestion(Long taskId, String token);
 }

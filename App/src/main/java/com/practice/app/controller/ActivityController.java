@@ -94,10 +94,27 @@ public class ActivityController {
         return JsonResult.success(activityEnroll);
     }
 
+    /**
+     * Get activity task by activityId
+     * @param activityId
+     * @param token
+     * @return
+     */
     @RequestMapping(value = "/task/{activityId}")
     public JsonResult getActivityTask(@PathVariable Long activityId,@RequestAttribute String token){
 
         return taskService.getActivityTask(activityId,token);
+    }
+
+    /**
+     * Get activity task question
+     * @param taskId
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/task/question/{taskId}")
+    public JsonResult getActivityQuestion(@PathVariable Long taskId,@RequestAttribute String token){
+        return taskService.getActivityTaskQuestion(taskId,token);
     }
 
 

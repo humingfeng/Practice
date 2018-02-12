@@ -1,12 +1,17 @@
 package com.practice.service.impl;
 
 import com.practice.dto.ActivityTaskDTO;
+import com.practice.dto.KeyValueDTO;
+import com.practice.dto.TaskQuestionDTO;
+import com.practice.dto.TokenParentDTO;
+import com.practice.mapper.ManageActivityQuestionMapper;
+import com.practice.mapper.ManageActivityQuestionOptionMapper;
 import com.practice.mapper.ManageActivityTaskItemMapper;
 import com.practice.mapper.ManageActivityTaskMapper;
-import com.practice.po.ManageActivityTask;
-import com.practice.po.ManageActivityTaskItemExample;
+import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.TaskService;
+import com.practice.utils.JwtTokenUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +29,10 @@ public class TaskServiceImpl implements TaskService {
     private ManageActivityTaskMapper taskMapper;
     @Resource
     private ManageActivityTaskItemMapper taskItemMapper;
+    @Resource
+    private ManageActivityQuestionMapper questionMapper;
+    @Resource
+    private ManageActivityQuestionOptionMapper questionOptionMapper;
 
     /**
      * Get activity Task
@@ -69,6 +78,70 @@ public class TaskServiceImpl implements TaskService {
             list.add(taskDTO);
         }
 
+        return JsonResult.success(list);
+    }
+
+    /**
+     * Get activity Task question
+     *
+     * @param taskId
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult getActivityTaskQuestion(Long taskId, String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ManageActivityTask task = taskMapper.selectByPrimaryKey(taskId);
+
+        List<Long> questionIds = taskItemMapper.selectQuestionIds(task.getActivityId(), taskId);
+
+        List<TaskQuestionDTO> list = new ArrayList<>();
+
+        ManageActivityQuestionOptionExample optionExample = new ManageActivityQuestionOptionExample();
+
+        for (Long questionId : questionIds) {
+
+            ManageActivityQuestion question = questionMapper.selectByPrimaryKey(questionId);
+
+            TaskQuestionDTO taskQuestionDTO = new TaskQuestionDTO();
+
+            taskQuestionDTO.setActivityId(task.getActivityId());
+
+            taskQuestionDTO.setTaskId(taskId);
+
+            taskQuestionDTO.setClassify(question.getClassify());
+
+            taskQuestionDTO.setType(question.getTypeId());
+
+            taskQuestionDTO.setQuestionStr(question.getQuestion());
+
+            if(question.getClassify()==3){
+                taskQuestionDTO.setPhotoNum(question.getPhotoNum());
+            }
+
+            if(question.getClassify()==1){
+
+                optionExample.clear();
+
+                optionExample.createCriteria().andQuestionIdEqualTo(questionId);
+
+                List<ManageActivityQuestionOption> options = questionOptionMapper.selectByExample(optionExample);
+
+                List<KeyValueDTO> optionsList = new ArrayList<>();
+
+                for (ManageActivityQuestionOption option : options) {
+
+                    optionsList.add(new KeyValueDTO(option.getId(),option.getOptionMark(),option.getText()));
+                }
+
+                taskQuestionDTO.setOptions(optionsList);
+            }
+
+            list.add(taskQuestionDTO);
+
+        }
         return JsonResult.success(list);
     }
 }
