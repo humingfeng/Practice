@@ -117,6 +117,9 @@
 
         <!--<table schema="" tableName="activity_message"/>-->
 
+        <!--<table schema="" tableName="manage_activity_task_item_answer"/>-->
+        <!--<table schema="" tableName="parent_photos"/>-->
+
 
 
 

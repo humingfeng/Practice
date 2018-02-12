@@ -34,6 +34,8 @@ public class TaskQuestionDTO implements Serializable{
 
     private String answer;
 
+
+
     private List<String> answers;
 
     public TaskQuestionDTO() {

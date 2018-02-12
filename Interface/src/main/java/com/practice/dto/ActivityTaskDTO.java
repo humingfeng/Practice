@@ -23,7 +23,17 @@ public class ActivityTaskDTO implements Serializable {
 
     private Integer questionNum;
 
+    private Integer isAnswer;
+
     public ActivityTaskDTO() {
+    }
+
+    public Integer getIsAnswer() {
+        return isAnswer;
+    }
+
+    public void setIsAnswer(Integer isAnswer) {
+        this.isAnswer = isAnswer;
     }
 
     public Integer getQuestionNum() {

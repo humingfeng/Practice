@@ -21,4 +21,12 @@ public interface TaskService {
      * @return
      */
     JsonResult getActivityTaskQuestion(Long taskId, String token);
+
+    /**
+     * Save task answer
+     * @param answer
+     * @param token
+     * @return
+     */
+    JsonResult saveActivityTaskQuestionAnswer(String answer, String token);
 }

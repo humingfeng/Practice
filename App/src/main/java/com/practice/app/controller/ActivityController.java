@@ -118,4 +118,15 @@ public class ActivityController {
     }
 
 
+    /**
+     * Submit task answer
+     * @param answer
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/task/answer/submit")
+    public JsonResult submitTaskAnswer(String answer,@RequestAttribute String token){
+        return taskService.saveActivityTaskQuestionAnswer(answer,token);
+    }
+
 }
