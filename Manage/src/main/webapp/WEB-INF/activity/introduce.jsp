@@ -161,6 +161,8 @@
                         app.layerMessageE(result.message);
                     }
                     app.closeLoading(load);
+                },error: function(index, upload){
+                    app.closeLoading(load);
                 }
             });
 

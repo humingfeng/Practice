@@ -55,6 +55,8 @@ public class ActivityDetailVO implements Serializable {
 
     private Integer sign;
 
+    private Integer self;
+
     private Integer closeType;
 
     private String time;
@@ -70,6 +72,14 @@ public class ActivityDetailVO implements Serializable {
     private String moneyDesc;
 
     public ActivityDetailVO() {
+    }
+
+    public Integer getSelf() {
+        return self;
+    }
+
+    public void setSelf(Integer self) {
+        this.self = self;
     }
 
     public String getMoneyDesc() {

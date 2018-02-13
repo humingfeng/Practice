@@ -79,9 +79,17 @@ public class PushServiceImpl implements PushService {
 
             jpushMessageDTO.setContent(message.getMsgContent());
 
-            PushPayload pushPayload = buildPushTagPayload(jpushMessageDTO);
+            if(message.getActivityId()==0L){
+                //ALL
+                PushPayload pushPayload = buildPushAllPayload(jpushMessageDTO);
+                this.sendJpush(pushPayload);
+            }else{
+                PushPayload pushPayload = buildPushTagPayload(jpushMessageDTO);
 
-            this.sendJpush(pushPayload);
+                this.sendJpush(pushPayload);
+
+            }
+
 
 
         }else{
@@ -205,6 +213,44 @@ public class PushServiceImpl implements PushService {
     public static PushPayload buildPushTagPayload(JpushMessageDTO dto) {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.all()).setAudience(Audience.tag(dto.getTag()))
+                .setNotification(Notification.newBuilder()
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .setAlert(dto.getTitle())
+                                .setSound("happy")
+                                .addExtra("id", dto.getMsgId())
+                                .addExtra("msg",dto.getContent())
+                                .addExtra("type",dto.getType())
+                                .addExtra("activityId",dto.getActivityId())
+                                .build())
+                        .addPlatformNotification(AndroidNotification.newBuilder()
+                                .setAlert(dto.getTitle())
+                                .addExtra("id", dto.getMsgId())
+                                .addExtra("msg",dto.getContent())
+                                .addExtra("type",dto.getType())
+                                .addExtra("activityId",dto.getActivityId())
+                                .build())
+                        .build())
+                .setMessage(Message.newBuilder()
+                        .setTitle(dto.getTitle())
+                        .setMsgContent(dto.getContent())
+                        .addExtra("id",dto.getMsgId())
+                        .addExtra("msg",dto.getContent())
+                        .addExtra("type",dto.getType())
+                        .addExtra("activityId",dto.getActivityId())
+                        .build())
+                .setOptions(Options.newBuilder()
+                        .setApnsProduction(true)
+                        .build())
+                .build();
+    }
+
+    /**
+     * 生成全体推送的推送体
+     * @return
+     */
+    public static PushPayload buildPushAllPayload(JpushMessageDTO dto) {
+        return PushPayload.newBuilder()
+                .setPlatform(Platform.all()).setAudience(Audience.all())
                 .setNotification(Notification.newBuilder()
                         .addPlatformNotification(IosNotification.newBuilder()
                                 .setAlert(dto.getTitle())

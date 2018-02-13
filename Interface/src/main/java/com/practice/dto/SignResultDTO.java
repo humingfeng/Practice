@@ -1,6 +1,7 @@
 package com.practice.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Xushd on 2018/2/13 15:54
@@ -11,29 +12,17 @@ public class SignResultDTO implements Serializable{
 
     private String imgCover;
 
-    private String beginTime;
+    private String validTime;
 
-    private String endTime;
-
-    private String signTime;
-
-    private String signOutTime;
+    private String durationTime;
 
     private String studentName;
 
     private String studentDesc;
 
-    private String groupTime;
+    private List<SignRecordDTO> list;
 
     public SignResultDTO() {
-    }
-
-    public String getGroupTime() {
-        return groupTime;
-    }
-
-    public void setGroupTime(String groupTime) {
-        this.groupTime = groupTime;
     }
 
     public String getActivityName() {
@@ -52,36 +41,20 @@ public class SignResultDTO implements Serializable{
         this.imgCover = imgCover;
     }
 
-    public String getBeginTime() {
-        return beginTime;
+    public String getValidTime() {
+        return validTime;
     }
 
-    public void setBeginTime(String beginTime) {
-        this.beginTime = beginTime;
+    public void setValidTime(String validTime) {
+        this.validTime = validTime;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getDurationTime() {
+        return durationTime;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getSignTime() {
-        return signTime;
-    }
-
-    public void setSignTime(String signTime) {
-        this.signTime = signTime;
-    }
-
-    public String getSignOutTime() {
-        return signOutTime;
-    }
-
-    public void setSignOutTime(String signOutTime) {
-        this.signOutTime = signOutTime;
+    public void setDurationTime(String durationTime) {
+        this.durationTime = durationTime;
     }
 
     public String getStudentName() {
@@ -98,5 +71,13 @@ public class SignResultDTO implements Serializable{
 
     public void setStudentDesc(String studentDesc) {
         this.studentDesc = studentDesc;
+    }
+
+    public List<SignRecordDTO> getList() {
+        return list;
+    }
+
+    public void setList(List<SignRecordDTO> list) {
+        this.list = list;
     }
 }

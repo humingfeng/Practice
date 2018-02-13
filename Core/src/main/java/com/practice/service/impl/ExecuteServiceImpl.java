@@ -44,7 +44,8 @@ public class ExecuteServiceImpl implements ExecuteService {
         example.createCriteria()
                 .andDelflagEqualTo(0)
                 .andStatusEqualTo(6);
-
+        example.or().andDelflagEqualTo(0)
+                .andStatusEqualTo(2);
         List<ManageActivity> manageActivities = activityMapper.selectByExample(example);
 
         List<Long> ids = new ArrayList<>();

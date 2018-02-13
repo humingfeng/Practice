@@ -1,9 +1,6 @@
 package com.practice.service.impl;
 
-import com.practice.dto.SignErcodeDTO;
-import com.practice.dto.SignResultDTO;
-import com.practice.dto.StudentDTO;
-import com.practice.dto.TokenParentDTO;
+import com.practice.dto.*;
 import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
@@ -14,15 +11,14 @@ import com.practice.service.EnrollService;
 import com.practice.service.PersonnelService;
 import com.practice.utils.JwtTokenUtil;
 import com.practice.utils.TimeUtils;
+import org.apache.solr.common.util.Hash;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Xushd on 2018/1/30 15:26
@@ -38,8 +34,6 @@ public class EnrollServiceImpl implements EnrollService {
     private ManageActivityEnrollRecordMapper enrollRecordMapper;
     @Resource
     private ManageActivityMapper activityMapper;
-    @Resource
-    private ParentActivityLinkMapper parentActivityLinkMapper;
     @Resource
     private ParentStudentMapper parentStudentMapper;
     @Resource
@@ -211,12 +205,25 @@ public class EnrollServiceImpl implements EnrollService {
 
         Date nowDate = new Date();
 
+
+
+        //签到
+        if(TimeUtils.Obj1LessObj2(nowDate,beginTime)){
+            return JsonResult.error("活动未到开始时间");
+        }
+
+
+
         ManageActivitySign manageActivitySign = signMapper.selectByPrimaryKey(sign.getSignId());
 
         if(sign.getEvent()==1){
             if(manageActivitySign.getSignIn()==0){
                 return JsonResult.error("该活动未开启签到功能！");
             }
+            if(TimeUtils.Obj1LessObj2(endTime,nowDate)){
+                return JsonResult.error("已过活动签到时间");
+            }
+
             //是否已经签到
 
             ManageActivitySignRecordExample signRecordExample = new ManageActivitySignRecordExample();
@@ -230,32 +237,29 @@ public class EnrollServiceImpl implements EnrollService {
 
             long l1 = signRecordMapper.countByExample(signRecordExample);
 
-            if(l1==0){
-
-                //签到
-                if(!TimeUtils.Obj1LessObj2(beginTime,nowDate)){
-                    return JsonResult.error("活动未到开始时间");
-                }
-
-                ManageActivitySignRecord signRecord = new ManageActivitySignRecord();
-
-                signRecord.setActivityId(sign.getActivityId());
-
-                signRecord.setSignId(sign.getSignId());
-
-                signRecord.setStudentId(tokenParent.getStudentId());
-
-                signRecord.setGroupDate(nowTimeShort);
-
-                signRecord.setSignTime(nowDate);
-
-                signRecord.setType(1);
-
-                signRecordMapper.insertSelective(signRecord);
-
+            if(l1>0){
+                return JsonResult.error("您已经签到了,请请勿重复签到哦！");
 
             }
 
+
+            ManageActivitySignRecord signRecord = new ManageActivitySignRecord();
+
+            signRecord.setActivityId(sign.getActivityId());
+
+            signRecord.setSignId(sign.getSignId());
+
+            signRecord.setStudentId(tokenParent.getStudentId());
+
+            signRecord.setGroupDate(nowTimeShort);
+
+            signRecord.setSignTime(nowDate);
+
+            signRecord.setType(1);
+
+            signRecordMapper.insertSelective(signRecord);
+
+            return JsonResult.success("签到成功");
 
 
         }else{
@@ -291,73 +295,130 @@ public class EnrollServiceImpl implements EnrollService {
 
             long l1 = signRecordMapper.countByExample(signRecordExample);
 
-            if(l1==0){
-                ManageActivitySignRecord signRecord = new ManageActivitySignRecord();
-
-                signRecord.setActivityId(sign.getActivityId());
-
-                signRecord.setSignId(sign.getSignId());
-
-                signRecord.setStudentId(tokenParent.getStudentId());
-
-                signRecord.setGroupDate(nowTimeShort);
-
-                signRecord.setSignTime(nowDate);
-
-                signRecord.setType(2);
-
-                signRecordMapper.insertSelective(signRecord);
+            if(l1>0){
+                return JsonResult.error("您已经签退了,请请勿重复签到哦！");
             }
+            ManageActivitySignRecord signRecord = new ManageActivitySignRecord();
 
+            signRecord.setActivityId(sign.getActivityId());
 
+            signRecord.setSignId(sign.getSignId());
 
+            signRecord.setStudentId(tokenParent.getStudentId());
+
+            signRecord.setGroupDate(nowTimeShort);
+
+            signRecord.setSignTime(nowDate);
+
+            signRecord.setType(2);
+
+            signRecordMapper.insertSelective(signRecord);
+
+            return JsonResult.success("签退成功");
 
         }
+
+
+
+
+
+    }
+
+    /**
+     * App sign record
+     *
+     * @param activityId
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult appActivitySignRecord(Long activityId, String token) {
+
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
 
         SignResultDTO signResultDTO = new SignResultDTO();
 
-        signResultDTO.setActivityName(manageActivity.getName());
+        ManageActivity activity = activityMapper.selectByPrimaryKey(activityId);
 
-        signResultDTO.setBeginTime(split[0]);
 
-        signResultDTO.setEndTime(split[1]);
 
-        signResultDTO.setGroupTime(nowTimeShort);
+        signResultDTO.setActivityName(activity.getName());
 
-        if(sign.getEvent()==1){
-            signResultDTO.setSignTime(TimeUtils.getDateString(nowDate));
-            signResultDTO.setSignOutTime("");
-        }else{
+        String validTime = activity.getValidTime();
 
-            ManageActivitySignRecordExample signRecordExample = new ManageActivitySignRecordExample();
+        String[] split = validTime.split(" - ");
 
-            signRecordExample.createCriteria()
-                    .andActivityIdEqualTo(sign.getActivityId())
-                    .andStudentIdEqualTo(tokenParent.getStudentId())
-                    .andSignIdEqualTo(sign.getSignId())
-                    .andTypeEqualTo(1)
-                    .andGroupDateEqualTo(nowTimeShort);
+        String beginHour = split[0].substring(0, 5),endHour = split[1].substring(0, 5);
 
-            List<ManageActivitySignRecord> signRecordList = signRecordMapper.selectByExample(signRecordExample);
+        signResultDTO.setValidTime(beginHour+" - "+endHour);
 
-            if(signRecordList.size()>0){
-                ManageActivitySignRecord manageActivitySignRecord = signRecordList.get(0);
-
-                signResultDTO.setSignTime(TimeUtils.getDateString(manageActivitySignRecord.getSignTime()));
-            }else{
-                signResultDTO.setSignTime("");
-            }
-            signResultDTO.setSignOutTime(TimeUtils.getDateString(nowDate));
-        }
-
+        signResultDTO.setDurationTime(TimeUtils.getDateStringShort(activity.getBeginTime())+" - "+TimeUtils.getDateStringShort(activity.getEndTime()));
 
         StudentDTO studentDTO = personnelService.getStudentDTO(tokenParent.getStudentId());
 
         signResultDTO.setStudentName(studentDTO.getStudentName());
 
-        signResultDTO.setStudentDesc(studentDTO.getSchoolName()+"|"+studentDTO.getPeriodName()+"|"+studentDTO.getClassName());
+        signResultDTO.setStudentDesc(studentDTO.getSchoolName()+" - "+studentDTO.getPeriodName()+" - "+studentDTO.getClassName());
 
+        ManageActivitySignRecordExample signRecordExample = new ManageActivitySignRecordExample();
+
+        signRecordExample.createCriteria()
+                .andActivityIdEqualTo(activityId)
+                .andStudentIdEqualTo(tokenParent.getStudentId());
+
+        signRecordExample.setOrderByClause(" sign_time desc ");
+
+        List<ManageActivitySignRecord> signRecords = signRecordMapper.selectByExample(signRecordExample);
+
+        //处理一下
+
+        Map<String,List<ManageActivitySignRecord>> map = new HashMap<>();
+
+        for (ManageActivitySignRecord signRecord : signRecords) {
+
+            if(map.containsKey(signRecord.getGroupDate())){
+                map.get(signRecord.getGroupDate()).add(signRecord);
+            }else{
+                List<ManageActivitySignRecord> values = new ArrayList<>();
+                values.add(signRecord);
+                map.put(signRecord.getGroupDate(),values);
+            }
+        }
+        List<SignRecordDTO> list = new ArrayList<>();
+        for (String s : map.keySet()) {
+
+            SignRecordDTO signRecordDTO = new SignRecordDTO();
+
+            List<ManageActivitySignRecord> manageActivitySignRecords = map.get(s);
+
+            for (ManageActivitySignRecord manageActivitySignRecord : manageActivitySignRecords) {
+                String dateString = TimeUtils.getDateString(manageActivitySignRecord.getSignTime());
+                if(manageActivitySignRecord.getType()==1){
+
+                    signRecordDTO.setSignIn(dateString.substring(10, 16));
+
+                }else{
+                    signRecordDTO.setSignOut(dateString.substring(10,16));
+                }
+
+            }
+            ManageActivitySign sign = signMapper.selectByPrimaryKey(manageActivitySignRecords.get(0).getSignId());
+
+            signRecordDTO.setSignMark(sign.getSignIn());
+
+            signRecordDTO.setSignOutMark(sign.getSignOut());
+
+            signRecordDTO.setGroupTime(s);
+
+            list.add(signRecordDTO);
+
+        }
+
+        signResultDTO.setList(list);
 
         return JsonResult.success(signResultDTO);
+
     }
 }

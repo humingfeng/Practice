@@ -144,4 +144,16 @@ public class ActivityController {
         return enrollService.appScanSign(sign,token);
     }
 
+    /**
+     * App 签到记录
+     * @param activityId
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/sign/record/{activityId}")
+    public JsonResult singRecord(@PathVariable Long activityId,@RequestAttribute String token){
+
+        return enrollService.appActivitySignRecord(activityId,token);
+    }
+
 }

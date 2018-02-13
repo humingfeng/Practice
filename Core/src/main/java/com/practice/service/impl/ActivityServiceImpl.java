@@ -884,16 +884,20 @@ public class ActivityServiceImpl implements ActivityService {
          * @author Xushd on 2018/2/2 14:43
          */
         String price = manageActivity.getPrice();
-
-        BigDecimal bigDecimal = new BigDecimal(price);
-
-        if(bigDecimal.compareTo(new BigDecimal(0))==0){
+        if(StringUtils.isBlank(price)){
             manageActivity.setMoney(0);
         }else{
-            BigDecimal multiply = bigDecimal.multiply(new BigDecimal(100));
+            BigDecimal bigDecimal = new BigDecimal(price);
 
-            manageActivity.setMoney(multiply.intValue());
+            if(bigDecimal.compareTo(new BigDecimal(0))==0){
+                manageActivity.setMoney(0);
+            }else{
+                BigDecimal multiply = bigDecimal.multiply(new BigDecimal(100));
+
+                manageActivity.setMoney(multiply.intValue());
+            }
         }
+
         /**
          * 库存
          * @author Xushd on 2018/2/2 14:45
@@ -3509,6 +3513,8 @@ public class ActivityServiceImpl implements ActivityService {
             detailVO.setPrice(price);
 
             detailVO.setSign(activity.getSign());
+
+            detailVO.setSelf(activity.getSelf());
 
             if (StringUtils.isNotBlank(activity.getValidTime())) {
                 String[] split = activity.getValidTime().split(" - ");

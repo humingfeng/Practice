@@ -40,4 +40,12 @@ public interface EnrollService {
      * @return
      */
     JsonResult appScanSign(SignErcodeDTO sign, String token);
+
+    /**
+     * App sign record
+     * @param activityId
+     * @param token
+     * @return
+     */
+    JsonResult appActivitySignRecord(Long activityId, String token);
 }

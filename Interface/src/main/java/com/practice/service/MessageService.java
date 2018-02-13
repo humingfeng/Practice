@@ -12,4 +12,13 @@ public interface MessageService {
      * @return
      */
     JsonResult getMessageListItemById(Long msgId);
+
+    /**
+     * List message
+     * @param activityId
+     * @param pageIndex
+     * @param token
+     * @return
+     */
+    JsonResult getMessageList(Long activityId, Integer pageIndex, String token);
 }
