@@ -1,10 +1,12 @@
 package com.practice.app.controller;
 
 import com.practice.dto.PageResult;
+import com.practice.dto.SignErcodeDTO;
 import com.practice.dto.SolrQueryDTO;
 import com.practice.po.ManageActivityEnroll;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
+import com.practice.service.EnrollService;
 import com.practice.service.SearchService;
 import com.practice.service.TaskService;
 import com.practice.vo.ActivitySearchVO;
@@ -28,6 +30,8 @@ public class ActivityController {
     private ActivityService activityService;
     @Resource
     private TaskService taskService;
+    @Resource
+    private EnrollService enrollService;
 
     /**
      * Activity list by search param
@@ -127,6 +131,17 @@ public class ActivityController {
     @RequestMapping(value = "/task/answer/submit")
     public JsonResult submitTaskAnswer(String answer,@RequestAttribute String token){
         return taskService.saveActivityTaskQuestionAnswer(answer,token);
+    }
+
+    /**
+     * 签到签退
+     * @param sign
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/sign")
+    public JsonResult sign(SignErcodeDTO sign,@RequestAttribute String token){
+        return enrollService.appScanSign(sign,token);
     }
 
 }

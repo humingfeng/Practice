@@ -1,6 +1,8 @@
 package com.practice.utils;
 
 import org.apache.commons.codec.binary.Hex;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -82,5 +84,41 @@ public class CommonUtils {
         return is;
     }
 
+    /**
+     *     base64  加密
+     */
+    public String getBase64(String str) {
+        byte[] b = null;
+        String s = null;
+        try {
+            b = str.getBytes("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        if (b != null) {
+            s = new BASE64Encoder().encode(b);
+        }
+        return s;
+    }
+
+    /**
+     * base65 解密
+     * @param s
+     * @return
+     */
+    public String getFromBase64(String s) {
+        byte[] b = null;
+        String result = null;
+        if (s != null) {
+            BASE64Decoder decoder = new BASE64Decoder();
+            try {
+                b = decoder.decodeBuffer(s);
+                result = new String(b, "utf-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 
 }

@@ -106,6 +106,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Value("${LIKE.BASE}")
     private String LIKEBASE;
 
+
     @Resource
     private ActiveMqProducer activeMqProducer;
 
@@ -1750,12 +1751,14 @@ public class ActivityServiceImpl implements ActivityService {
 
         OutputStream out = new ByteArrayOutputStream();
 
-        JSONObject jsonObject = new JSONObject();
+        SignErcodeDTO signErcodeDTO = new SignErcodeDTO();
 
-        jsonObject.put("activityId", activityId);
-        jsonObject.put("id", id);
+        signErcodeDTO.setActivityId(activityId);
+        signErcodeDTO.setSignId(id);
+        signErcodeDTO.setEvent(1);
+        signErcodeDTO.setType("sign");
 
-        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
+        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(signErcodeDTO));
 
         ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
 
@@ -1797,11 +1800,14 @@ public class ActivityServiceImpl implements ActivityService {
 
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("activityId", activityId);
-        jsonObject.put("id", id);
-        jsonObject.put("diff", diff);
+        SignErcodeDTO signErcodeDTO = new SignErcodeDTO();
 
-        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(jsonObject));
+        signErcodeDTO.setActivityId(activityId);
+        signErcodeDTO.setSignId(id);
+        signErcodeDTO.setEvent(2);
+        signErcodeDTO.setType("sign");
+
+        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(signErcodeDTO));
 
         ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
 
@@ -3849,4 +3855,6 @@ public class ActivityServiceImpl implements ActivityService {
             }
         }
     }
+
+
 }

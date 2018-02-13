@@ -1,5 +1,6 @@
 package com.practice.service;
 
+import com.practice.dto.SignErcodeDTO;
 import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 
@@ -31,4 +32,12 @@ public interface EnrollService {
      * @return
      */
     JsonResult listMyStudent(String token);
+
+    /**
+     * App scan sign
+     * @param sign
+     * @param token
+     * @return
+     */
+    JsonResult appScanSign(SignErcodeDTO sign, String token);
 }

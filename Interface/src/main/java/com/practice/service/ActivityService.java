@@ -671,4 +671,6 @@ public interface ActivityService {
      * @param solrUpdateMessage
      */
     void excuteSolrUpdate(SolrUpdateMessage solrUpdateMessage);
+
+
 }
