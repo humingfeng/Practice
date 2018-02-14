@@ -27,4 +27,6 @@ public interface ManageActivityTaskItemAnswerMapper {
     int updateByPrimaryKeySelective(ManageActivityTaskItemAnswer record);
 
     int updateByPrimaryKey(ManageActivityTaskItemAnswer record);
+
+    Long countTaskOver(@Param("studentId")Long studentId);
 }

@@ -108,4 +108,12 @@
     <bean id="taskService" class="com.practice.service.impl.TaskServiceImpl"></bean>
     <dubbo:service interface="com.practice.service.TaskService" ref="taskService"></dubbo:service>
 
+    <!--statisticsService-->
+    <bean id="statisticsService" class="com.practice.service.impl.StatisticsServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.StatisticsService" ref="statisticsService"></dubbo:service>
+
+    <!--newsService-->
+    <bean id="newsService" class="com.practice.service.impl.NewsServiceImpl"></bean>
+    <dubbo:service interface="com.practice.service.NewsService" ref="newsService"></dubbo:service>
+
 </beans>

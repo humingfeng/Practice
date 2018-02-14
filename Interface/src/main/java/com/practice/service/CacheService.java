@@ -387,4 +387,18 @@ public interface CacheService {
      * @return
      */
     MessageListItemDTO getActivityMessageItem(Long id);
+
+    /**
+     * List news
+     * @param pageIndex
+     * @return
+     */
+    List<NewsDto> listNews(Integer pageIndex);
+
+    /**
+     * Set news list
+     * @param pageIndex
+     * @param list
+     */
+    void setNewsList(Integer pageIndex,List<NewsDto> list);
 }

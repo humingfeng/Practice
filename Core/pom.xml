@@ -130,6 +130,7 @@
             </exclusions>
         </dependency>
 
+
         <dependency>
             <groupId>se.jiderhamn.classloader-leak-prevention</groupId>
             <artifactId>classloader-leak-prevention-servlet</artifactId>

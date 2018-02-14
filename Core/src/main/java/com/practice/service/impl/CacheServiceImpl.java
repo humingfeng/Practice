@@ -760,4 +760,37 @@ public class CacheServiceImpl implements CacheService {
 
         return null;
     }
+
+    /**
+     * List news
+     *
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public List<NewsDto> listNews(Integer pageIndex) {
+
+        String s = jedisClient.get(ConstantEnum.NEWS.getStrValue() + ":KEY:" + pageIndex);
+
+        if(StringUtils.isNotBlank(s)){
+
+            return JsonUtils.jsonToList(s,NewsDto.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set news list
+     *
+     * @param pageIndex
+     * @param list
+     */
+    @Override
+    public void setNewsList(Integer pageIndex, List<NewsDto> list) {
+
+        jedisClient.set(ConstantEnum.NEWS.getStrValue() + ":KEY:" + pageIndex,JsonUtils.objectToJson(list));
+
+        jedisClient.expire(ConstantEnum.NEWS.getStrValue() + ":KEY:" + pageIndex,60*60*30);
+    }
 }

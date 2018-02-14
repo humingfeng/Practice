@@ -34,6 +34,7 @@ public enum ConstantEnum {
     SOLR_UPDATE_MESSAGE("SOLR_UPDATE_MESSAGE"),
 
     FILTER_PERIOD("FILTER_PERIOD"),
+    NEWS("NEWS"),
 
     /**
      * Parent keys

@@ -49,4 +49,8 @@
 
     <dubbo:reference id="taskService" interface="com.practice.service.TaskService"/>
 
+    <dubbo:reference id="statisticsService" interface="com.practice.service.StatisticsService"/>
+
+    <dubbo:reference id="newsService" interface="com.practice.service.NewsService"/>
+
 </beans>

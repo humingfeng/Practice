@@ -2,9 +2,7 @@ package com.practice.app.controller;
 
 import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
-import com.practice.service.ActivityService;
-import com.practice.service.EnrollService;
-import com.practice.service.PersonnelService;
+import com.practice.service.*;
 import com.practice.utils.JsonUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -26,6 +24,10 @@ public class MyController {
     private EnrollService enrollService;
     @Resource
     private PersonnelService personnelService;
+    @Resource
+    private StatisticsService statisticsService;
+    @Resource
+    private NewsService newsService;
     /**
      * List my collect
      * @param token
@@ -87,5 +89,26 @@ public class MyController {
     @RequestMapping(value = "/list/enroll/activity/{pageIndex}")
     public JsonResult listMyEnrollActivity(@PathVariable int pageIndex,@RequestAttribute String token){
         return personnelService.listParentEnrollActivity(token,pageIndex);
+    }
+
+    /**
+     * Get my statistics
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/statistics")
+    public JsonResult getStatistics(@RequestAttribute String token){
+        return statisticsService.getStatistics(token);
+    }
+
+
+    /**
+     * List news
+     * @param pageIndex
+     * @return
+     */
+    @RequestMapping(value = "/news/{pageIndex}")
+    public JsonResult listNews(@PathVariable Integer pageIndex){
+        return newsService.listNews(pageIndex);
     }
 }
