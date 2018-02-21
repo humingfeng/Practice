@@ -10,11 +10,13 @@ import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.practice.po.OrderInfo;
 import com.practice.service.OrderService;
 import com.practice.service.PayService;
+import com.practice.weixinpay.sdk.MD5Encrypt;
+import com.practice.weixinpay.sdk.WxPayCore;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Map;
 
 /**
  * @author Xushd  2018/2/5 21:54
@@ -37,15 +39,31 @@ public class PayServiceImpl implements PayService {
     static final String ZIFUBAO_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgmQPOKVLsVhY3Jek82DNU9nHauH/MJ/WNvu9m6cUs81p5WmkEcHYxqfxu9ZphBCfustLBfblW1Ln89+3Zcz846VuWu2HTUC7aEDjfMNc4FZ80cZQ3R1rrzYgDMlY78UGfjDKSEGjPLzs6CmsHgC5Yq3uCSqSV+wsZ6ZGkDuMd6RwUh5Sd4wR8TsWOogh4lndkCyht45rCuk6iCxwxg6FA2zk2AxQBC4t02p1iQ+ThVE5YC1ZBqZimU+6jZ6zCceMbEBpDRE4ckxA/+vZ4l4ACmgvo2xDr/OeYJDZ7/LGOw/g2KCMWydY0Njcd14KYx9OLNVl4+hf+KBPk2APuWdgwwIDAQAB";
 
 
-    //weixinpay
+    /**
+     * weixinpay
+     */
 
-    static final String WX_PAY_URL="https://api.mch.weixin.qq.com/pay/unifiedorder";
 
+    /**
+     * 微信统一下单接口路径
+     */
+    static final String WX_UNIFORMORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    /**
+     * 微信商户号
+     */
+    static final String WX_MCHID = "1499045902";
+
+    static final String WX_NOTIFYURL = "http://practise.uping.wang/weixin/pay/result";
+
+    /**
+     * 微信APP
+     */
     static final String WX_APP_ID="wx9c13e51e43a1b064";
-
-    static final String WX_MCH_ID="1421346502";
-
-
+    /**
+     *  微信APIKEY
+     */
+    static final String WX_APIKEY ="56gP8fm44m8GgUIbJivoL0k7qD82fSpO";
 
 
 
@@ -127,7 +145,7 @@ public class PayServiceImpl implements PayService {
      * @return
      */
     @Override
-    public String getWeixinPayOrderString(String orderNum) {
+    public String getWeixinPayOrderString(String orderNum,String ip) {
 
 
         OrderInfo orderInfo = orderService.getOderInfoByOrderNum(orderNum);
@@ -136,77 +154,23 @@ public class PayServiceImpl implements PayService {
             return null;
         }
 
-        SortedMap<Object,Object> param = new TreeMap<Object,Object>();
-
-        param.put("appid",WX_APP_ID);
-        param.put("mch_id",WX_MCH_ID);
-        String randomStr = getRandomString(18);
-
-        param.put("nonce_str",randomStr);
-
-        param.put("body","去哪实践 活动订单");
-
-        param.put("out_trade_no",orderNum);
-
-        Integer price = orderInfo.getPrice();
-
-        param.put("total_fee",price);
-
-        param.put("notify_url", "http://practise.uping.wang/weixin/pay/result");
-
-        param.put("trade_type", "APP");
+        //微信支付上显示的商品名称
+        String subject=orderInfo.getOrderName();
+        //随机字符串
+        String nonce_str= MD5Encrypt.MD5Encode("" + Math.random());
+        //订单金额（只能以分为单位）
+		String money=String.valueOf(orderInfo.getPrice());
 
 
-//        String sign =
+        String xml = WxPayCore.getXml(subject, nonce_str, orderNum, ip, money);
 
 
+        String prepay_id=WxPayCore.getPrepayId(xml);
 
+        String json=WxPayCore.getJson(nonce_str, prepay_id);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        return null;
+        return json;
     }
 
-    // 随机字符串生成
-    public static String getRandomString(int length) {
-        // length表示生成字符串的长度
-        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
-//    //创建md5 数字签证
-//    public static String createSign(SortedMap<Object, Object> parame){
-//        StringBuffer buffer = new StringBuffer();
-//        Set set = parame.entrySet();
-//        Iterator iterator = set.iterator();
-//        while(iterator.hasNext()){
-//            Map.Entry entry = (Map.Entry) iterator.next();
-//            String key = (String)entry.getKey();
-//            Object value = (String)entry.getValue();
-//            if(null != value && !"".equals(value) && !"sign".equals(key) && !"key".equals(key)){
-//                buffer.append(key+"="+value+"&");
-//            }
-//        }
-//        buffer.append("key="+APIKEY);
-//        String sign =MyMd5Util.md5(buffer.toString()).toUpperCase();
-//        System.out.println("签名参数："+sign);
-//        return sign;
-//    }
 }

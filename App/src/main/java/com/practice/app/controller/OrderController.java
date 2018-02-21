@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Xushd on 2018/2/1 13:21
@@ -72,7 +73,7 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "/pay/{method}/infostring/{orderNum}")
-    public JsonResult getOrderPayString(@PathVariable String orderNum,@PathVariable Integer method){
+    public JsonResult getOrderPayString(@PathVariable String orderNum, @PathVariable Integer method, HttpServletRequest request){
         if(method==1){
             String aliPayOrderString = payService.getAliPayOrderString(orderNum);
 
@@ -83,7 +84,14 @@ public class OrderController {
             }
 
         }else{
-            return JsonResult.success();
+
+            String weixinPayOrderString = payService.getWeixinPayOrderString(orderNum, request.getRemoteAddr());
+            if(weixinPayOrderString==null){
+                return JsonResult.error("微信订单创建失败，请联系客服");
+            }else{
+                return JsonResult.build(200,"OK",weixinPayOrderString);
+            }
+
         }
 
     }

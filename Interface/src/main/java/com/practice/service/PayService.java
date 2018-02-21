@@ -26,5 +26,5 @@ public interface PayService {
      * @param orderNum
      * @return
      */
-    String getWeixinPayOrderString(String orderNum);
+    String getWeixinPayOrderString(String orderNum,String ip);
 }
