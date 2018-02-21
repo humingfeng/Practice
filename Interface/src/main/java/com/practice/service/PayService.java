@@ -20,4 +20,11 @@ public interface PayService {
      * @return
      */
     Boolean validateAliPayCallBack(Map<String,String> params);
+
+    /**
+     * Get WeixinPay order string
+     * @param orderNum
+     * @return
+     */
+    String getWeixinPayOrderString(String orderNum);
 }
