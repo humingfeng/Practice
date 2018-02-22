@@ -16,6 +16,7 @@ import com.practice.utils.JwtTokenUtil;
 import com.practice.utils.OrderNumUtil;
 import com.practice.utils.TimeUtils;
 import com.practice.vo.ActivityDetailVO;
+import com.practice.weixinpay.sdk.XmlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1065,5 +1066,112 @@ public class OrderServiceImpl implements OrderService {
 
 
         return JsonResult.success(orderDetailDTO);
+    }
+
+    /**
+     * Update orderinfo status weixin
+     *
+     * @param xmlString
+     */
+    @Override
+    public void updateAndRecordPayInfoWeiXin(String xmlString) throws Exception {
+
+
+        Map<String, Object> map = XmlUtil.doXMLParse(xmlString);
+
+        String result_code = map.get("result_code").toString();
+        String out_trade_no = map.get("out_trade_no").toString();
+        String return_code = map.get("return_code").toString();
+
+        if(result_code.equals("SUCCESS")&&result_code.equals("SUCCESS")){
+
+            String orderNum = out_trade_no;
+
+            OrderInfoExample orderInfoExample = new OrderInfoExample();
+
+            orderInfoExample.createCriteria().andOrderNumEqualTo(orderNum);
+
+            List<OrderInfo> orderInfos = orderMapper.selectByExample(orderInfoExample);
+
+            if(orderInfos.size()>0){
+
+                OrderInfo orderInfo = orderInfos.get(0);
+
+                OrderInfo info = new OrderInfo();
+                info.setPayMethod(2);
+                info.setPayTime(new Date());
+                info.setStatus(2);
+                info.setId(orderInfo.getId());
+
+                orderMapper.updateByPrimaryKeySelective(info);
+
+                ManageActivityEnrollRecord record = new ManageActivityEnrollRecord();
+
+                record.setId(orderInfo.getEnrollId());
+
+                record.setStatus(8);
+
+                record.setUpdateTime(new Date());
+
+                enrollRecordMapper.updateByPrimaryKeySelective(record);
+
+                ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+
+                linkExample.createCriteria()
+                        .andOrderNumEqualTo(orderInfo.getOrderNum());
+
+                ParentActivityLink link = new ParentActivityLink();
+
+                link.setStatus(1);
+
+                link.setUpdateTime(new Date());
+
+                parentActivityLinkMapper.updateByExampleSelective(link, linkExample);
+
+
+                ActivityMessage activityMessage = new ActivityMessage();
+
+                ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(orderInfo.getActivityId());
+
+                activityMessage.setMsgTitle(actvitySolrItemDTO.getName());
+
+                activityMessage.setMsgContent(ConstantEnum.ENROLL_SUCCESS.getStrValue());
+
+                activityMessage.setMsgCover(actvitySolrItemDTO.getImgCover());
+
+                activityMessage.setPushStatus(1);
+
+                activityMessage.setStatus(1);
+
+                activityMessage.setType(1);
+
+                activityMessage.setActivityId(orderInfo.getActivityId());
+
+                activityMessage.setCreateTime(new Date());
+
+                activityMessage.setCreateUser(0L);
+
+                activityMessage.setReceiverId(orderInfo.getUserId());
+
+                activityMessage.setReceiverType(1);
+
+                activityMessageMapper.insertSelective(activityMessage);
+
+
+                PushMessageDTO pushMessageDTO = new PushMessageDTO();
+
+                pushMessageDTO.setMsgId(activityMessage.getId());
+
+                pushMessageDTO.setCreateTime(TimeUtils.getNowTime());
+
+                pushMessageDTO.setStatus(1);
+
+                pushMessageDTO.setType(1);
+
+                activeMqProducer.sendPushMessage(pushMessageDTO);
+
+            }
+
+        }
     }
 }

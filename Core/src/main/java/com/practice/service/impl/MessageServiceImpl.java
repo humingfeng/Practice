@@ -2,9 +2,9 @@ package com.practice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.practice.dto.MessageListItemDTO;
-import com.practice.dto.PageResult;
-import com.practice.dto.TokenParentDTO;
+import com.practice.dao.ActiveMqProducer;
+import com.practice.dto.*;
+import com.practice.enums.ConstantEnum;
 import com.practice.mapper.ActivityMessageMapper;
 import com.practice.po.ActivityMessage;
 import com.practice.po.ActivityMessageExample;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +32,9 @@ public class MessageServiceImpl implements MessageService {
     private ActivityMessageMapper messageMapper;
     @Resource
     private CacheService cacheService;
+    @Resource
+    private ActiveMqProducer activeMqProducer;
+
 
     /**
      * Get message list item by id
@@ -128,5 +132,108 @@ public class MessageServiceImpl implements MessageService {
 
 
         return JsonResult.success(pageResult);
+    }
+
+
+    /**
+     * Send activity end push
+     *
+     * @param id
+     */
+    @Override
+    public void sendActivityEndMessage(Long id) {
+
+        ActivityMessage activityMessage = new ActivityMessage();
+
+        ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(id);
+
+        activityMessage.setMsgTitle(actvitySolrItemDTO.getName());
+
+        activityMessage.setMsgContent(ConstantEnum.ENROLL_END.getStrValue());
+
+        activityMessage.setMsgCover(actvitySolrItemDTO.getImgCover());
+
+        activityMessage.setPushStatus(1);
+
+        activityMessage.setStatus(1);
+
+        activityMessage.setType(4);
+
+        activityMessage.setActivityId(id);
+
+        activityMessage.setCreateTime(new Date());
+
+        activityMessage.setCreateUser(0L);
+
+        activityMessage.setReceiverId(0L);
+
+        activityMessage.setReceiverType(1);
+
+        messageMapper.insertSelective(activityMessage);
+
+
+        PushMessageDTO pushMessageDTO = new PushMessageDTO();
+
+        pushMessageDTO.setMsgId(activityMessage.getId());
+
+        pushMessageDTO.setCreateTime(TimeUtils.getNowTime());
+
+        pushMessageDTO.setStatus(1);
+
+        pushMessageDTO.setType(1);
+
+        activeMqProducer.sendPushMessage(pushMessageDTO);
+
+
+
+    }
+
+    /**
+     * Send activity begin push
+     *
+     * @param id
+     */
+    @Override
+    public void sendActivityBeginMessage(Long id) {
+
+        ActivityMessage activityMessage = new ActivityMessage();
+
+        ActivitySolrItemDTO actvitySolrItemDTO = cacheService.getActvitySolrItemDTO(id);
+
+        activityMessage.setMsgTitle(actvitySolrItemDTO.getName());
+
+        activityMessage.setMsgContent(ConstantEnum.ENROLL_BEGIN.getStrValue());
+
+        activityMessage.setMsgCover(actvitySolrItemDTO.getImgCover());
+
+        activityMessage.setPushStatus(1);
+
+        activityMessage.setStatus(1);
+
+        activityMessage.setType(4);
+
+        activityMessage.setActivityId(id);
+
+        activityMessage.setCreateTime(new Date());
+
+        activityMessage.setCreateUser(0L);
+
+        activityMessage.setReceiverId(0L);
+
+        activityMessage.setReceiverType(1);
+
+        messageMapper.insertSelective(activityMessage);
+
+        PushMessageDTO pushMessageDTO = new PushMessageDTO();
+
+        pushMessageDTO.setMsgId(activityMessage.getId());
+
+        pushMessageDTO.setCreateTime(TimeUtils.getNowTime());
+
+        pushMessageDTO.setStatus(1);
+
+        pushMessageDTO.setType(1);
+
+        activeMqProducer.sendPushMessage(pushMessageDTO);
     }
 }

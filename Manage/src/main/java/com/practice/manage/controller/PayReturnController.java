@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -29,6 +30,11 @@ public class PayReturnController {
     @Resource
     private OrderService orderService;
 
+    /**
+     * Ali pay return
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/alipay/pay/result")
     public void aliPayCallBack(HttpServletRequest request, HttpServletResponse response){
 
@@ -63,5 +69,59 @@ public class PayReturnController {
 
         }
         out.println("success");
+    }
+
+    /**
+     * Weixin pay call back
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/weixin/pay/result")
+    public void weixinPayCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        BufferedReader reader = null;
+
+        reader = request.getReader();
+        String line = "";
+        String xmlString = null;
+        StringBuffer inputString = new StringBuffer();
+
+        while ((line = reader.readLine()) != null) {
+            inputString.append(line);
+        }
+        xmlString = inputString.toString();
+        request.getReader().close();
+
+        String result;
+        if (payService.validateWeixinPaySign(xmlString)) {
+
+            try {
+                orderService.updateAndRecordPayInfoWeiXin(xmlString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            LOGGER.info("WeixinPay callback {}",xmlString);
+
+            result = returnXML("SUCCESS");
+        } else {
+            result = returnXML("FAIL");
+        }
+
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out= null;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        out.println(result);
+
+    }
+
+    private String returnXML(String return_code) {
+
+        return "<xml><return_code><![CDATA["+ return_code+ "]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
     }
 }

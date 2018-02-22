@@ -111,4 +111,27 @@ public class MyController {
     public JsonResult listNews(@PathVariable Integer pageIndex){
         return newsService.listNews(pageIndex);
     }
+
+
+    /**
+     * Get push tag
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/notice/tag")
+    public JsonResult getMyNoticeTag(@RequestAttribute String token){
+
+        return enrollService.getNoticeTag(token);
+    }
+
+    /**
+     * List photos
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/photos/{pageIndex}")
+    public JsonResult getMyPhoto(@RequestAttribute String token,@PathVariable Integer pageIndex){
+
+        return personnelService.listPhotos(token,pageIndex);
+    }
 }

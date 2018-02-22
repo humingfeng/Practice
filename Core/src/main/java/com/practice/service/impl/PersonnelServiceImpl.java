@@ -16,9 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Personnel service
@@ -45,6 +43,8 @@ public class PersonnelServiceImpl implements PersonnelService {
     private ParentActivityLinkMapper parentActivityLinkMapper;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private ParentPhotosMapper parentPhotosMapper;
     /**
      * List Teacher
      *
@@ -1119,5 +1119,75 @@ public class PersonnelServiceImpl implements PersonnelService {
         pageResult.setPages(pageInfo.getPages());
 
         return JsonResult.success(pageResult);
+    }
+
+    /**
+     * List photos
+     *
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public JsonResult listPhotos(String token, Integer pageIndex) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+
+        PageHelper.startPage(pageIndex,20);
+
+        ParentPhotosExample photosExample = new ParentPhotosExample();
+
+        photosExample.createCriteria()
+                .andUserIdEqualTo(tokenParent.getId());
+
+        photosExample.setOrderByClause("create_time desc");
+
+        List<ParentPhotos> parentPhotos = parentPhotosMapper.selectByExample(photosExample);
+
+        List<PhotoDTO> list = new ArrayList<>();
+
+        Map<String,PhotoDTO> map = new LinkedHashMap<>();
+
+        for (ParentPhotos parentPhoto : parentPhotos) {
+
+            String dateString = TimeUtils.getDateString(parentPhoto.getCreateTime());
+
+            if(map.containsKey(dateString)){
+                map.get(dateString).getImg().add(parentPhoto.getPhoto());
+            }else{
+
+                PhotoDTO photoDTO = new PhotoDTO();
+
+                photoDTO.setId(parentPhoto.getId());
+
+                photoDTO.setDesc(parentPhoto.getDescription());
+
+                List<String> imgs = new ArrayList<>();
+
+                imgs.add(parentPhoto.getPhoto());
+
+                photoDTO.setImg(imgs);
+
+                photoDTO.setTime(TimeUtils.getBeforeNowString(parentPhoto.getCreateTime()));
+
+                map.put(dateString,photoDTO);
+            }
+        }
+
+        for (PhotoDTO photoDTO : map.values()) {
+
+            list.add(photoDTO);
+        }
+
+        PageInfo<ParentPhotos> parentPhotosPageInfo = new PageInfo<>(parentPhotos);
+
+        PageResult<PhotoDTO> result = new PageResult<>();
+
+        result.setList(list);
+
+        result.setPages(parentPhotosPageInfo.getPages());
+
+        return JsonResult.success(result);
     }
 }

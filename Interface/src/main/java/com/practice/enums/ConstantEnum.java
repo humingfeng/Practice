@@ -59,6 +59,8 @@ public enum ConstantEnum {
      * Status Activity Message
      */
     ENROLL_SUCCESS("恭喜您，报名成功！"),
+    ENROLL_BEGIN("活动开始啦！"),
+    ENROLL_END("活动结束啦！"),
     PAY_SUCCESS("恭喜您，支付成功"),
 
     /**

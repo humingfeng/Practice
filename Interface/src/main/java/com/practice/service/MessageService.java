@@ -21,4 +21,16 @@ public interface MessageService {
      * @return
      */
     JsonResult getMessageList(Long activityId, Integer pageIndex, String token);
+
+    /**
+     * Send activity end push
+     * @param id
+     */
+    void sendActivityEndMessage(Long id);
+
+    /**
+     * Send activity begin push
+     * @param id
+     */
+    void sendActivityBeginMessage(Long id);
 }

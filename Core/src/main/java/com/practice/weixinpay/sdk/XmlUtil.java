@@ -17,8 +17,6 @@ public class XmlUtil {
 	 * 
 	 * @param strxml
 	 * @return
-	 * @throws JDOMException
-	 * @throws IOException
 	 */
 	public static Map<String, Object> doXMLParse(String strxml) throws Exception {
 		if (null == strxml || "".equals(strxml)) {

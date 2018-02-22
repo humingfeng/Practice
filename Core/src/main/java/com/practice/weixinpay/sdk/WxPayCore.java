@@ -1,7 +1,6 @@
 package com.practice.weixinpay.sdk;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.practice.dto.WexinPayInfoDTO;
 import com.practice.utils.JsonUtils;
@@ -145,6 +144,34 @@ public class WxPayCore {
         wexinPayInfoDTO.setSign(newSign);
 
 		return JsonUtils.objectToJson(wexinPayInfoDTO);
+	}
+
+	public static String getSign(Map<String, Object> map) {
+
+		SortedMap<String, Object> signParams = new TreeMap<String, Object>();
+		for (Map.Entry<String, Object> stringStringEntry : map.entrySet()) {
+			signParams.put(stringStringEntry.getKey(), stringStringEntry.getValue());
+		}
+		signParams.remove("sign");
+
+
+		StringBuffer sb = new StringBuffer();
+
+		Set es = signParams.entrySet();
+		Iterator it = es.iterator();
+		while(it.hasNext()) {
+			Map.Entry entry = (Map.Entry)it.next();
+			String k = (String)entry.getKey();
+			Object v = entry.getValue();
+			if(null != v && !"".equals(v)
+					&& !"sign".equals(k) && !"key".equals(k)) {
+				sb.append(k + "=" + v + "&");
+			}
+		}
+		sb.append("key=" + key);
+		String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+		return sign;
+
 	}
 	
 }

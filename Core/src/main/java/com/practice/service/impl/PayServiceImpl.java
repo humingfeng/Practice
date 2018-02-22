@@ -12,10 +12,12 @@ import com.practice.service.OrderService;
 import com.practice.service.PayService;
 import com.practice.weixinpay.sdk.MD5Encrypt;
 import com.practice.weixinpay.sdk.WxPayCore;
+import com.practice.weixinpay.sdk.XmlUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -170,6 +172,53 @@ public class PayServiceImpl implements PayService {
         String json=WxPayCore.getJson(nonce_str, prepay_id);
 
         return json;
+    }
+
+    /**
+     * Validate Weixpay call back
+     *
+     * @param xmlString
+     * @return
+     */
+    @Override
+    public Boolean validateWeixinPaySign(String xmlString) {
+
+        Map<String, Object> map = null;
+
+        try {
+
+            map = XmlUtil.doXMLParse(xmlString);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String signFromAPIResponse = map.get("sign").toString();
+
+        if (signFromAPIResponse == "" || signFromAPIResponse == null) {
+
+            System.out.println("API返回的数据签名数据不存在，有可能被第三方篡改!!!");
+
+            return false;
+
+        }
+        System.out.println("服务器回包里面的签名是:" + signFromAPIResponse);
+
+        //清掉返回数据对象里面的Sign数据（不能把这个数据也加进去进行签名），然后用签名算法进行签名
+
+        map.put("sign", "");
+
+        //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
+
+        String signForAPIResponse = WxPayCore.getSign(map);
+
+        if (!signForAPIResponse.equals(signFromAPIResponse)) {
+
+            return false;
+        }
+
+        return true;
+
     }
 
 

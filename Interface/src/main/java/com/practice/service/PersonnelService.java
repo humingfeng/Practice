@@ -238,4 +238,12 @@ public interface PersonnelService {
      * @return
      */
     JsonResult listParentEnrollActivity(String token, int pageIndex);
+
+    /**
+     * List photos
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    JsonResult listPhotos(String token, Integer pageIndex);
 }

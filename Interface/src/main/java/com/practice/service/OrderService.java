@@ -85,4 +85,10 @@ public interface OrderService {
      * @return
      */
     JsonResult getOrderInfoDetail(Long id);
+
+    /**
+     * Update orderinfo status weixin
+     * @param xmlString
+     */
+    void updateAndRecordPayInfoWeiXin(String xmlString) throws Exception;
 }

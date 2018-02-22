@@ -27,4 +27,11 @@ public interface PayService {
      * @return
      */
     String getWeixinPayOrderString(String orderNum,String ip);
+
+    /**
+     * Validate Weixpay call back
+     * @param xmlString
+     * @return
+     */
+    Boolean validateWeixinPaySign(String xmlString);
 }

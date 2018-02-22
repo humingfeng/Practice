@@ -6,6 +6,7 @@ import com.practice.mapper.ManageActivityMapper;
 import com.practice.po.ManageActivity;
 import com.practice.po.ManageActivityExample;
 import com.practice.service.ExecuteService;
+import com.practice.service.MessageService;
 import com.practice.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,8 @@ public class ExecuteServiceImpl implements ExecuteService {
     private ManageActivityMapper activityMapper;
     @Resource
     private ActiveMqProducer activeMqProducer;
+    @Resource
+    private MessageService messageService;
 
     private static Integer INTERVAL = 1;
     /**
@@ -158,6 +161,13 @@ public class ExecuteServiceImpl implements ExecuteService {
 
                 activeMqProducer.sendSolrUpdateMessage(solrUpdateMessage);
 
+
+
+                messageService.sendActivityBeginMessage(id);
+
+
+
+
             }
         } else {
             LOGGER.info("UPDATE STATUS END NO ITEMS {}", TimeUtils.getNowTime());
@@ -218,6 +228,8 @@ public class ExecuteServiceImpl implements ExecuteService {
                 solrUpdateMessage.setCreateTime(new Date());
 
                 activeMqProducer.sendSolrUpdateMessage(solrUpdateMessage);
+
+                messageService.sendActivityEndMessage(id);
 
             }
 

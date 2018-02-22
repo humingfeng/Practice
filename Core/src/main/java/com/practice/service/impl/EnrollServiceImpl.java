@@ -42,6 +42,8 @@ public class EnrollServiceImpl implements EnrollService {
     private ManageActivitySignMapper signMapper;
     @Resource
     private ManageActivitySignRecordMapper signRecordMapper;
+    @Resource
+    private ParentActivityLinkMapper parentActivityLinkMapper;
     /**
      * Get student enroll info
      *
@@ -259,6 +261,8 @@ public class EnrollServiceImpl implements EnrollService {
 
             signRecordMapper.insertSelective(signRecord);
 
+
+
             return JsonResult.success("签到成功");
 
 
@@ -313,6 +317,9 @@ public class EnrollServiceImpl implements EnrollService {
             signRecord.setType(2);
 
             signRecordMapper.insertSelective(signRecord);
+
+
+
 
             return JsonResult.success("签退成功");
 
@@ -420,5 +427,42 @@ public class EnrollServiceImpl implements EnrollService {
 
         return JsonResult.success(signResultDTO);
 
+    }
+
+    /**
+     * Get push tag
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult getNoticeTag(String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+
+        ParentActivityLinkExample linkExample = new ParentActivityLinkExample();
+
+        linkExample.createCriteria()
+                .andParentIdEqualTo(tokenParent.getId())
+                .andStatusEqualTo(1)
+                .andDelflagEqualTo(0);
+
+        List<ParentActivityLink> activityLinks = parentActivityLinkMapper.selectByExample(linkExample);
+
+        List<Long> activityIds = new ArrayList<>();
+        for (ParentActivityLink activityLink : activityLinks) {
+
+            Long activityId = activityLink.getActivityId();
+
+            ManageActivity activity = activityMapper.selectByPrimaryKey(activityId);
+
+            if(activity.getStatus()==6||activity.getStatus()==1||activity.getStatus()==2){
+                activityIds.add(activityId);
+            }
+        }
+
+
+        return JsonResult.success(activityIds);
     }
 }

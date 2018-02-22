@@ -48,4 +48,11 @@ public interface EnrollService {
      * @return
      */
     JsonResult appActivitySignRecord(Long activityId, String token);
+
+    /**
+     * Get push tag
+     * @param token
+     * @return
+     */
+    JsonResult getNoticeTag(String token);
 }

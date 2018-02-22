@@ -146,7 +146,7 @@
                         </a>
                     </div>
                     {{# } }}
-                    {{# if (item.status==6||item.status==2) { }}
+                    {{# if (item.status==6||item.status==2||item.status==5) { }}
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-xs  do-action layui-btn-normal"
                            data-type="handle" data-url="/auth/jump/activity/activity_view?id={{item.id}}" data-name="活动预览">
