@@ -51,4 +51,10 @@ public interface AreaService {
      * @return
      */
     AreaDTO getArea(Long areaId);
+
+    /**
+     * Get pro city
+     * @return
+     */
+    JsonResult getProCity();
 }

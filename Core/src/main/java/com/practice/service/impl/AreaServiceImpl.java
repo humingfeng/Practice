@@ -2,6 +2,7 @@ package com.practice.service.impl;
 
 import com.practice.dto.AreaDTO;
 import com.practice.dto.CityDTO;
+import com.practice.dto.ProCityDTO;
 import com.practice.dto.ProvinceDTO;
 import com.practice.mapper.AreaMapper;
 import com.practice.mapper.CityMapper;
@@ -10,6 +11,7 @@ import com.practice.po.*;
 import com.practice.result.JsonResult;
 import com.practice.service.CacheService;
 import com.practice.service.AreaService;
+import com.practice.utils.PinYinUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -233,5 +235,49 @@ public class AreaServiceImpl implements AreaService {
         }
 
         return areaDTO;
+    }
+
+    /**
+     * Get pro city
+     *
+     * @return
+     */
+    @Override
+    public JsonResult getProCity() {
+
+        List<Province> provinces = provinceMapper.selectByExample(null);
+
+        List<ProCityDTO> list = new ArrayList<>();
+
+        CityExample cityExample = new CityExample();
+
+        for (Province province : provinces) {
+            ProCityDTO dto = new ProCityDTO();
+
+            dto.setName(province.getProvince());
+            dto.setId(province.getProvinceId());
+            dto.setSpell(PinYinUtils.cnToPinYin(province.getProvince()));
+
+            cityExample.clear();
+
+            cityExample.createCriteria().andProvinceIdEqualTo(province.getProvinceId());
+
+            List<ProCityDTO> cityList = new ArrayList<>();
+
+            List<City> cities = cityMapper.selectByExample(cityExample);
+
+            for (City city : cities) {
+                ProCityDTO dto1 = new ProCityDTO();
+
+                dto1.setName(city.getCity());
+                dto1.setId(city.getCityId());
+
+                cityList.add(dto1);
+
+            }
+
+        }
+
+        return JsonResult.success(list);
     }
 }

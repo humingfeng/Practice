@@ -22,4 +22,11 @@ public interface LoginService {
      * @return
      */
     JsonResult getParentToken(Long id);
+
+    /**
+     * Update parent token
+     * @param token
+     * @return
+     */
+    JsonResult updateToken(String token);
 }

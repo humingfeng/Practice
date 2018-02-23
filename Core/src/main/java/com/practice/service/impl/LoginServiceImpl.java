@@ -121,4 +121,19 @@ public class LoginServiceImpl implements LoginService {
         return JsonResult.success(JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParentDTO)));
 
     }
+
+    /**
+     * Update parent token
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult updateToken(String token) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+
+        return this.getParentToken(tokenParent.getId());
+    }
 }

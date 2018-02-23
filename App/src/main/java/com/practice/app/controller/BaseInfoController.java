@@ -47,7 +47,10 @@ public class BaseInfoController {
      */
     @RequestMapping(value = "/pro/list")
     public JsonResult provinceList(){
+
         return areaService.listProvinceList();
+
+//        return areaService.getProCity();
     }
 
     /**

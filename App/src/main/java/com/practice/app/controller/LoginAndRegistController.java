@@ -6,6 +6,7 @@ import com.practice.result.JsonResult;
 import com.practice.service.LoginService;
 import com.practice.service.PersonnelService;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -81,5 +82,16 @@ public class LoginAndRegistController {
     @RequestMapping(value = "/app/parent/token/{id}")
     public JsonResult getParentToken(@PathVariable Long id){
         return loginService.getParentToken(id);
+    }
+
+
+    /**
+     * Update parent token
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/app/auth/update/token")
+    public JsonResult updateToken(@RequestAttribute String token){
+        return loginService.updateToken(token);
     }
 }
