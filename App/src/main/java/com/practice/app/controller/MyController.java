@@ -1,5 +1,6 @@
 package com.practice.app.controller;
 
+import com.practice.dto.VerifyStudentDTO;
 import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
@@ -133,5 +134,28 @@ public class MyController {
     public JsonResult getMyPhoto(@RequestAttribute String token,@PathVariable Integer pageIndex){
 
         return personnelService.listPhotos(token,pageIndex);
+    }
+
+    /**
+     * Add child
+     * @param token
+     * @param verifyStudentDTO
+     * @return
+     */
+    @RequestMapping(value = "/add/child")
+    public JsonResult addChild(@RequestAttribute String token,VerifyStudentDTO verifyStudentDTO){
+
+        return personnelService.addParentChild(token,verifyStudentDTO);
+    }
+
+    /**
+     * Change child
+     * @param token
+     * @param studentId
+     * @return
+     */
+    @RequestMapping(value = "/change/child/{studentId}")
+    public JsonResult changeChild(@RequestAttribute String token,@PathVariable Long studentId){
+        return personnelService.changeChild(token,studentId);
     }
 }

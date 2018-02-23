@@ -73,7 +73,7 @@ public class EnrollServiceImpl implements EnrollService {
 
             studentEnrollInfo.setParentName(tokenParent.getName());
 
-            ManageStudent student = studentMapper.selectByPrimaryKey(tokenParent.getStudentId());
+            ManageStudent student = studentMapper.selectByPrimaryKey(studentId);
 
             studentEnrollInfo.setName(student.getName());
 

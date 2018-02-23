@@ -246,4 +246,20 @@ public interface PersonnelService {
      * @return
      */
     JsonResult listPhotos(String token, Integer pageIndex);
+
+    /**
+     * Add child
+     * @param token
+     * @param verifyStudentDTO
+     * @return
+     */
+    JsonResult addParentChild(String token, VerifyStudentDTO verifyStudentDTO);
+
+    /**
+     * Change child
+     * @param token
+     * @param studentId
+     * @return
+     */
+    JsonResult changeChild(String token, Long studentId);
 }

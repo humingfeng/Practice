@@ -12,7 +12,17 @@ public class VerifyStudentDTO implements Serializable{
     private Long classId;
     private String name;
 
+    private Long relationId;
+
     public VerifyStudentDTO() {
+    }
+
+    public Long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Long relationId) {
+        this.relationId = relationId;
     }
 
     public Long getSid() {

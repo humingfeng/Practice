@@ -1190,4 +1190,135 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         return JsonResult.success(result);
     }
+
+
+    /**
+     * Add child
+     *
+     * @param token
+     * @param verifyStudentDTO
+     * @return
+     */
+    @Override
+    public JsonResult addParentChild(String token, VerifyStudentDTO verifyStudentDTO) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ManageStudentExample studentExample = new ManageStudentExample();
+
+        studentExample.createCriteria()
+                .andSchoolIdEqualTo(verifyStudentDTO.getSid())
+                .andPeriodIdEqualTo(verifyStudentDTO.getPeriodId())
+                .andClassIdEqualTo(verifyStudentDTO.getClassId())
+                .andNameEqualTo(verifyStudentDTO.getName())
+                .andDelflagEqualTo(0)
+                .andStatusEqualTo(1);
+
+        List<ManageStudent> manageStudents = studentMapper.selectByExample(studentExample);
+
+        if(manageStudents.size()==0){
+            return JsonResult.error("无此学生，请核对信息");
+        }else{
+
+            ManageStudent student = manageStudents.get(0);
+
+            //判断是否绑定了已经
+
+            ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+            parentStudentExample.createCriteria()
+                    .andParentIdEqualTo(tokenParent.getId())
+                    .andStudentIdEqualTo(student.getId());
+
+            long l = parentStudentMapper.countByExample(parentStudentExample);
+
+            if(l>0){
+                return JsonResult.error("已存在，请勿重复添加！");
+            }
+
+            ParentStudent parentStudent = new ParentStudent();
+
+            parentStudent.setIsLogin(0);
+
+            parentStudent.setStudentId(student.getId());
+
+            parentStudent.setParentId(tokenParent.getId());
+
+            parentStudent.setRelationId(verifyStudentDTO.getRelationId());
+
+            parentStudent.setCreateTime(new Date());
+
+            parentStudentMapper.insertSelective(parentStudent);
+
+            return JsonResult.success("添加成功！");
+        }
+
+    }
+
+    /**
+     * Change child
+     *
+     * @param token
+     * @param studentId
+     * @return
+     */
+    @Override
+    public JsonResult changeChild(String token, Long studentId) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        ParentStudentExample parentStudentExample = new ParentStudentExample();
+
+        parentStudentExample.createCriteria()
+                .andParentIdEqualTo(tokenParent.getId())
+                .andStudentIdEqualTo(studentId);
+
+        List<ParentStudent> parentStudents = parentStudentMapper.selectByExample(parentStudentExample);
+
+        if(parentStudents.size()==0){
+            return JsonResult.error("帐号信息错误，请联系客服");
+        }
+
+        ParentStudent parentStudent = parentStudents.get(0);
+
+        if(parentStudent.getIsLogin()==1){
+            return JsonResult.error("当前孩子不需要切换");
+        }
+
+        //当前登录状态切换为0
+        ParentStudent parentStudent1 = new ParentStudent();
+
+        parentStudent1.setIsLogin(0);
+
+        parentStudentExample.clear();
+
+        parentStudentExample.createCriteria()
+                .andParentIdEqualTo(tokenParent.getId());
+
+        parentStudentMapper.updateByExampleSelective(parentStudent1,parentStudentExample);
+
+
+        parentStudent1 = new ParentStudent();
+
+
+        parentStudent1.setIsLogin(1);
+        parentStudent1.setId(parentStudent.getId());
+
+        parentStudentMapper.updateByPrimaryKeySelective(parentStudent1);
+
+        //切换帐号后 重新给token
+
+        tokenParent.setStudentId(studentId);
+
+        String newToken = JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParent));
+
+        ParentDTO parentDTO = this.getParentDTO(tokenParent.getId());
+
+
+
+
+        cacheService.setParent(parentDTO);
+
+        return JsonResult.success(newToken,parentDTO);
+    }
 }
