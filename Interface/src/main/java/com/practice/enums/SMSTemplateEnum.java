@@ -8,6 +8,8 @@ public enum SMSTemplateEnum {
      * Sms template
      */
     REGISTER("SMS_121907712","register"),
+    REST_PASS("SMS_125019661","resetpass"),
+    REST_PHONE("SMS_125119425","resetphone"),
     FORGET("SMS_122286243","forget");
 
     private String code;

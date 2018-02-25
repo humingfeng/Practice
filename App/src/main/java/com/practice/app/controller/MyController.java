@@ -158,4 +158,26 @@ public class MyController {
     public JsonResult changeChild(@RequestAttribute String token,@PathVariable Long studentId){
         return personnelService.changeChild(token,studentId);
     }
+
+    /**
+     * Change phone
+     * @param token
+     * @param phone
+     * @return
+     */
+    @RequestMapping(value = "/change/phone/{phone}")
+    public JsonResult changePhone(@RequestAttribute String token,@PathVariable String phone){
+        return personnelService.changePhone(token,phone);
+    }
+
+    /**
+     * Change headimg
+     * @param token
+     * @param headImg
+     * @return
+     */
+    @RequestMapping(value = "/change/headimg")
+    public JsonResult changeHeadImg(@RequestAttribute String token,String headImg){
+        return personnelService.changeHeadImg(token,headImg);
+    }
 }

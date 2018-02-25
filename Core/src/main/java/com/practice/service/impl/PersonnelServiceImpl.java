@@ -1321,4 +1321,77 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         return JsonResult.success(newToken,parentDTO);
     }
+
+    /**
+     * Change phone
+     *
+     * @param token
+     * @param phone
+     * @return
+     */
+    @Override
+    public JsonResult changePhone(String token, String phone) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        if(!ValidatorUtils.isMobile(phone)){
+            return JsonResult.error("手机号格式错误!");
+        }
+
+        ParentExample parentExample = new ParentExample();
+
+        parentExample.createCriteria()
+                .andPhoneEqualTo(Long.valueOf(phone))
+                .andStatusEqualTo(1)
+                .andDelflagEqualTo(0);
+
+        long l1 = parentMapper.countByExample(parentExample);
+        if(l1>0){
+            return JsonResult.error("该手机号已注册");
+        }
+
+
+        Long id = tokenParent.getId();
+
+        Parent parent = parentMapper.selectByPrimaryKey(id);
+
+        parent.setPhone(Long.valueOf(phone));
+
+        parentMapper.updateByPrimaryKeySelective(parent);
+
+
+        tokenParent.setPhone(Long.valueOf(phone));
+
+        String newToken = JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParent));
+
+        ParentDTO parentDTO = this.getParentDTO(tokenParent.getId());
+
+        cacheService.setParent(parentDTO);
+
+        return JsonResult.success(newToken,parentDTO);
+
+    }
+
+    /**
+     * Change head img
+     *
+     * @param token
+     * @param headImg
+     * @return
+     */
+    @Override
+    public JsonResult changeHeadImg(String token, String headImg) {
+
+        TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
+
+        Parent parent = parentMapper.selectByPrimaryKey(tokenParent.getId());
+
+        parent.setHeadImg(headImg);
+
+        parentMapper.updateByPrimaryKeySelective(parent);
+
+        ParentDTO parentDTO = this.getParentDTO(parent.getId());
+
+        return JsonResult.success(parentDTO);
+    }
 }

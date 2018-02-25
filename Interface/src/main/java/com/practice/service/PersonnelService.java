@@ -262,4 +262,20 @@ public interface PersonnelService {
      * @return
      */
     JsonResult changeChild(String token, Long studentId);
+
+    /**
+     * Change phone
+     * @param token
+     * @param phone
+     * @return
+     */
+    JsonResult changePhone(String token, String phone);
+
+    /**
+     * Change head img
+     * @param token
+     * @param headImg
+     * @return
+     */
+    JsonResult changeHeadImg(String token, String headImg);
 }

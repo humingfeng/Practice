@@ -5,10 +5,12 @@ import com.practice.dto.AppBaseDataDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.enums.DicParentEnum;
 import com.practice.enums.SMSTemplateEnum;
+import com.practice.enums.SystemParamEnum;
 import com.practice.po.ManageBase;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +42,8 @@ public class BaseInfoController {
     private BasesService basesService;
     @Resource
     private UploadService uploadService;
+    @Resource
+    private ParamService paramService;
 
     /**
      * List province
@@ -142,6 +146,13 @@ public class BaseInfoController {
             if(!personnelService.isParentPhoneExit(phone)){
                 return JsonResult.error("该手机从未注册过，请仔细检查！");
             }
+        }
+        if(StringUtils.equals(type,SMSTemplateEnum.REST_PHONE.getSign())||StringUtils.equals(type,SMSTemplateEnum.REGISTER.getSign())){
+
+            if(personnelService.isParentPhoneExit(phone)){
+                return JsonResult.error("该手机已经注册过，请仔细检查！");
+            }
+
         }
 
         return smsService.sendSms(phone, SMSTemplateEnum.stateOf(type));
@@ -250,7 +261,17 @@ public class BaseInfoController {
         return uploadService.uploadImg(file,"appimg/");
     }
 
+    /**
+     * Get About content
+     * @return
+     */
+    @RequestMapping(value = "/about")
+    public JsonResult getAboutContent(){
+        KeyValueDTO paramByEnumPhone = paramService.getParamByEnum(SystemParamEnum.LINK_PHONE);
+        KeyValueDTO paramByEnumAbout = paramService.getParamByEnum(SystemParamEnum.APP_ABOUT);
 
+        return JsonResult.success(paramByEnumPhone.getValue(),paramByEnumAbout.getValue());
+    }
 
 }
 

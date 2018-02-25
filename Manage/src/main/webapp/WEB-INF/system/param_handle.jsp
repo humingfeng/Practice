@@ -26,7 +26,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">参数信息</label>
                     <div class="layui-input-block">
-                        <input type="text" name="param" class="layui-input" lay-verify="empty" lay-verType="tips" maxlength="100" placeholder="请输入参数信息">
+                        <input type="text" name="param" class="layui-input" lay-verify="empty" lay-verType="tips" maxlength="500" placeholder="请输入参数信息">
                     </div>
                 </div>
                 <div class="layui-form-item">

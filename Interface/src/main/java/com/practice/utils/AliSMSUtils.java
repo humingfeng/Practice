@@ -43,7 +43,7 @@ public class AliSMSUtils {
             //必填:待发送手机号
             request.setPhoneNumbers(phone);
             //必填:短信签名-可在短信控制台中找到
-            request.setSignName("夜放华");
+            request.setSignName("去哪实践");
             //必填:短信模板-可在短信控制台中找到
             request.setTemplateCode(smsTemplateEnum.getCode());
             request.setTemplateParam("{\"code\":\""+code+"\"}");

@@ -8,7 +8,9 @@ public enum SystemParamEnum {
     /**
      * 系统参数
      */
-    ICONFONT_CSS(1L,"ICONFONT_CSS");
+    ICONFONT_CSS(1L,"ICONFONT_CSS"),
+    LINK_PHONE(3L,"LINK_PHONE"),
+    APP_ABOUT(2L,"APP_ABOUT");
 
     private Long id;
 
