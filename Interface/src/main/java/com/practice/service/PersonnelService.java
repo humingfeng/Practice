@@ -278,4 +278,21 @@ public interface PersonnelService {
      * @return
      */
     JsonResult changeHeadImg(String token, String headImg);
+
+    /**
+     * Check Teacher Login
+     * @param phone
+     * @param pass
+     * @return
+     */
+    JsonResult checkTeacherManageLogin(String phone, String pass);
+
+    /**
+     * Bind Teacher manage push id
+     * @param token
+     * @param pushId
+     * @return
+     */
+    JsonResult updateTeacherManagePushId(String token, String pushId);
+
 }

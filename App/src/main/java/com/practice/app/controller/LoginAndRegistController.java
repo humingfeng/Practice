@@ -75,6 +75,17 @@ public class LoginAndRegistController {
     }
 
     /**
+     * Teacher login check
+     * @param phone
+     * @param pass
+     * @return
+     */
+    @RequestMapping(value = "/app/teacher/manage/login/check")
+    public JsonResult teacherManageLoginCheck(String phone,String pass){
+        return personnelService.checkTeacherManageLogin(phone,pass);
+    }
+
+    /**
      * Get parent token by id
      * @param id
      * @return
@@ -93,5 +104,15 @@ public class LoginAndRegistController {
     @RequestMapping(value = "/app/auth/update/token")
     public JsonResult updateToken(@RequestAttribute String token){
         return loginService.updateToken(token);
+    }
+
+    /**
+     * Update teacher manage token
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/app/auth/update/token/teacher/manage")
+    public JsonResult updateTokenTeacherManage(@RequestAttribute String token){
+        return loginService.updateTeacherManageToken(token);
     }
 }

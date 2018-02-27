@@ -2,8 +2,10 @@ package com.practice.service.impl;
 
 import com.practice.dto.ParentDTO;
 import com.practice.dto.TokenParentDTO;
+import com.practice.dto.TokenTeacherManageDTO;
 import com.practice.dto.TokenUserDTO;
 import com.practice.enums.AuthEnum;
+import com.practice.enums.OperateEnum;
 import com.practice.mapper.ManageUserMapper;
 import com.practice.po.ManageUser;
 import com.practice.po.ManageUserExample;
@@ -118,7 +120,7 @@ public class LoginServiceImpl implements LoginService {
 
         TokenParentDTO tokenParentDTO = new TokenParentDTO(parent.getId(), parent.getPhone(), parent.getName(), parent.getStudentId());
 
-        return JsonResult.success(JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParentDTO)));
+        return JsonResult.success(JwtTokenUtil.createAPPJWT(JsonUtils.objectToJson(tokenParentDTO)));
 
     }
 
@@ -134,6 +136,24 @@ public class LoginServiceImpl implements LoginService {
         TokenParentDTO tokenParent = JwtTokenUtil.getTokenParent(token);
 
 
+
         return this.getParentToken(tokenParent.getId());
+    }
+
+    /**
+     * Update teacher manage token
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult updateTeacherManageToken(String token) {
+
+        TokenTeacherManageDTO tokenTeacherManage = JwtTokenUtil.getTokenTeacherManage(token);
+
+        token = JwtTokenUtil.createAPPJWT(JsonUtils.objectToJson(tokenTeacherManage));
+
+
+        return JsonResult.success(OperateEnum.SUCCESS.getStateInfo(),token);
     }
 }

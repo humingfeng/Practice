@@ -136,7 +136,7 @@ public class CacheServiceImpl implements CacheService {
     public void setManageUserPermission(List<String> permissionList, Long id) {
 
         jedisClient.set(ConstantEnum.CACHE_MANGE_USER_PERMISSION.getStrValue()+"KEY:"+id, JsonUtils.objectToJson(permissionList));
-        jedisClient.expire(ConstantEnum.CACHE_MANGE_USER_PERMISSION.getStrValue()+":KEY:"+id,60*31);
+       // jedisClient.expire(ConstantEnum.CACHE_MANGE_USER_PERMISSION.getStrValue()+":KEY:"+id,60*31);
     }
 
     /**
@@ -792,5 +792,34 @@ public class CacheServiceImpl implements CacheService {
         jedisClient.set(ConstantEnum.NEWS.getStrValue() + ":KEY:" + pageIndex,JsonUtils.objectToJson(list));
 
         jedisClient.expire(ConstantEnum.NEWS.getStrValue() + ":KEY:" + pageIndex,60*60*30);
+    }
+
+    /**
+     * Set teacher manage
+     *
+     * @param teacherManageDTO
+     */
+    @Override
+    public void setTeacherManage(TeacherManageDTO teacherManageDTO) {
+
+        jedisClient.hset(ConstantEnum.CACHE_TEACHER_MANGE_USER.getStrValue(),"KEY:"+teacherManageDTO.getId(),JsonUtils.objectToJson(teacherManageDTO));
+    }
+
+    /**
+     * Get teacher manage
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public TeacherManageDTO getTeacherManage(Long id) {
+
+        String hget = jedisClient.hget(ConstantEnum.CACHE_TEACHER_MANGE_USER.getStrValue(), "KEY:" + id);
+
+        if(StringUtils.isNotBlank(hget)){
+            return JsonUtils.jsonToPojo(hget,TeacherManageDTO.class);
+        }
+
+        return null;
     }
 }

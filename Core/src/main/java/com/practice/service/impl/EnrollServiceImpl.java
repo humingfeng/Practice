@@ -44,6 +44,8 @@ public class EnrollServiceImpl implements EnrollService {
     private ManageActivitySignRecordMapper signRecordMapper;
     @Resource
     private ParentActivityLinkMapper parentActivityLinkMapper;
+    @Resource
+    private ManageActivityLeaderMapper  leaderMapper;
     /**
      * Get student enroll info
      *
@@ -464,5 +466,45 @@ public class EnrollServiceImpl implements EnrollService {
 
 
         return JsonResult.success(activityIds);
+    }
+
+    /**
+     * Get Notice tag tacher manage
+     *
+     * @param token
+     * @return
+     */
+    @Override
+    public JsonResult getNoiceTag(String token) {
+
+        TokenTeacherManageDTO tokenTeacherManage = JwtTokenUtil.getTokenTeacherManage(token);
+
+        ManageActivityLeaderExample example = new ManageActivityLeaderExample();
+
+        example.createCriteria()
+                .andUserIdEqualTo(tokenTeacherManage.getId());
+
+        List<ManageActivityLeader> leaders = leaderMapper.selectByExample(example);
+
+        List<String> ids = new ArrayList<>();
+
+        for (ManageActivityLeader leader : leaders) {
+
+            if(!ids.contains(leader.getActivityId())){
+
+                ManageActivity activity = activityMapper.selectByPrimaryKey(leader.getActivityId());
+
+                if(activity.getStatus()==6||activity.getStatus()==1||activity.getStatus()==2){
+                    ids.add(String.valueOf(leader.getActivityId()));
+                }
+
+
+            }
+        }
+
+        ids.add("O"+tokenTeacherManage.getOrganizeId());
+
+
+        return JsonResult.success(ids);
     }
 }

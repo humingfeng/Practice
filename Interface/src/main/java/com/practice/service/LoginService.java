@@ -29,4 +29,11 @@ public interface LoginService {
      * @return
      */
     JsonResult updateToken(String token);
+
+    /**
+     * Update teacher manage token
+     * @param token
+     * @return
+     */
+    JsonResult updateTeacherManageToken(String token);
 }

@@ -401,4 +401,17 @@ public interface CacheService {
      * @param list
      */
     void setNewsList(Integer pageIndex,List<NewsDto> list);
+
+    /**
+     * Set teacher manage
+     * @param teacherManageDTO
+     */
+    void setTeacherManage(TeacherManageDTO teacherManageDTO);
+
+    /**
+     * Get teacher manage
+     * @param id
+     * @return
+     */
+    TeacherManageDTO getTeacherManage(Long id);
 }

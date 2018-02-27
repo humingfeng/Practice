@@ -84,6 +84,17 @@ public class MyController {
     }
 
     /**
+     * Bind Teacher manage id
+     * @param token
+     * @param pushId
+     * @return
+     */
+    @RequestMapping(value = "/bind/teacher/manage/push/{pushId}")
+    public JsonResult bindPushIdTeacherManage(@RequestAttribute String token,@PathVariable String pushId){
+        return personnelService.updateTeacherManagePushId(token,pushId);
+    }
+
+    /**
      * List my enroll activity
      * @return
      */
@@ -123,6 +134,17 @@ public class MyController {
     public JsonResult getMyNoticeTag(@RequestAttribute String token){
 
         return enrollService.getNoticeTag(token);
+    }
+
+    /**
+     * Get push tag teacher manange
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/notice/teacher/manage/tag")
+    public JsonResult getMyNoticeTagTeacherManage(@RequestAttribute String token){
+
+        return enrollService.getNoiceTag(token);
     }
 
     /**

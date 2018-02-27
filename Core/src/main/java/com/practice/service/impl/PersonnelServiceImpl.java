@@ -11,7 +11,6 @@ import com.practice.result.JsonResult;
 import com.practice.service.*;
 import com.practice.utils.*;
 import com.practice.vo.ActivityListItemVO;
-import com.practice.vo.ActivitySearchVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +44,12 @@ public class PersonnelServiceImpl implements PersonnelService {
     private ActivityService activityService;
     @Resource
     private ParentPhotosMapper parentPhotosMapper;
+    @Resource
+    private ManageUserMapper manageUserMapper;
+    @Resource
+    private UserService userService;
+    @Resource
+    private ManageUserAppMapper manageUserAppMapper;
     /**
      * List Teacher
      *
@@ -931,6 +936,43 @@ public class PersonnelServiceImpl implements PersonnelService {
         return JsonResult.success(OperateEnum.SUCCESS);
     }
 
+    /**
+     * Bind Teacher manage push id
+     *
+     * @param token
+     * @param pushId
+     * @return
+     */
+    @Override
+    public JsonResult updateTeacherManagePushId(String token, String pushId) {
+
+        TokenTeacherManageDTO tokenTeacherManage  = JwtTokenUtil.getTokenTeacherManage(token);
+
+        ManageUserApp manageUserApp = manageUserAppMapper.selectByPrimaryKey(tokenTeacherManage.getId());
+
+        if(manageUserApp==null){
+
+            manageUserApp.setId(tokenTeacherManage.getId());
+
+            manageUserApp.setPushId(pushId);
+
+            manageUserApp.setUpdateTime(new Date());
+
+            manageUserApp.setCreateTime(new Date());
+
+            manageUserAppMapper.insertSelective(manageUserApp);
+
+        }else{
+            manageUserApp.setPushId(pushId);
+
+            manageUserApp.setUpdateTime(new Date());
+
+            manageUserAppMapper.updateByPrimaryKeySelective(manageUserApp);
+        }
+
+
+        return JsonResult.success(OperateEnum.SUCCESS);
+    }
 
     /**
      * List parent
@@ -1310,7 +1352,7 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         tokenParent.setStudentId(studentId);
 
-        String newToken = JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParent));
+        String newToken = JwtTokenUtil.createAPPJWT(JsonUtils.objectToJson(tokenParent));
 
         ParentDTO parentDTO = this.getParentDTO(tokenParent.getId());
 
@@ -1362,7 +1404,7 @@ public class PersonnelServiceImpl implements PersonnelService {
 
         tokenParent.setPhone(Long.valueOf(phone));
 
-        String newToken = JwtTokenUtil.createParentJWT(JsonUtils.objectToJson(tokenParent));
+        String newToken = JwtTokenUtil.createAPPJWT(JsonUtils.objectToJson(tokenParent));
 
         ParentDTO parentDTO = this.getParentDTO(tokenParent.getId());
 
@@ -1393,5 +1435,74 @@ public class PersonnelServiceImpl implements PersonnelService {
         ParentDTO parentDTO = this.getParentDTO(parent.getId());
 
         return JsonResult.success(parentDTO);
+    }
+
+
+    /**
+     * Check Teacher Login
+     *
+     * @param phone
+     * @param pass
+     * @return
+     */
+    @Override
+    public JsonResult checkTeacherManageLogin(String phone, String pass) {
+
+        if(!ValidatorUtils.isMobile(phone)){
+            return JsonResult.error(OperateEnum.PHONE_ERROR);
+        }
+
+        ManageUserExample example = new ManageUserExample();
+
+        example.createCriteria()
+                .andPhoneEqualTo(Long.valueOf(phone))
+                .andDelflagEqualTo(0);
+
+        List<ManageUser> manageUsers = manageUserMapper.selectByExample(example);
+
+        if(manageUsers.size()==0){
+            return JsonResult.error(OperateEnum.LOGIN_ERROR_NOUSER);
+        }
+
+        ManageUser manageUser = manageUsers.get(0);
+
+        if(!StringUtils.equals(CommonUtils.sha256(pass),manageUser.getPassword())){
+            return JsonResult.error(OperateEnum.LOGIN_ERROR_PASSERROR);
+        }
+
+        if(manageUser.getStatus()==0){
+            return JsonResult.error(OperateEnum.LOGIN_ERROR_USERSTOP);
+        }
+
+        TeacherManageDTO teacherManageDTO = new TeacherManageDTO();
+
+        teacherManageDTO.setId(manageUser.getId());
+
+        teacherManageDTO.setHeadImg(manageUser.getHeadImg());
+
+        teacherManageDTO.setOrganizeId(manageUser.getOrganizeId());
+
+        teacherManageDTO.setOrganizeName(dictionaryService.getDictionaryPO(manageUser.getOrganizeId()).getName());
+
+        teacherManageDTO.setUserName(manageUser.getNickName());
+
+        teacherManageDTO.setPhone(phone);
+
+        cacheService.setTeacherManage(teacherManageDTO);
+
+        try {
+
+            String token = JwtTokenUtil.createAPPJWT(JsonUtils.objectToJson(new TokenTeacherManageDTO(manageUser.getId(),manageUser.getPhone(),manageUser.getOrganizeId(),manageUser.getNickName())));
+
+            userService.createUserNavsAndPermissionCache(manageUser.getId());
+
+            return JsonResult.success(token,teacherManageDTO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return JsonResult.error(ExceptionUtil.getStackTrace(e));
+        }
+
     }
 }

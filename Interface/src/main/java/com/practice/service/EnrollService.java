@@ -55,4 +55,12 @@ public interface EnrollService {
      * @return
      */
     JsonResult getNoticeTag(String token);
+
+
+    /**
+     * Get Notice tag tacher manage
+     * @param token
+     * @return
+     */
+    JsonResult getNoiceTag(String token);
 }

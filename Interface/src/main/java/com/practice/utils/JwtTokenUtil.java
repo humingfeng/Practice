@@ -2,6 +2,7 @@ package com.practice.utils;
 
 
 import com.practice.dto.TokenParentDTO;
+import com.practice.dto.TokenTeacherManageDTO;
 import com.practice.dto.TokenUserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -25,8 +26,8 @@ public class JwtTokenUtil {
      */
     public static final String JWT_ID = "jwt";
     public static final String JWT_SECRET = "7786df7fc3a34e26a61c034d5ec8245d";
-    public static final int JWT_TTL = 30*60*1000;
-    public static final int JWT_TTL_PARENT = 7*24*60*60*1000;
+    public static final int JWT_TTL_WEB = 30*60*1000;
+    public static final int JWT_TTL_APP = 7*24*60*60*1000;
     public static final String PROFILES = "Xushd";
 
     /**
@@ -56,7 +57,7 @@ public class JwtTokenUtil {
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .signWith(signatureAlgorithm, key);
-        long expMillis = nowMillis + JWT_TTL;
+        long expMillis = nowMillis + JWT_TTL_WEB;
         Date exp = new Date( expMillis);
         builder.setExpiration( exp);
         return builder.compact();
@@ -136,12 +137,36 @@ public class JwtTokenUtil {
         }
         return null;
     }
+
     /**
-     * Create parent token
+     * Get teacherManageDTO by token
+     * @param token
+     * @return
+     */
+    public static TokenTeacherManageDTO getTokenTeacherManage(String token) {
+
+        try {
+            Claims claims = parseJWT(token);
+
+            if(claims!=null){
+                String subject = claims.getSubject();
+
+                return JsonUtils.jsonToPojo(subject,TokenTeacherManageDTO.class);
+
+            }
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
+    /**
+     * Create APP token
      * @param subject
      * @return
      */
-    public static String createParentJWT(String subject) {
+    public static String createAPPJWT(String subject) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256 ;
         long nowMillis = System. currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -151,10 +176,12 @@ public class JwtTokenUtil {
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .signWith(signatureAlgorithm, key);
-        long expMillis = nowMillis + JWT_TTL_PARENT;
+        long expMillis = nowMillis + JWT_TTL_APP;
         Date exp = new Date( expMillis);
         builder.setExpiration( exp);
         return builder.compact();
 
     }
+
+
 }
