@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/1/1 17:24
+ * @author Xushd  2018/3/20 22:54
  */
 public class ManageActivity implements Serializable {
 
@@ -16,6 +16,38 @@ public class ManageActivity implements Serializable {
     private String classify;
 
     private String theme;
+
+    private String timeStr;
+
+    private String price;
+
+    private String closeTimeStr;
+
+    private String taskCloseTimeStr;
+
+    public String getCloseTimeStr() {
+        return closeTimeStr;
+    }
+
+    public void setCloseTimeStr(String closeTimeStr) {
+        this.closeTimeStr = closeTimeStr;
+    }
+
+    public String getTaskCloseTimeStr() {
+        return taskCloseTimeStr;
+    }
+
+    public void setTaskCloseTimeStr(String taskCloseTimeStr) {
+        this.taskCloseTimeStr = taskCloseTimeStr;
+    }
+
+    public String getBaseName() {
+        return baseName;
+    }
+
+    public void setBaseName(String baseName) {
+        this.baseName = baseName;
+    }
 
     public String getType() {
         return type;
@@ -41,18 +73,6 @@ public class ManageActivity implements Serializable {
         this.theme = theme;
     }
 
-    private String closeTimeStr;
-
-    private String timeStr;
-
-    public String getCloseTimeStr() {
-        return closeTimeStr;
-    }
-
-    public void setCloseTimeStr(String closeTimeStr) {
-        this.closeTimeStr = closeTimeStr;
-    }
-
     public String getTimeStr() {
         return timeStr;
     }
@@ -61,12 +81,12 @@ public class ManageActivity implements Serializable {
         this.timeStr = timeStr;
     }
 
-    public String getBaseName() {
-        return baseName;
+    public String getPrice() {
+        return price;
     }
 
-    public void setBaseName(String baseName) {
-        this.baseName = baseName;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     private Long id;
@@ -93,21 +113,29 @@ public class ManageActivity implements Serializable {
 
     private Date endTime;
 
+    private Date taskCloseTime;
+
     private Integer self;
+
+    private Integer signInRun;
+
+    private Integer collective;
 
     private Integer sign;
 
     private Integer number;
 
+    private Integer minNum;
+
     private Integer stock;
+
+    private Integer immediately;
 
     private Integer closeType;
 
     private Date closeTime;
 
     private Integer money;
-
-    private String price;
 
     private String moneyDesc;
 
@@ -132,6 +160,10 @@ public class ManageActivity implements Serializable {
     private Integer delflag;
 
     private String reason;
+
+    private Long createUser;
+
+    private Date createTime;
 
     private Long updateUser;
 
@@ -233,12 +265,36 @@ public class ManageActivity implements Serializable {
         this.endTime = endTime;
     }
 
+    public Date getTaskCloseTime() {
+        return taskCloseTime;
+    }
+
+    public void setTaskCloseTime(Date taskCloseTime) {
+        this.taskCloseTime = taskCloseTime;
+    }
+
     public Integer getSelf() {
         return self;
     }
 
     public void setSelf(Integer self) {
         this.self = self;
+    }
+
+    public Integer getSignInRun() {
+        return signInRun;
+    }
+
+    public void setSignInRun(Integer signInRun) {
+        this.signInRun = signInRun;
+    }
+
+    public Integer getCollective() {
+        return collective;
+    }
+
+    public void setCollective(Integer collective) {
+        this.collective = collective;
     }
 
     public Integer getSign() {
@@ -257,12 +313,28 @@ public class ManageActivity implements Serializable {
         this.number = number;
     }
 
+    public Integer getMinNum() {
+        return minNum;
+    }
+
+    public void setMinNum(Integer minNum) {
+        this.minNum = minNum;
+    }
+
     public Integer getStock() {
         return stock;
     }
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Integer getImmediately() {
+        return immediately;
+    }
+
+    public void setImmediately(Integer immediately) {
+        this.immediately = immediately;
     }
 
     public Integer getCloseType() {
@@ -385,6 +457,22 @@ public class ManageActivity implements Serializable {
         this.reason = reason == null ? null : reason.trim();
     }
 
+    public Long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public Long getUpdateUser() {
         return updateUser;
     }
@@ -399,13 +487,5 @@ public class ManageActivity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 }

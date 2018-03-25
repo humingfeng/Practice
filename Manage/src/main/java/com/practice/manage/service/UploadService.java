@@ -17,4 +17,20 @@ public interface UploadService {
     JsonResult uploadImg(MultipartFile file, String dir);
 
 
+    /**
+     * Create activity sign in ercode
+     * @param activityId
+     * @param id
+     * @return
+     */
+    JsonResult createActivitySignInErcode(Long activityId, Long id);
+
+    /**
+     * Create activity sign out ercode
+     * @param activityId
+     * @param id
+     * @param diff
+     * @return
+     */
+    JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff);
 }

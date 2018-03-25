@@ -37,7 +37,7 @@
                     <a href="javascript:;"><i class="iconfont icon-gonggao"></i><cite>系统公告</cite></a>
                 </li>
                 <li class="layui-nav-item" mobile>
-                    <a href="javascript:;" class="mobileAddTab" data-url="page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>设置</cite></a>
+                    <a href="javascript:;" class="mobileAddTab" data-url="/auth/user/change/pwd"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>设置</cite></a>
                 </li>
                 <li class="layui-nav-item" mobile>
                     <a href="javascript:;" class="signOut"><i class="iconfont icon-exit"></i> 退出</a>
@@ -52,13 +52,13 @@
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" data-url="page/user/userInfo.html">
+                            <a href="javascript:;" data-url="/auth/user/change/userInfo">
                                 <i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i>
                                 <cite>个人资料</cite>
                             </a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" data-url="page/user/changePwd.html">
+                            <a href="javascript:;" data-url="/auth/user/change/pwd">
                                 <i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i>
                                 <cite>修改密码</cite>
                             </a>

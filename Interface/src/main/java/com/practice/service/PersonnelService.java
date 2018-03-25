@@ -295,4 +295,22 @@ public interface PersonnelService {
      */
     JsonResult updateTeacherManagePushId(String token, String pushId);
 
+    /**
+     * List manage activity
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    JsonResult listManageActivity(String token, int pageIndex);
+
+    /**
+     * List manage activity enroll or sign
+     * @param token
+     * @param pageIndex
+     * @param status
+     * @return
+     */
+    JsonResult listManageActivityEnrollOrSign(String token, int pageIndex,int status);
+
+
 }

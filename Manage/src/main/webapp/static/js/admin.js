@@ -1,8 +1,9 @@
 /**
  * Created by Xushd on 2017/10/9.
  */
+var $;
 layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
-    var $ = layui.jquery,app = layui.app,
+    $ = layui.jquery,app = layui.app,
         element = layui.element,tab = layui.bodyTab({
             openTabNum : "50",  //最大可打开窗口数量
             url : "/auth/user/nav" //获取菜单json地址
@@ -167,3 +168,7 @@ layui.config({base:"/static/js/"}).use(['app','element','bodyTab'],function(){
         tab.tabMove();
     }
 })
+
+function closeWinCur() {
+    $("#top_tabs .layui-this .layui-tab-close").click();
+}

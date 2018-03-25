@@ -5,10 +5,7 @@ import com.practice.enums.OperateEnum;
 import com.practice.mapper.*;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
-import com.practice.service.ActivityService;
-import com.practice.service.CacheService;
-import com.practice.service.EnrollService;
-import com.practice.service.PersonnelService;
+import com.practice.service.*;
 import com.practice.utils.JwtTokenUtil;
 import com.practice.utils.TimeUtils;
 import org.apache.solr.common.util.Hash;
@@ -46,6 +43,12 @@ public class EnrollServiceImpl implements EnrollService {
     private ParentActivityLinkMapper parentActivityLinkMapper;
     @Resource
     private ManageActivityLeaderMapper  leaderMapper;
+    @Resource
+    private SchoolService schoolService;
+    @Resource
+    private DictionaryService dictionaryService;
+
+
     /**
      * Get student enroll info
      *
@@ -507,4 +510,189 @@ public class EnrollServiceImpl implements EnrollService {
 
         return JsonResult.success(ids);
     }
+
+    /**
+     * List manage activity enroll record
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public JsonResult listManageActivityEnrollRecord(Long activityId) {
+
+
+        ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
+
+        recordExample.createCriteria().andActivityIdEqualTo(activityId).andStatusNotEqualTo(0);
+
+        List<ManageActivityEnrollRecord> records = enrollRecordMapper.selectByExample(recordExample);
+
+        recordExample.setOrderByClause("update_time desc");
+
+
+
+        for (ManageActivityEnrollRecord record : records) {
+            record.setSchoolName(schoolService.getSchoolPO(record.getSchoolId()).getName());
+
+            record.setPeriodName(dictionaryService.getDictionaryPO(record.getPeriodId()).getName());
+
+            record.setClassName(dictionaryService.getDictionaryPO(record.getClassId()).getName());
+
+            if (record.getNation() != null) {
+                record.setNationName(dictionaryService.getDictionaryPO(record.getNation()).getName());
+            }
+
+            record.setTimeStr(TimeUtils.getDateString(record.getUpdateTime()));
+        }
+
+        return JsonResult.success(records);
+    }
+
+    /**
+     * Get manage activity sign record
+     *
+     * @param activityId
+     * @param type
+     * @return
+     */
+    @Override
+    public JsonResult getSignRecord(Long activityId, int type) {
+
+        ManageActivityEnrollRecordExample recordExample = new ManageActivityEnrollRecordExample();
+
+        recordExample.createCriteria().andActivityIdEqualTo(activityId).andStatusEqualTo(8);
+
+        List<ManageActivityEnrollRecord> records = enrollRecordMapper.selectByExample(recordExample);
+
+        ManageActivitySignRecordExample signRecordExample = new ManageActivitySignRecordExample();
+
+        signRecordExample.createCriteria().andActivityIdEqualTo(activityId).andTypeEqualTo(type);
+
+        List<ManageActivitySignRecord> signRecords = signRecordMapper.selectByExample(signRecordExample);
+
+        Map<String ,List<ManageActivitySignRecord> > signMap = new HashMap<>();
+
+        Map<String,List<Long>> signStudentIds = new HashMap<>();
+
+        Map<Long,ManageActivitySignRecord> mapSignTemp = new HashMap<>();
+
+        for (ManageActivitySignRecord signRecord : signRecords) {
+            if(signMap.containsKey(signRecord.getGroupDate())){
+                signMap.get(signRecord.getGroupDate()).add(signRecord);
+
+                signStudentIds.get(signRecord.getGroupDate()).add(signRecord.getStudentId());
+
+
+
+            }else{
+                List<ManageActivitySignRecord> list = new ArrayList<>();
+                list.add(signRecord);
+                signMap.put(signRecord.getGroupDate(),list);
+
+                List<Long> ids = new ArrayList<>();
+
+                ids.add(signRecord.getStudentId());
+
+                signStudentIds.put(signRecord.getGroupDate(),ids);
+            }
+
+            if(!mapSignTemp.containsKey(signRecord.getStudentId())){
+                mapSignTemp.put(signRecord.getStudentId(),signRecord);
+            }
+        }
+
+        //Map<String,List<SignStudentRecord>> resultMap = new HashMap<>();
+
+        Map<String, List<ManageActivitySignRecord>> stringListMap = sortMapByKey(signMap);
+
+        List<SignStudentRecordListDTO> resultlist = new ArrayList<>();
+
+        for (Map.Entry<String, List<ManageActivitySignRecord>> entry : stringListMap.entrySet()) {
+
+            List<ManageActivitySignRecord> value = entry.getValue();
+
+            List<Long> signIds = signStudentIds.get(entry.getKey());
+
+            SignStudentRecordListDTO dto = new SignStudentRecordListDTO();
+
+            dto.setGroupDate(entry.getKey());
+
+
+            List<SignStudentRecord> list  = new ArrayList<>();
+
+            for (ManageActivityEnrollRecord enrollRecord : records) {
+
+                SignStudentRecord signStudentRecord = new SignStudentRecord();
+
+                signStudentRecord.setId(enrollRecord.getStudentId());
+
+                StudentDTO studentDTO = personnelService.getStudentDTO(enrollRecord.getStudentId());
+
+                signStudentRecord.setName(studentDTO.getStudentName());
+
+                signStudentRecord.setSchoolName(studentDTO.getSchoolName());
+
+                signStudentRecord.setPeriodName(studentDTO.getPeriodName());
+
+                signStudentRecord.setClassName(studentDTO.getClassName());
+
+                if(signIds.contains(enrollRecord.getStudentId())){
+
+                    signStudentRecord.setIsSign(1);
+
+                    ManageActivitySignRecord record = mapSignTemp.get(enrollRecord.getStudentId());
+
+                    signStudentRecord.setSignTime(TimeUtils.getDateString(record.getSignTime()));
+                }else{
+                    signStudentRecord.setIsSign(0);
+                }
+
+                list.add(signStudentRecord);
+
+            }
+
+            dto.setList(list);
+
+            resultlist.add(dto);
+
+        }
+
+
+        return JsonResult.success(resultlist);
+    }
+
+
+    static class MapKeyComparator implements Comparator<String>{
+
+        @Override
+        public int compare(String str1, String str2) {
+
+            boolean b = TimeUtils.Obj1LessObj2(TimeUtils.getDateFromStringShort(str1), TimeUtils.getDateFromStringShort(str2));
+
+            if(b){
+                return 1;
+            }else{
+                return -1;
+            }
+
+        }
+    }
+    /**
+     * 使用 Map按key进行排序
+     * @param map
+     * @return
+     */
+    public static Map<String, List<ManageActivitySignRecord>> sortMapByKey(Map<String, List<ManageActivitySignRecord>> map) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+
+        Map<String, List<ManageActivitySignRecord>> sortMap = new TreeMap<String, List<ManageActivitySignRecord>>(
+                new MapKeyComparator());
+
+        sortMap.putAll(map);
+
+        return sortMap;
+    }
+
 }

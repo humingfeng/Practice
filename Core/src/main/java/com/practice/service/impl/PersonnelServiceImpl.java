@@ -50,6 +50,8 @@ public class PersonnelServiceImpl implements PersonnelService {
     private UserService userService;
     @Resource
     private ManageUserAppMapper manageUserAppMapper;
+    @Resource
+    private ManageActivityLeaderMapper leaderMapper;
     /**
      * List Teacher
      *
@@ -1505,4 +1507,103 @@ public class PersonnelServiceImpl implements PersonnelService {
         }
 
     }
+
+    /**
+     * List manage activity
+     *
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public JsonResult listManageActivity(String token, int pageIndex) {
+
+
+        TokenTeacherManageDTO tokenTeacherManage = JwtTokenUtil.getTokenTeacherManage(token);
+
+        PageHelper.startPage(pageIndex,10);
+
+        ManageActivityLeaderExample leaderExample = new ManageActivityLeaderExample();
+
+        leaderExample.createCriteria().andUserIdEqualTo(tokenTeacherManage.getId());
+
+        leaderExample.setOrderByClause("update_time desc");
+
+        List<ManageActivityLeader> leaders = leaderMapper.selectByExample(leaderExample);
+
+        PageInfo<ManageActivityLeader> pageInfo = new PageInfo<>(leaders);
+
+        List<ActivityListItemVO> list = new ArrayList<>();
+
+        for (ManageActivityLeader leader : leaders) {
+
+            ActivityListItemVO activityListItemDTO = activityService.getActivityListItemDTO(leader.getActivityId());
+
+            list.add(activityListItemDTO);
+        }
+
+        PageResult<ActivityListItemVO> pageResult = new PageResult<>();
+
+        pageResult.setPages(pageInfo.getPages());
+
+        pageResult.setList(list);
+
+        return JsonResult.success(pageResult);
+    }
+
+    /**
+     * List manage activity enroll
+     *
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @Override
+    public JsonResult listManageActivityEnrollOrSign(String token, int pageIndex,int status) {
+
+        TokenTeacherManageDTO tokenTeacherManage = JwtTokenUtil.getTokenTeacherManage(token);
+
+        PageHelper.startPage(pageIndex,10);
+
+        ManageActivityLeaderExample leaderExample = new ManageActivityLeaderExample();
+
+        leaderExample.createCriteria().andUserIdEqualTo(tokenTeacherManage.getId());
+
+        leaderExample.setOrderByClause("update_time desc");
+
+        List<ManageActivityLeader> leaders = leaderMapper.selectByExample(leaderExample);
+
+        PageInfo<ManageActivityLeader> pageInfo = new PageInfo<>(leaders);
+
+        List<ActivityListItemVO> list = new ArrayList<>();
+
+        for (ManageActivityLeader leader : leaders) {
+
+            ActivityListItemVO activityListItemDTO = activityService.getActivityListItemDTO(leader.getActivityId());
+
+            if(status==1){
+                if(activityListItemDTO.getStatus()==6||activityListItemDTO.getStatus()==2){
+                    list.add(activityListItemDTO);
+                }
+            }else{
+                if(activityListItemDTO.getStatus()==1){
+                    list.add(activityListItemDTO);
+                }
+            }
+
+
+
+        }
+
+        PageResult<ActivityListItemVO> pageResult = new PageResult<>();
+
+        pageResult.setPages(pageInfo.getPages());
+
+        pageResult.setList(list);
+
+        return JsonResult.success(pageResult);
+    }
+
+
+
 }

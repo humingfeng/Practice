@@ -1,6 +1,5 @@
 package com.practice.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.practice.dao.ActiveMqProducer;
@@ -21,9 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -814,11 +810,11 @@ public class ActivityServiceImpl implements ActivityService {
 
         manageActivity.setOrganizeId(tokeUser.getOid());
 
+
         Date date = new Date();
 
         if (StringUtils.isBlank(manageActivity.getCloseTimeStr())) {
             manageActivity.setCloseTime(date);
-
 
         } else {
 
@@ -832,19 +828,38 @@ public class ActivityServiceImpl implements ActivityService {
 
         }
 
+        if(manageActivity.getNumber()!=0&&manageActivity.getMinNum()!=0){
+            if(manageActivity.getNumber()<=manageActivity.getMinNum()){
+                return JsonResult.error("报名人数限制输入不正确");
+            }
+        }
+
         if (manageActivity.getSign() == 1) {
             manageActivity.setCheckSign(3);
         } else {
             manageActivity.setCheckSign(0);
         }
 
-        if (StringUtils.isNotBlank(manageActivity.getTimeStr()) && StringUtils.isNotBlank(manageActivity.getValidTime())) {
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr())
+                && StringUtils.isNotBlank(manageActivity.getValidTime())
+                && StringUtils.isNotBlank(manageActivity.getTaskCloseTimeStr())) {
             String dateStr = manageActivity.getTimeStr();
             String timeStr = manageActivity.getValidTime();
+
+            String taskCloseTimeStr = manageActivity.getTaskCloseTimeStr();
+
+            Date dateTaskCloseTime = TimeUtils.getDateFromString(taskCloseTimeStr);
+
+            manageActivity.setTaskCloseTime(dateTaskCloseTime);
+
 
             String[] split = dateStr.split(" - ");
 
             String[] split1 = timeStr.split(" - ");
+
+            if(split1[0].equals(split1[1])){
+                return JsonResult.error("活动时间为零");
+            }
 
             Date dateBegin = TimeUtils.getDateFromStringShort(split[0]);
 
@@ -982,19 +997,44 @@ public class ActivityServiceImpl implements ActivityService {
             manageActivity.setCloseTime(closeDate);
         }
 
+        if(manageActivity.getNumber()!=0&&manageActivity.getMinNum()!=0){
+            if(manageActivity.getNumber()<=manageActivity.getMinNum()){
+                return JsonResult.error("报名人数限制输入不正确");
+            }
+        }
+
         if (manageActivity.getSign() == 1) {
             manageActivity.setCheckSign(3);
         } else {
             manageActivity.setCheckSign(0);
         }
 
-        if (StringUtils.isNotBlank(manageActivity.getTimeStr()) && StringUtils.isNotBlank(manageActivity.getValidTime())) {
+        if (StringUtils.isNotBlank(manageActivity.getTimeStr())
+                && StringUtils.isNotBlank(manageActivity.getValidTime())
+                && StringUtils.isNotBlank(manageActivity.getTaskCloseTimeStr())) {
             String dateStr = manageActivity.getTimeStr();
             String timeStr = manageActivity.getValidTime();
+
+            String taskCloseTimeStr = manageActivity.getTaskCloseTimeStr();
+
+            Date dateTaskCloseTime = TimeUtils.getDateFromString(taskCloseTimeStr);
+
+            manageActivity.setTaskCloseTime(dateTaskCloseTime);
+
+
+
 
             String[] split = dateStr.split(" - ");
 
             String[] split1 = timeStr.split(" - ");
+
+
+            Date dateEnd1 = TimeUtils.getDateFromString(split[1] + " " + split1[1]);
+
+
+            if(TimeUtils.Obj1LessObj2(dateTaskCloseTime,dateEnd1)){
+                return JsonResult.error("任务结束时间应该大于活动的结束时间");
+            }
 
             Date dateBegin = TimeUtils.getDateFromStringShort(split[0]);
 
@@ -1744,98 +1784,57 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     /**
-     * Create Sign in ercode
+     * Update activity sign out Ercode
      *
-     * @param activityId
      * @param id
-     * @return
+     * @param s
+     * @param diff
      */
     @Override
-    public JsonResult createActivitySignInErcode(Long activityId, Long id) {
-
-        OutputStream out = new ByteArrayOutputStream();
-
-        SignErcodeDTO signErcodeDTO = new SignErcodeDTO();
-
-        signErcodeDTO.setActivityId(activityId);
-        signErcodeDTO.setSignId(id);
-        signErcodeDTO.setEvent(1);
-        signErcodeDTO.setType("sign");
-
-        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(signErcodeDTO));
-
-        ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
-
-        ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
-
-        Map<String, String> param = this.getParam();
-
-        param.put("key", PARENET_DIR + "ercode/");
-
-        String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
+    public void updateActivitySingOutErcode(Long id, String s, int diff) {
 
         ManageActivitySign sign = new ManageActivitySign();
 
-        String url = IMGURL + PARENET_DIR + "ercode/" + newFileName;
-
         sign.setId(id);
 
-        sign.setSignInErcode(url);
+        sign.setSignOutErcode(s);
+
+        sign.setSignOutTime((long) diff);
 
         signMapper.updateByPrimaryKeySelective(sign);
-
-        return JsonResult.success(OperateEnum.FILE_UPLOAD_SUCCESS.getStateInfo(), url);
 
     }
 
-
     /**
-     * Create Sign out ercode
+     * Update activity sign in Ercode
      *
-     * @param activityId
      * @param id
-     * @param diff
-     * @return
+     * @param s
      */
     @Override
-    public JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff) {
+    public void updateActivitySignInErcode(Long id, String s) {
 
-        OutputStream out = new ByteArrayOutputStream();
-
-        JSONObject jsonObject = new JSONObject();
-
-        SignErcodeDTO signErcodeDTO = new SignErcodeDTO();
-
-        signErcodeDTO.setActivityId(activityId);
-        signErcodeDTO.setSignId(id);
-        signErcodeDTO.setEvent(2);
-        signErcodeDTO.setType("sign");
-
-        ErCodeUtils.createErCode(out, JsonUtils.objectToJson(signErcodeDTO));
-
-        ByteArrayOutputStream baos = (ByteArrayOutputStream) out;
-
-        ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
-
-        Map<String, String> param = this.getParam();
-
-        param.put("key", PARENET_DIR + "ercode/");
-
-        String newFileName = FileUploadUtils.UploadStreamOSS(param, swapStream);
 
         ManageActivitySign sign = new ManageActivitySign();
 
-        String url = IMGURL + PARENET_DIR + "ercode/" + newFileName;
-
         sign.setId(id);
 
-        sign.setSignOutErcode(url);
-
-        sign.setSignOutTime(Long.valueOf(diff));
+        sign.setSignInErcode(s);
 
         signMapper.updateByPrimaryKeySelective(sign);
+    }
 
-        return JsonResult.success(OperateEnum.FILE_UPLOAD_SUCCESS.getStateInfo(), url);
+    /**
+     * Reset classify cache
+     *
+     * @return
+     */
+    @Override
+    public JsonResult resetClassifyCache() {
+
+        cacheService.delClassify();
+
+        return JsonResult.success(OperateEnum.SUCCESS);
     }
 
     /**

@@ -822,4 +822,13 @@ public class CacheServiceImpl implements CacheService {
 
         return null;
     }
+
+    /**
+     * del classify cache
+     */
+    @Override
+    public void delClassify() {
+        jedisClient.hdel(ConstantEnum.ACTIVITY_CLASSIFY.getStrValue(),"KEY:"+5);
+        jedisClient.hdel(ConstantEnum.ACTIVITY_CLASSIFY.getStrValue(),"KEY:"+6);
+    }
 }

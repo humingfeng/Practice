@@ -1,6 +1,8 @@
 package com.practice.app.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.practice.dto.VerifyStudentDTO;
+import com.practice.po.ManageActivitySign;
 import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 import com.practice.service.*;
@@ -201,5 +203,80 @@ public class MyController {
     @RequestMapping(value = "/change/headimg")
     public JsonResult changeHeadImg(@RequestAttribute String token,String headImg){
         return personnelService.changeHeadImg(token,headImg);
+    }
+
+
+    /**
+     * List activity manage
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/manage/activity/list/{pageIndex}")
+    public JsonResult listManageActivity(@RequestAttribute String token,@PathVariable int pageIndex){
+
+        return personnelService.listManageActivity(token,pageIndex);
+    }
+
+    /**
+     * List activity manage enroll
+     * @param token
+     * @param pageIndex
+     * @return
+     */
+    @RequestMapping(value = "/manage/activity/enroll/list/{pageIndex}/{status}")
+    public JsonResult listManageActivityEnrolling(@RequestAttribute String token,@PathVariable int pageIndex,@PathVariable int status){
+
+        return personnelService.listManageActivityEnrollOrSign(token,pageIndex,status);
+    }
+
+    /**
+     * List activity manage enroll or sign info
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/manage/activity/enroll/info/list/{activityId}")
+    public JsonResult listManageActivityEnrollRecord(@PathVariable Long activityId){
+
+        return enrollService.listManageActivityEnrollRecord(activityId);
+    }
+
+    /**
+     * Get manage activity sign info
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/manage/activity/sign/info/{activityId}")
+    public JsonResult getManageActivitySignInfo(@PathVariable Long activityId){
+
+        ManageActivitySign activitySign = activityService.getActivitySign(activityId);
+
+        return JsonResult.success(activitySign);
+    }
+
+    /**
+     * Get sign record list
+     * @param activityId
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/manage/sign/record/{activityId}/{type}")
+    public JsonResult getSignRecord(@PathVariable Long activityId,@PathVariable int type){
+
+        return enrollService.getSignRecord(activityId,type);
+    }
+
+    /**
+     * Get tongji by activity
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/manage/tongji/activity/info")
+    public JsonResult getTongjiActivity(@RequestAttribute String token){
+        return statisticsService.getTongjiByActivity(token);
+    }
+
+    @RequestMapping(value = "/manage/tongji/activity/info/{id}")
+    public JsonResult getTongjiByActivity(@PathVariable Long id){
+        return statisticsService.getTongjiByActivityInfo(id);
     }
 }

@@ -63,4 +63,19 @@ public interface EnrollService {
      * @return
      */
     JsonResult getNoiceTag(String token);
+
+    /**
+     * List manage activity enroll record
+     * @param activityId
+     * @return
+     */
+    JsonResult listManageActivityEnrollRecord(Long activityId);
+
+    /**
+     * Get manage activity sign record
+     * @param activityId
+     * @param type
+     * @return
+     */
+    JsonResult getSignRecord(Long activityId, int type);
 }

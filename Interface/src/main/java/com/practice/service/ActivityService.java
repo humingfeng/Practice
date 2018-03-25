@@ -346,22 +346,6 @@ public interface ActivityService {
      */
     JsonResult updateActivitySign(String token, ManageActivitySign sign);
 
-    /**
-     * Create Sign in ercode
-     * @param activityId
-     * @param id
-     * @return
-     */
-    JsonResult createActivitySignInErcode(Long activityId, Long id);
-
-    /**
-     * Create Sign out ercode
-     * @param activityId
-     * @param id
-     * @param diff
-     * @return
-     */
-    JsonResult createActivitySignOutErcode(Long activityId, Long id, int diff);
 
     /**
      * List task
@@ -672,5 +656,25 @@ public interface ActivityService {
      */
     void excuteSolrUpdate(SolrUpdateMessage solrUpdateMessage);
 
+    /**
+     * Update activity sign out Ercode
+     * @param id
+     * @param s
+     * @param diff
+     */
+    void updateActivitySingOutErcode(Long id, String s, int diff);
+
+    /**
+     * Update activity sign in Ercode
+     * @param id
+     * @param s
+     */
+    void updateActivitySignInErcode(Long id, String s);
+
+    /**
+     * Reset classify cache
+     * @return
+     */
+    JsonResult resetClassifyCache();
 
 }

@@ -3,8 +3,11 @@ package com.practice.manage.controller;
 import com.practice.dto.KeyValueDTO;
 import com.practice.dto.PageSearchParam;
 import com.practice.dto.QuestionDTO;
+import com.practice.enums.ConstantEnum;
 import com.practice.enums.DicParentEnum;
+import com.practice.enums.OperateEnum;
 import com.practice.exception.ServiceException;
+import com.practice.manage.service.UploadService;
 import com.practice.manage.target.ControllerPermisson;
 import com.practice.po.*;
 import com.practice.result.JsonResult;
@@ -40,6 +43,8 @@ public class ActivityController {
     private DictionaryService dictionaryService;
     @Resource
     private UserService userService;
+    @Resource
+    private UploadService uploadService;
 
     /**
      * Activity Type index
@@ -214,6 +219,11 @@ public class ActivityController {
     }
 
 
+    @RequestMapping(value = "/classify/reset/cache")
+    @ResponseBody
+    public JsonResult ajaxResetClassifyCache(){
+        return activityService.resetClassifyCache();
+    }
     /**
      * Activity theme
      *
@@ -672,7 +682,13 @@ public class ActivityController {
     @ResponseBody
     public JsonResult ajaxActivitySignInCreateErcode(@PathVariable Long activityId,
                                                      @PathVariable Long id){
-        return activityService.createActivitySignInErcode(activityId,id);
+
+        JsonResult jsonResult = uploadService.createActivitySignInErcode(activityId, id);
+
+        if(jsonResult.getCode().equals(OperateEnum.SUCCESS.getState())){
+            activityService.updateActivitySignInErcode(id,String.valueOf(jsonResult.getData()));
+        }
+        return jsonResult;
     }
 
     /**
@@ -687,7 +703,13 @@ public class ActivityController {
     public JsonResult ajaxActivitySingOutCreateErcode(@PathVariable Long activityId,
                                                       @PathVariable Long id,
                                                       @PathVariable int diff){
-        return activityService.createActivitySignOutErcode(activityId,id,diff);
+
+        JsonResult jsonResult = uploadService.createActivitySignOutErcode(activityId, id, diff);
+
+        if(jsonResult.getCode().equals(OperateEnum.SUCCESS.getState())){
+            activityService.updateActivitySingOutErcode(id,String.valueOf(jsonResult.getData()),diff);
+        }
+        return jsonResult;
     }
 
     /**

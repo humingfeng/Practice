@@ -9,13 +9,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <jsp:include page="/head"></jsp:include>
-<body class="childrenBody">
+<style>
+    .layui-form-pane .layui-form-label {
 
-<fieldset class="layui-elem-field" style="width: 700px;">
+        padding: 8px 10px;
+    }
+</style>
+<body class="childrenBody tips_verify">
+
+<fieldset class="layui-elem-field" style="width: 1020px;">
     <blockquote class="layui-elem-quote layui-quote-nm qute-blue">
         <h3>活动基本信息</h3>
-        <p>1、活动日期为当期日期后至少2天</p>
-        <p>2、报名截止日期为当期日期后至少1天</p>
     </blockquote>
     <div class="layui-row">
         <div class="layui-col-md12">
@@ -25,7 +29,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">活动类型</label>
                         <div class="layui-input-block">
-                            <select name="typeId" id="typeId" lay-filter="typeId" lay-verify="required">
+                            <select name="typeId" id="typeId" lay-filter="typeId" lay-verify="empty" lay-verType="tips" placeholder="请选择活动类型">
                                 <option value=''>请选择活动类型</option>
                                 <c:forEach items="${types}" var="item">
                                     <option value="${item.id}">${item.value}</option>
@@ -36,33 +40,31 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">活动分类</label>
                         <div class="layui-input-block">
-                            <select name="classifyId" id="classifyId" lay-filter="classifyId" lay-verify="required" >
+                            <select name="classifyId" id="classifyId" lay-filter="classifyId" lay-verify="empty" lay-verType="tips" placeholder="请选择活动分类" >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动主题</label>
+                        <div class="layui-input-block">
+                            <select name="themeId" id="themeId" lay-verify="empty" lay-verType="tips" placeholder="请选择活动主题">
 
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">活动主题</label>
-                        <div class="layui-input-block">
-                            <select name="themeId" id="themeId" lay-verify="required">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">活动名称</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="name" class="layui-input" lay-verify="required" maxlength="20" style="width: 212px" placeholder="请输入活动名称">
-                        </div>
+                <div class="layui-form-item" style="margin-right: 0px;">
+                    <label class="layui-form-label">活动名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" class="layui-input" maxlength="20"  lay-verify="empty" lay-verType="tips" placeholder="请输入活动名称" style="width: 884px;">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline" >
                         <label class="layui-form-label">活动基地</label>
-                        <div class="layui-input-inline"  style="width: 212px">
-                            <select name="baseId" id="baseId" lay-verify="required" >
+                        <div class="layui-input-inline"  style="width: 548px">
+                            <select name="baseId" id="baseId" lay-verify="empty" lay-verType="tips" placeholder="请选择活动基地">
                                 <option value=''>请选择活动基地</option>
                                 <c:forEach items="${bases}" var="item">
                                     <option value="${item.id}">${item.value}</option>
@@ -74,41 +76,39 @@
                         <input type="checkbox" id="nobases" lay-skin="primary" title="无基地" lay-filter="nobases">
                     </div>
                 </div>
-                <%--<div class="layui-form-item">--%>
-                    <%--<div class="layui-inline">--%>
-                        <%--<label class="layui-form-label">时长</label>--%>
-                        <%--<div class="layui-input-block" >--%>
-                            <%--<input type="text" name="duration" class="layui-input" lay-verify="required" maxlength="20" style="width: 212px" placeholder="请输入活动时长，单位小时">--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="layui-inline">--%>
-                        <%--<input type="radio" name="durationType" value="2" title="当天">--%>
-                        <%--<input type="radio" name="durationType" value="1" title="超过1天" checked="">--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">活动日期</label>
-                        <div class="layui-input-block" style="width: 212px">
-                            <input type="text" name="timeStr" id="timeStr" class="layui-input" lay-verify="required" placeholder="请选择活动时间段">
-                        </div>
+                <div class="layui-form-item" >
+                    <label class="layui-form-label">集体活动</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="collective" value="1" title="是" >
+                        <input type="radio" name="collective" value="2" title="否" checked="" >
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">活动时间</label>
-                        <div class="layui-input-inline" style="width: 212px">
-                            <input type="text" name="validTime" id="validTime" class="layui-input" lay-verify="required" placeholder="请选择活动时间">
-                        </div>
-                    </div>
+                    <div class="layui-form-mid layui-word-aux">集体活动，报名信息可以后台添加</div>
                 </div>
                 <div class="layui-form-item" >
                     <label class="layui-form-label">自助</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="self" value="1" title="是">
-                        <input type="radio" name="self" value="2" title="否" checked="">
+                        <input type="radio" name="self" value="1" title="开启" lay-filter="self">
+                        <input type="radio" name="self" value="2" title="关闭" checked="" lay-filter="self">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">自助。。。。。</div>
+                    <div class="layui-form-mid layui-word-aux">开启自助活动，可以设置自动开始，但不可用签到</div>
                 </div>
-                <div class="layui-form-item" >
+                <div class="layui-form-item" id="autoBeginDiv" style="display: none">
+                    <label class="layui-form-label">自动开始</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="immediately" value="1" title="开启" lay-filter="auto">
+                        <input type="radio" name="immediately" value="2" title="关闭" checked="" lay-filter="auto">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">开启自动后，报名成功后，活动自动开始</div>
+                </div>
+                <div class="layui-form-item" id="signInRunDiv" style="display: none">
+                    <label class="layui-form-label">开始后报名</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="signInRun" value="1" title="开启" lay-filter="auto">
+                        <input type="radio" name="signInRun" value="2" title="关闭" checked="" lay-filter="auto">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">活动进行中可以报名</div>
+                </div>
+                <div class="layui-form-item" id="signDiv">
                     <label class="layui-form-label">签到</label>
                     <div class="layui-input-inline">
                         <input type="radio" name="sign" value="1" title="开启">
@@ -116,23 +116,67 @@
                     </div>
                     <div class="layui-form-mid layui-word-aux">开启签到，可使用二维码扫描签到签退</div>
                 </div>
-
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">活动人数</label>
+                        <label class="layui-form-label">活动日期</label>
+                        <div class="layui-input-block" style="width: 212px">
+                            <input type="text" name="timeStr" id="timeStr" class="layui-input" lay-verify="required" placeholder="请选择活动时间段">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-right: 2px;">
+                        <label class="layui-form-label">活动时间</label>
                         <div class="layui-input-inline" style="width: 212px">
-                            <input type="text" name="number" id="number" class="layui-input" lay-verify="required|number"  maxlength="5" placeholder="请输入活动人数">
+                            <input type="text" name="validTime" id="validTime" class="layui-input" lay-verify="required" placeholder="请选择活动时间">
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-right: 0px;">
+                        <label class="layui-form-label">任务截止时间</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="taskCloseTimeStr" id="taskClose" class="layui-input" lay-verify="required" placeholder="请选择活动时间">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="numDiv">
+                    <div class="layui-inline" style="margin-right: 2px;">
+                        <label class="layui-form-label">最多人数</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="number" id="number" class="layui-input" lay-verify="empty|number" lay-verType="tips" maxlength="5" placeholder="请输入活动人数">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最少人数</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="minNum" id="minNum" class="layui-input" lay-verify="empty|number"  lay-verType="tips" maxlength="5" placeholder="请输入活动人数">
                         </div>
                     </div>
                     <div class="layui-inline" style="height: 43px;">
                         <input type="checkbox" id="nonumbers" lay-skin="primary" lay-filter="nonumbers" title="不限人数">
                     </div>
                 </div>
+                <div class="layui-form-item" id="enrollDiv">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">报名截止方式</label>
+                        <div class="layui-input-block" style="width: 212px">
+                            <select name="closeType" id="closeType" lay-filter="closeType" lay-verify="empty" lay-verType="tips" placeholder="请选择报名截止方式">
+                                <option value="">请选择报名截止方式</option>
+                                <option value="1">指定截止时间</option>
+                                <option value="2">人数满自动截止</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-right: 2px;">
+                        <label class="layui-form-label">报名截止时间</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="closeTimeStr" id="closeTime" class="layui-input" lay-verify="empty" lay-verType="tips" placeholder="请输入报名截止时间">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">活动费用</label>
                         <div class="layui-input-inline" style="width: 212px">
-                            <input type="text" name="price" id="money" class="layui-input" lay-verify="required|number"  maxlength="5" placeholder="请输入活动费用">
+                            <input type="text" name="price" id="money" class="layui-input" lay-verify="empty|number"  lay-verType="tips" maxlength="5" placeholder="请输入活动费用">
                         </div>
                     </div>
                     <div class="layui-inline" style="height: 43px;">
@@ -142,27 +186,10 @@
                 <div class="layui-form-item layui-form-text" id="money_desc_item">
                     <label class="layui-form-label">费用说明</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="费用说明" class="layui-textarea" id="money_desc" maxlength="500" name="moneyDesc" lay-verify="required"></textarea>
+                        <textarea placeholder="费用说明" class="layui-textarea" id="money_desc" maxlength="500" name="moneyDesc" lay-verify="empty" lay-verType="tips"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">截止方式</label>
-                        <div class="layui-input-block" style="width: 212px">
-                            <select name="closeType" id="closeType" lay-verify="required" lay-filter="closeType">
-                                <option value="">请选择报名截止方式</option>
-                                <option value="1">指定截止时间</option>
-                                <option value="2">人数满自动截止</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">截止时间</label>
-                        <div class="layui-input-inline" style="width: 212px">
-                            <input type="text" name="closeTimeStr" id="closeTime" class="layui-input" lay-verify="required" placeholder="请输入报名截止时间">
-                        </div>
-                    </div>
-                </div>
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit="return false" lay-filter="submit">立即提交</button>
@@ -184,11 +211,24 @@
 
         var url = "/auth/activity/manage/base/add";
 
-        laydate.render({elem: '#closeTime',min: 1,type: 'datetime',btns: ['clear', 'confirm']});
+        //绑定日期控件
+        laydate.render({elem: '#closeTime',min: 0,type: 'datetime',btns: ['clear', 'confirm']});
 
-        laydate.render({elem: '#timeStr',range: true,min: 2});
+        laydate.render({elem: '#taskClose',min: 0,type: 'datetime',btns: ['clear', 'confirm']});
+
+        laydate.render({elem: '#timeStr',range: true,min: 0});
 
         laydate.render({elem: '#validTime',type: 'time',range: true});
+
+        //自定义验证
+        form.verify({
+            empty: function(value, item) {
+                if(!value){
+                    return $(item).attr('placeholder');
+                }
+            }
+        });
+
 
         if(id){
 
@@ -220,7 +260,7 @@
                                 $("#nobases").attr("checked","checked");
                             }
                             if(!data.number){
-                                $("#number").attr("disabled","disabled").removeAttr("lay-verify").val("");
+                                $("#number,#minNum").attr("disabled","disabled").removeAttr("lay-verify").val("");
                                 $("#closeType option").each(function(){
                                     if($(this).val()==2){
                                         $(this).attr("disabled","disabled");
@@ -261,57 +301,72 @@
 
         //监听活动类型
         form.on('select(typeId)', function(data){
-            load = app.showLoading();
-            app.get('/auth/activity/classify/usable/'+data.value).then(d=>{
-                $("#classifyId").empty();
-                $("#classifyId").append("<option value=''>请选择活动分类</option>");
-                layui.each(d.data,function(index,item){
-                    $("#classifyId").append("<option value='"+item.id+"' >"+item.value+"</option>");
-                })
-                form.render('select');
-            },e=>{}).finally(_=>{app.closeLoading(load)});
+            if(data.value){
+                load = app.showLoading();
+                app.get('/auth/activity/classify/usable/'+data.value).then(d=>{
+                    $("#classifyId").empty();
+                    $("#classifyId").append("<option value=''>请选择活动分类</option>");
+                    layui.each(d.data,function(index,item){
+                        $("#classifyId").append("<option value='"+item.id+"' >"+item.value+"</option>");
+                    })
+                    form.render('select');
+                },e=>{}).finally(_=>{app.closeLoading(load)});
+            }
         });
+
         //监听活动分类
         form.on('select(classifyId)', function(data){
-            load = app.showLoading();
-            app.get('/auth/activity/theme/usable/'+data.value).then(d=>{
-                $("#themeId").empty();
-                $("#themeId").append("<option value=''>请选择活动主题</option>");
-                layui.each(d.data,function(index,item){
-                    $("#themeId").append("<option value='"+item.id+"' >"+item.value+"</option>");
-                })
-                form.render('select');
-            },e=>{}).finally(_=>{app.closeLoading(load)});
+            if(data.value){
+                load = app.showLoading();
+                app.get('/auth/activity/theme/usable/'+data.value).then(d=>{
+                    $("#themeId").empty();
+                    $("#themeId").append("<option value=''>请选择活动主题</option>");
+                    layui.each(d.data,function(index,item){
+                        $("#themeId").append("<option value='"+item.id+"' >"+item.value+"</option>");
+                    })
+                    form.render('select');
+                },e=>{}).finally(_=>{app.closeLoading(load)});
+            }
         });
         //监听无基地
         form.on('checkbox(nobases)', function(data){
             if(data.elem.checked){
                 $("#baseId").attr("disabled","disabled");
                 $("#baseId").val(0);
+                $("#baseId").removeAttr("lay-verify");
             }else{
                 $("#baseId").removeAttr("disabled");
                 $("#baseId").val('');
+                $("#baseId").attr('lay-verify','empty');
             }
-
             form.render('select');
         });
+        //监听活动是否自助
+        form.on('radio(self)',function(data){
+            if(data.value==2){
+                $("#signDiv").show();
+                $("#autoBeginDiv,#signInRunDiv").hide();
+            }else{
+                $("#signDiv").hide();
+                $("#autoBeginDiv,#signInRunDiv").show();
+            }
+        })
+
         //监听不限制人数
         form.on('checkbox(nonumbers)', function(data){
             if(data.elem.checked){
-                $("#number").attr("disabled","disabled").removeAttr("lay-verify");
+                $("#number,#minNum").attr("disabled","disabled").removeAttr("lay-verify");
                 $("#closeType option").each(function(){
                     if($(this).val()==2){
                         $(this).attr("disabled","disabled");
                         return false;
                     }
                 })
-
             }else{
-                $("#number").removeAttr("disabled").attr("lay-verify","required|number");
+                $("#number,#minNum").removeAttr("disabled").attr("lay-verify","empty|number");
                 $("#closeType option").removeAttr("disabled");
             }
-            $("#number").val('');
-            $("#closeType").val('');
+            $("#number,#minNum,#closeType").val('');
             form.render('select');
         });
         //监听是否免费
@@ -323,7 +378,7 @@
 
                 $("#money_desc").removeAttr("lay-verify");
             }else{
-                $("#money").removeAttr("disabled").attr("lay-verify","required|number");
+                $("#money").removeAttr("disabled").attr("lay-verify","empty|number");
 
                 $("#money_desc_item").show();
 
@@ -335,12 +390,13 @@
             if(data.value==2){
                 $("#closeTime").val('').attr("disabled","disabled").removeAttr("lay-verify");
             }else{
-                $("#closeTime").val('').removeAttr("disabled").attr("lay-verify","required");
+                $("#closeTime").val('').removeAttr("disabled").attr("lay-verify","empty");
             }
         })
 
         form.on("submit(submit)",data=>{
             if(!data.field.number)data.field.number='0';
+            if(!data.field.minNum)data.field.minNum='0';
             if(!data.field.money)data.field.money='0';
             if(!data.field.baseId)data.field.baseId='0';
             app.post(url,data.field).then(d=>{

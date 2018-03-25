@@ -1,8 +1,10 @@
 package com.practice.manage.controller;
 
+import com.practice.dto.CountDTO;
 import com.practice.dto.KeyValueDTO;
 import com.practice.enums.SystemParamEnum;
 import com.practice.service.ParamService;
+import com.practice.service.StatisticsService;
 import com.practice.service.VersionService;
 import com.practice.vo.SystemInfoVO;
 import com.practice.dto.TokenUserDTO;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -32,6 +35,8 @@ public class IndexController {
     private VersionService versionService;
     @Resource
     private ParamService paramService;
+    @Resource
+    private StatisticsService statisticsService;
 
     @RequestMapping(value = "/")
     public String index(@CookieValue(required = false,value = "manage_token") String token,Model model) {
@@ -98,6 +103,10 @@ public class IndexController {
         model.addAttribute("versionLog",versionLog);
 
 
+        CountDTO countDTO = statisticsService.getCountDTO();
+
+        model.addAttribute("count",countDTO);
+
 
         return "welcome";
     }
@@ -120,4 +129,5 @@ public class IndexController {
         }
         return module+"/"+page;
     }
+
 }

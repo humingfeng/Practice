@@ -14,10 +14,15 @@
     <result column="valid_time" jdbcType="VARCHAR" property="validTime" />
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="task_close_time" jdbcType="TIMESTAMP" property="taskCloseTime" />
     <result column="self" jdbcType="INTEGER" property="self" />
+    <result column="sign_in_run" jdbcType="INTEGER" property="signInRun" />
+    <result column="collective" jdbcType="INTEGER" property="collective" />
     <result column="sign" jdbcType="INTEGER" property="sign" />
     <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="min_num" jdbcType="INTEGER" property="minNum" />
     <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="immediately" jdbcType="INTEGER" property="immediately" />
     <result column="close_type" jdbcType="INTEGER" property="closeType" />
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
     <result column="money" jdbcType="INTEGER" property="money" />
@@ -33,6 +38,8 @@
     <result column="check_evaluate" jdbcType="INTEGER" property="checkEvaluate" />
     <result column="delflag" jdbcType="INTEGER" property="delflag" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="BIGINT" property="updateUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -96,9 +103,10 @@
   </sql>
   <sql id="Base_Column_List">
     id, type_id, classify_id, theme_id, name, organize_id, base_id, duration, duration_type, 
-    valid_time, begin_time, end_time, self, sign, number, stock, close_type, close_time, 
-    money, money_desc, status, check_leader, check_apply, check_sign, check_supervise, 
-    check_task, check_introduce, check_enroll, check_evaluate, delflag, reason, update_user, 
+    valid_time, begin_time, end_time, task_close_time, self, sign_in_run, collective, 
+    sign, number, min_num, stock, immediately, close_type, close_time, money, money_desc, 
+    status, check_leader, check_apply, check_sign, check_supervise, check_task, check_introduce, 
+    check_enroll, check_evaluate, delflag, reason, create_user, create_time, update_user, 
     update_time
   </sql>
   <select id="selectByExample" parameterType="com.practice.po.ManageActivityExample" resultMap="BaseResultMap">
@@ -136,26 +144,30 @@
       theme_id, name, organize_id, 
       base_id, duration, duration_type, 
       valid_time, begin_time, end_time, 
-      self, sign, number, 
-      stock, close_type, close_time, 
-      money, money_desc, status, 
-      check_leader, check_apply, check_sign, 
-      check_supervise, check_task, check_introduce, 
-      check_enroll, check_evaluate, delflag, 
-      reason, update_user, update_time
-      )
+      task_close_time, self, sign_in_run, 
+      collective, sign, number, 
+      min_num, stock, immediately, 
+      close_type, close_time, money, 
+      money_desc, status, check_leader, 
+      check_apply, check_sign, check_supervise, 
+      check_task, check_introduce, check_enroll, 
+      check_evaluate, delflag, reason, 
+      create_user, create_time, update_user, 
+      update_time)
     values (#{id,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{classifyId,jdbcType=BIGINT}, 
       #{themeId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{organizeId,jdbcType=BIGINT}, 
       #{baseId,jdbcType=BIGINT}, #{duration,jdbcType=INTEGER}, #{durationType,jdbcType=INTEGER}, 
       #{validTime,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{self,jdbcType=INTEGER}, #{sign,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
-      #{stock,jdbcType=INTEGER}, #{closeType,jdbcType=INTEGER}, #{closeTime,jdbcType=TIMESTAMP}, 
-      #{money,jdbcType=INTEGER}, #{moneyDesc,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{checkLeader,jdbcType=INTEGER}, #{checkApply,jdbcType=INTEGER}, #{checkSign,jdbcType=INTEGER}, 
-      #{checkSupervise,jdbcType=INTEGER}, #{checkTask,jdbcType=INTEGER}, #{checkIntroduce,jdbcType=INTEGER}, 
-      #{checkEnroll,jdbcType=INTEGER}, #{checkEvaluate,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, 
-      #{reason,jdbcType=VARCHAR}, #{updateUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{taskCloseTime,jdbcType=TIMESTAMP}, #{self,jdbcType=INTEGER}, #{signInRun,jdbcType=INTEGER}, 
+      #{collective,jdbcType=INTEGER}, #{sign,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
+      #{minNum,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, #{immediately,jdbcType=INTEGER}, 
+      #{closeType,jdbcType=INTEGER}, #{closeTime,jdbcType=TIMESTAMP}, #{money,jdbcType=INTEGER}, 
+      #{moneyDesc,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{checkLeader,jdbcType=INTEGER}, 
+      #{checkApply,jdbcType=INTEGER}, #{checkSign,jdbcType=INTEGER}, #{checkSupervise,jdbcType=INTEGER}, 
+      #{checkTask,jdbcType=INTEGER}, #{checkIntroduce,jdbcType=INTEGER}, #{checkEnroll,jdbcType=INTEGER}, 
+      #{checkEvaluate,jdbcType=INTEGER}, #{delflag,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.practice.po.ManageActivity">
     insert into manage_activity
@@ -196,8 +208,17 @@
       <if test="endTime != null">
         end_time,
       </if>
+      <if test="taskCloseTime != null">
+        task_close_time,
+      </if>
       <if test="self != null">
         self,
+      </if>
+      <if test="signInRun != null">
+        sign_in_run,
+      </if>
+      <if test="collective != null">
+        collective,
       </if>
       <if test="sign != null">
         sign,
@@ -205,8 +226,14 @@
       <if test="number != null">
         number,
       </if>
+      <if test="minNum != null">
+        min_num,
+      </if>
       <if test="stock != null">
         stock,
+      </if>
+      <if test="immediately != null">
+        immediately,
       </if>
       <if test="closeType != null">
         close_type,
@@ -253,6 +280,12 @@
       <if test="reason != null">
         reason,
       </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
       <if test="updateUser != null">
         update_user,
       </if>
@@ -297,8 +330,17 @@
       <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="taskCloseTime != null">
+        #{taskCloseTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="self != null">
         #{self,jdbcType=INTEGER},
+      </if>
+      <if test="signInRun != null">
+        #{signInRun,jdbcType=INTEGER},
+      </if>
+      <if test="collective != null">
+        #{collective,jdbcType=INTEGER},
       </if>
       <if test="sign != null">
         #{sign,jdbcType=INTEGER},
@@ -306,8 +348,14 @@
       <if test="number != null">
         #{number,jdbcType=INTEGER},
       </if>
+      <if test="minNum != null">
+        #{minNum,jdbcType=INTEGER},
+      </if>
       <if test="stock != null">
         #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="immediately != null">
+        #{immediately,jdbcType=INTEGER},
       </if>
       <if test="closeType != null">
         #{closeType,jdbcType=INTEGER},
@@ -353,6 +401,12 @@
       </if>
       <if test="reason != null">
         #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
         #{updateUser,jdbcType=BIGINT},
@@ -407,8 +461,17 @@
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.taskCloseTime != null">
+        task_close_time = #{record.taskCloseTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.self != null">
         self = #{record.self,jdbcType=INTEGER},
+      </if>
+      <if test="record.signInRun != null">
+        sign_in_run = #{record.signInRun,jdbcType=INTEGER},
+      </if>
+      <if test="record.collective != null">
+        collective = #{record.collective,jdbcType=INTEGER},
       </if>
       <if test="record.sign != null">
         sign = #{record.sign,jdbcType=INTEGER},
@@ -416,8 +479,14 @@
       <if test="record.number != null">
         number = #{record.number,jdbcType=INTEGER},
       </if>
+      <if test="record.minNum != null">
+        min_num = #{record.minNum,jdbcType=INTEGER},
+      </if>
       <if test="record.stock != null">
         stock = #{record.stock,jdbcType=INTEGER},
+      </if>
+      <if test="record.immediately != null">
+        immediately = #{record.immediately,jdbcType=INTEGER},
       </if>
       <if test="record.closeType != null">
         close_type = #{record.closeType,jdbcType=INTEGER},
@@ -464,6 +533,12 @@
       <if test="record.reason != null">
         reason = #{record.reason,jdbcType=VARCHAR},
       </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=BIGINT},
       </if>
@@ -489,10 +564,15 @@
       valid_time = #{record.validTime,jdbcType=VARCHAR},
       begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      task_close_time = #{record.taskCloseTime,jdbcType=TIMESTAMP},
       self = #{record.self,jdbcType=INTEGER},
+      sign_in_run = #{record.signInRun,jdbcType=INTEGER},
+      collective = #{record.collective,jdbcType=INTEGER},
       sign = #{record.sign,jdbcType=INTEGER},
       number = #{record.number,jdbcType=INTEGER},
+      min_num = #{record.minNum,jdbcType=INTEGER},
       stock = #{record.stock,jdbcType=INTEGER},
+      immediately = #{record.immediately,jdbcType=INTEGER},
       close_type = #{record.closeType,jdbcType=INTEGER},
       close_time = #{record.closeTime,jdbcType=TIMESTAMP},
       money = #{record.money,jdbcType=INTEGER},
@@ -508,6 +588,8 @@
       check_evaluate = #{record.checkEvaluate,jdbcType=INTEGER},
       delflag = #{record.delflag,jdbcType=INTEGER},
       reason = #{record.reason,jdbcType=VARCHAR},
+      create_user = #{record.createUser,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_user = #{record.updateUser,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -550,8 +632,17 @@
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="taskCloseTime != null">
+        task_close_time = #{taskCloseTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="self != null">
         self = #{self,jdbcType=INTEGER},
+      </if>
+      <if test="signInRun != null">
+        sign_in_run = #{signInRun,jdbcType=INTEGER},
+      </if>
+      <if test="collective != null">
+        collective = #{collective,jdbcType=INTEGER},
       </if>
       <if test="sign != null">
         sign = #{sign,jdbcType=INTEGER},
@@ -559,8 +650,14 @@
       <if test="number != null">
         number = #{number,jdbcType=INTEGER},
       </if>
+      <if test="minNum != null">
+        min_num = #{minNum,jdbcType=INTEGER},
+      </if>
       <if test="stock != null">
         stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="immediately != null">
+        immediately = #{immediately,jdbcType=INTEGER},
       </if>
       <if test="closeType != null">
         close_type = #{closeType,jdbcType=INTEGER},
@@ -607,6 +704,12 @@
       <if test="reason != null">
         reason = #{reason,jdbcType=VARCHAR},
       </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=BIGINT},
       </if>
@@ -629,10 +732,15 @@
       valid_time = #{validTime,jdbcType=VARCHAR},
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
+      task_close_time = #{taskCloseTime,jdbcType=TIMESTAMP},
       self = #{self,jdbcType=INTEGER},
+      sign_in_run = #{signInRun,jdbcType=INTEGER},
+      collective = #{collective,jdbcType=INTEGER},
       sign = #{sign,jdbcType=INTEGER},
       number = #{number,jdbcType=INTEGER},
+      min_num = #{minNum,jdbcType=INTEGER},
       stock = #{stock,jdbcType=INTEGER},
+      immediately = #{immediately,jdbcType=INTEGER},
       close_type = #{closeType,jdbcType=INTEGER},
       close_time = #{closeTime,jdbcType=TIMESTAMP},
       money = #{money,jdbcType=INTEGER},
@@ -648,6 +756,8 @@
       check_evaluate = #{checkEvaluate,jdbcType=INTEGER},
       delflag = #{delflag,jdbcType=INTEGER},
       reason = #{reason,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

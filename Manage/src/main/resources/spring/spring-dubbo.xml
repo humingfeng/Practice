@@ -51,6 +51,8 @@
 
     <dubbo:reference id="orderService" interface="com.practice.service.OrderService"/>
 
+    <dubbo:reference id="statisticsService" interface="com.practice.service.StatisticsService"/>
+
 
 
 

@@ -115,4 +115,5 @@ public class LoginAndRegistController {
     public JsonResult updateTokenTeacherManage(@RequestAttribute String token){
         return loginService.updateTeacherManageToken(token);
     }
+
 }

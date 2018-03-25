@@ -414,4 +414,9 @@ public interface CacheService {
      * @return
      */
     TeacherManageDTO getTeacherManage(Long id);
+
+    /**
+     * del classify cache
+     */
+    void delClassify();
 }

@@ -845,6 +845,66 @@ public class ManageActivityExample {
             return (Criteria) this;
         }
 
+        public Criteria andTaskCloseTimeIsNull() {
+            addCriterion("task_close_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeIsNotNull() {
+            addCriterion("task_close_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeEqualTo(Date value) {
+            addCriterion("task_close_time =", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeNotEqualTo(Date value) {
+            addCriterion("task_close_time <>", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeGreaterThan(Date value) {
+            addCriterion("task_close_time >", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("task_close_time >=", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeLessThan(Date value) {
+            addCriterion("task_close_time <", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeLessThanOrEqualTo(Date value) {
+            addCriterion("task_close_time <=", value, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeIn(List<Date> values) {
+            addCriterion("task_close_time in", values, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeNotIn(List<Date> values) {
+            addCriterion("task_close_time not in", values, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeBetween(Date value1, Date value2) {
+            addCriterion("task_close_time between", value1, value2, "taskCloseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskCloseTimeNotBetween(Date value1, Date value2) {
+            addCriterion("task_close_time not between", value1, value2, "taskCloseTime");
+            return (Criteria) this;
+        }
+
         public Criteria andSelfIsNull() {
             addCriterion("self is null");
             return (Criteria) this;
@@ -902,6 +962,126 @@ public class ManageActivityExample {
 
         public Criteria andSelfNotBetween(Integer value1, Integer value2) {
             addCriterion("self not between", value1, value2, "self");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunIsNull() {
+            addCriterion("sign_in_run is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunIsNotNull() {
+            addCriterion("sign_in_run is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunEqualTo(Integer value) {
+            addCriterion("sign_in_run =", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunNotEqualTo(Integer value) {
+            addCriterion("sign_in_run <>", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunGreaterThan(Integer value) {
+            addCriterion("sign_in_run >", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sign_in_run >=", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunLessThan(Integer value) {
+            addCriterion("sign_in_run <", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunLessThanOrEqualTo(Integer value) {
+            addCriterion("sign_in_run <=", value, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunIn(List<Integer> values) {
+            addCriterion("sign_in_run in", values, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunNotIn(List<Integer> values) {
+            addCriterion("sign_in_run not in", values, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunBetween(Integer value1, Integer value2) {
+            addCriterion("sign_in_run between", value1, value2, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignInRunNotBetween(Integer value1, Integer value2) {
+            addCriterion("sign_in_run not between", value1, value2, "signInRun");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveIsNull() {
+            addCriterion("collective is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveIsNotNull() {
+            addCriterion("collective is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveEqualTo(Integer value) {
+            addCriterion("collective =", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveNotEqualTo(Integer value) {
+            addCriterion("collective <>", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveGreaterThan(Integer value) {
+            addCriterion("collective >", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveGreaterThanOrEqualTo(Integer value) {
+            addCriterion("collective >=", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveLessThan(Integer value) {
+            addCriterion("collective <", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveLessThanOrEqualTo(Integer value) {
+            addCriterion("collective <=", value, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveIn(List<Integer> values) {
+            addCriterion("collective in", values, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveNotIn(List<Integer> values) {
+            addCriterion("collective not in", values, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveBetween(Integer value1, Integer value2) {
+            addCriterion("collective between", value1, value2, "collective");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectiveNotBetween(Integer value1, Integer value2) {
+            addCriterion("collective not between", value1, value2, "collective");
             return (Criteria) this;
         }
 
@@ -1025,6 +1205,66 @@ public class ManageActivityExample {
             return (Criteria) this;
         }
 
+        public Criteria andMinNumIsNull() {
+            addCriterion("min_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumIsNotNull() {
+            addCriterion("min_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumEqualTo(Integer value) {
+            addCriterion("min_num =", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumNotEqualTo(Integer value) {
+            addCriterion("min_num <>", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumGreaterThan(Integer value) {
+            addCriterion("min_num >", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("min_num >=", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumLessThan(Integer value) {
+            addCriterion("min_num <", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumLessThanOrEqualTo(Integer value) {
+            addCriterion("min_num <=", value, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumIn(List<Integer> values) {
+            addCriterion("min_num in", values, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumNotIn(List<Integer> values) {
+            addCriterion("min_num not in", values, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumBetween(Integer value1, Integer value2) {
+            addCriterion("min_num between", value1, value2, "minNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("min_num not between", value1, value2, "minNum");
+            return (Criteria) this;
+        }
+
         public Criteria andStockIsNull() {
             addCriterion("stock is null");
             return (Criteria) this;
@@ -1082,6 +1322,66 @@ public class ManageActivityExample {
 
         public Criteria andStockNotBetween(Integer value1, Integer value2) {
             addCriterion("stock not between", value1, value2, "stock");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyIsNull() {
+            addCriterion("immediately is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyIsNotNull() {
+            addCriterion("immediately is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyEqualTo(Integer value) {
+            addCriterion("immediately =", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyNotEqualTo(Integer value) {
+            addCriterion("immediately <>", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyGreaterThan(Integer value) {
+            addCriterion("immediately >", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("immediately >=", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyLessThan(Integer value) {
+            addCriterion("immediately <", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyLessThanOrEqualTo(Integer value) {
+            addCriterion("immediately <=", value, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyIn(List<Integer> values) {
+            addCriterion("immediately in", values, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyNotIn(List<Integer> values) {
+            addCriterion("immediately not in", values, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyBetween(Integer value1, Integer value2) {
+            addCriterion("immediately between", value1, value2, "immediately");
+            return (Criteria) this;
+        }
+
+        public Criteria andImmediatelyNotBetween(Integer value1, Integer value2) {
+            addCriterion("immediately not between", value1, value2, "immediately");
             return (Criteria) this;
         }
 
@@ -2002,6 +2302,126 @@ public class ManageActivityExample {
 
         public Criteria andReasonNotBetween(String value1, String value2) {
             addCriterion("reason not between", value1, value2, "reason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIsNull() {
+            addCriterion("create_user is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIsNotNull() {
+            addCriterion("create_user is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserEqualTo(Long value) {
+            addCriterion("create_user =", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotEqualTo(Long value) {
+            addCriterion("create_user <>", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserGreaterThan(Long value) {
+            addCriterion("create_user >", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserGreaterThanOrEqualTo(Long value) {
+            addCriterion("create_user >=", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserLessThan(Long value) {
+            addCriterion("create_user <", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserLessThanOrEqualTo(Long value) {
+            addCriterion("create_user <=", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIn(List<Long> values) {
+            addCriterion("create_user in", values, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotIn(List<Long> values) {
+            addCriterion("create_user not in", values, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserBetween(Long value1, Long value2) {
+            addCriterion("create_user between", value1, value2, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotBetween(Long value1, Long value2) {
+            addCriterion("create_user not between", value1, value2, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 

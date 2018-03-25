@@ -34,6 +34,9 @@
                 <a class="layui-btn layui-btn-normal newsAdd_btn do-action"
                    data-type="handle" data-url="/auth/jump/activity/classify_handle"
                    data-name="分类新增"><i class="iconfont icon-add"></i>分类新增</a>
+                <a class="layui-btn layui-btn-danger newsAdd_btn do-action-page"
+                   data-type="clearCache" data-url="/auth/activity/classify/reset/cache"
+                   data-name="刷新缓存"><i class="iconfont icon-image"></i>刷新缓存</a>
             </div>
         </div>
     </form>

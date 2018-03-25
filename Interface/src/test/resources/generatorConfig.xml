@@ -70,7 +70,7 @@
 
         <!--<table schema="" tableName="manage_base"/>-->
 
-        <!--<table schema="" tableName="manage_activity"/>-->
+        <table schema="" tableName="manage_activity"/>
 
         <!--<table schema="" tableName="manage_activity_introduce"/>-->
         <!--<table schema="" tableName="manage_activity_apply"/>-->
