@@ -1635,6 +1635,66 @@ public class ManageActivityExample {
             return (Criteria) this;
         }
 
+        public Criteria andMinTaskNumIsNull() {
+            addCriterion("min_task_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumIsNotNull() {
+            addCriterion("min_task_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumEqualTo(Integer value) {
+            addCriterion("min_task_num =", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumNotEqualTo(Integer value) {
+            addCriterion("min_task_num <>", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumGreaterThan(Integer value) {
+            addCriterion("min_task_num >", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("min_task_num >=", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumLessThan(Integer value) {
+            addCriterion("min_task_num <", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumLessThanOrEqualTo(Integer value) {
+            addCriterion("min_task_num <=", value, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumIn(List<Integer> values) {
+            addCriterion("min_task_num in", values, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumNotIn(List<Integer> values) {
+            addCriterion("min_task_num not in", values, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumBetween(Integer value1, Integer value2) {
+            addCriterion("min_task_num between", value1, value2, "minTaskNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinTaskNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("min_task_num not between", value1, value2, "minTaskNum");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

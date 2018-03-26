@@ -171,7 +171,15 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">任务至少完成</label>
+                        <div class="layui-input-inline" style="width: 212px">
+                            <input type="text" name="minTaskNum" class="layui-input" lay-verify="empty|number"  lay-verType="tips" maxlength="5" placeholder="请输入活动费用">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">任务最少完成个数，注意活动的任务要大于等于这个数</div>
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">活动费用</label>
@@ -269,6 +277,10 @@
                                 })
                                 $("#nonumbers").attr("checked","checked");
 
+                            }
+                            if(Number(data.self)==1){
+                                $("#signDiv").hide();
+                                $("#autoBeginDiv,#signInRunDiv").show();
                             }
 
                             if(!data.money){

@@ -79,29 +79,29 @@
         <!-- 配置插件 -->
         <plugins>
             <!--Tomcat7 -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <configuration>
-                    <port>8085</port>
-                    <path>/</path>
-                </configuration>
-            </plugin>
-            <!--jetty -->
             <!--<plugin>-->
-                <!--<groupId>org.eclipse.jetty</groupId>-->
-                <!--<artifactId>jetty-maven-plugin</artifactId>-->
-                <!--<version>9.4.5.v20170502</version>-->
+                <!--<groupId>org.apache.tomcat.maven</groupId>-->
+                <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
                 <!--<configuration>-->
-                    <!--<scanIntervalSeconds>10</scanIntervalSeconds>-->
-                    <!--<httpConnector>-->
-                        <!--<port>8085</port>-->
-                    <!--</httpConnector>-->
-                    <!--<webApp>-->
-                        <!--<contextPath>/</contextPath>-->
-                    <!--</webApp>-->
+                    <!--<port>8085</port>-->
+                    <!--<path>/</path>-->
                 <!--</configuration>-->
             <!--</plugin>-->
+            <!--jetty -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.5.v20170502</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <httpConnector>
+                        <port>8085</port>
+                    </httpConnector>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
             <!--远程部署-->
             <!--<plugin>-->
 

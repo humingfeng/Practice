@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  *
- * @author Xushd  2018/3/20 22:54
+ * @author Xushd  2018/3/26 21:43
  */
 public class ManageActivity implements Serializable {
 
@@ -138,6 +138,8 @@ public class ManageActivity implements Serializable {
     private Integer money;
 
     private String moneyDesc;
+
+    private Integer minTaskNum;
 
     private Integer status;
 
@@ -367,6 +369,14 @@ public class ManageActivity implements Serializable {
 
     public void setMoneyDesc(String moneyDesc) {
         this.moneyDesc = moneyDesc == null ? null : moneyDesc.trim();
+    }
+
+    public Integer getMinTaskNum() {
+        return minTaskNum;
+    }
+
+    public void setMinTaskNum(Integer minTaskNum) {
+        this.minTaskNum = minTaskNum;
     }
 
     public Integer getStatus() {

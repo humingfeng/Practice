@@ -857,6 +857,14 @@ public class ActivityServiceImpl implements ActivityService {
 
             String[] split1 = timeStr.split(" - ");
 
+            if(!split1[0].split(":")[1].equals("00")
+                    ||!split1[0].split(":")[2].equals("00")
+                    ||!split1[1].split(":")[1].equals("00")
+                    ||!split1[1].split(":")[2].equals("00")){
+                return JsonResult.error("活动开始时间和结束时间请精确到小时，分秒请置0");
+            }
+
+
             if(split1[0].equals(split1[1])){
                 return JsonResult.error("活动时间为零");
             }

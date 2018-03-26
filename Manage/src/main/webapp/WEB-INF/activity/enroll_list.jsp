@@ -59,6 +59,7 @@
             </div>
             <div class="layui-inline">
                 <a class="layui-btn search_btn" lay-submit="return false" lay-filter="search">查询</a>
+                <a class="layui-btn search_btn layui-btn-warm" id="export" lay-filter="export">导出EXCEL</a>
             </div>
         </div>
     </form>
@@ -83,9 +84,102 @@
     {{#  } }}
 </script>
 <script type="text/javascript" src="/static/layui/layui.js"></script>
+<script type="text/html" id="exportFileds">
+    <fieldset class="layui-elem-field">
+    <blockquote class="layui-elem-quote layui-quote-nm qute-blue">基本信息已包含</blockquote>
+    <div class="layui-form layui-form-pane" id="form">
+        <div class="layui-form-item ">
+            {{# if(d.phone){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label ">电话信息</label>
+                <div class="layui-input-block ">
+                    <input type="checkbox" name="phone" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.parentName){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">家长姓名</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="parentName" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.idNum){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="idNum" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+        </div>
+        <div class="layui-form-item">
+            {{# if(d.passport){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">护照</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="passport" title="选择">
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.weight){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">体重</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="weight" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.height){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">身高</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="height" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.sex){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="sex" title="选择" >
+                </div>
+            </div>
+            {{# } }}
+        </div>
+        <div class="layui-form-item">
+            {{# if(d.nation){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">民族</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="nation" title="选择">
+                </div>
+            </div>
+            {{# } }}
+            {{# if(d.birthday){ }}
+            <div class="layui-inline">
+                <label class="layui-form-label">生日</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="birthday" title="选择">
+                </div>
+            </div>
+            {{# } }}
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn search_btn" lay-submit="return false" lay-filter="export">确认导出</a>
+        </div>
+    </div>
+    </fieldset>
+</script>
 <script type="text/javascript">
-    layui.config({base:"/static/js/"}).use(['app','form','table','laypage'],function(){
-        var $ = layui.$,form = layui.form,app=layui.app,table = layui.table,laypage = layui.laypage;
+    layui.config({base:"/static/js/"}).use(['app','form','table','laypage','laytpl'],function(){
+        var $ = layui.$,
+            form = layui.form,
+            app=layui.app,
+            table = layui.table,
+            laytpl = layui.laytpl,
+            laypage = layui.laypage;
 
         var pageParam = {
             pageIndex:1,
@@ -95,6 +189,32 @@
         }
 
         var load;
+
+        var getTpl = $("#exportFileds").html();
+
+
+        $("#export").click(function(){
+            //获取该活动选择的信息
+
+            app.get('/auth/activity/enroll/info/${id}').then(d=>{
+
+                laytpl(getTpl).render(d.data, function(html){
+                    layer.open({
+                        type: 1,area: ['800px', '400px'],title:'选择导出字段',
+                        content: html
+                    });
+                    form.render();
+                });
+            });
+        })
+
+        form.on("submit(export)",function(data){
+
+            console.log(data);
+
+            return false;
+        })
+
 
         app.get("/auth/baseinfo/school/usable/list").then(d=>{
             layui.each(d.data,function(index,item){

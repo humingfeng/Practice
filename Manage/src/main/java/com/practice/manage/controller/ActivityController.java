@@ -957,6 +957,19 @@ public class ActivityController {
     }
 
     /**
+     * Ajax 获取活动的报名信息
+     * @param activityId
+     * @return
+     */
+    @RequestMapping(value = "/enroll/info/{activityId}")
+    @ResponseBody
+    public JsonResult ajaxActivityEnrollInfo(@PathVariable Long activityId){
+        ManageActivityEnroll enroll = activityService.getActivityEnroll(activityId);
+
+        return JsonResult.success(enroll);
+    }
+
+    /**
      * Activity Enroll update
      * @param token
      * @param enroll
