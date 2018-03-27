@@ -193,6 +193,21 @@
         var getTpl = $("#exportFileds").html();
 
 
+        var Fileds = {
+
+            phone:0,
+            parentName:0,
+            idNum:0,
+            birthday:0,
+            nation:0,
+            passport:0,
+            weight:0,
+            height:0,
+            sex:0
+
+        }
+
+
         $("#export").click(function(){
             //获取该活动选择的信息
 
@@ -210,7 +225,10 @@
 
         form.on("submit(export)",function(data){
 
-            console.log(data);
+            layui.each(data.field,function(key,value){
+                Fileds[key] = 1;
+            })
+
 
             return false;
         })

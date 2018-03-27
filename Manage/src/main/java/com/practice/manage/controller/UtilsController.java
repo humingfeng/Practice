@@ -1,10 +1,13 @@
 package com.practice.manage.controller;
 
+import com.practice.dto.ExcelExportDTO;
 import com.practice.dto.StudentExcelDTO;
 import com.practice.dto.TeacherExcelDTO;
 import com.practice.enums.OperateEnum;
 import com.practice.manage.service.UploadService;
 import com.practice.po.ManageActivity;
+import com.practice.po.ManageActivityEnroll;
+import com.practice.po.ManageActivityEnrollRecord;
 import com.practice.po.ManageActivitySign;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
@@ -271,7 +274,13 @@ public class UtilsController {
     }
 
     @RequestMapping("/download/excel/enroll/{activityId}")
-    public void exportEnroll(){
+    public void exportEnroll(@PathVariable Long activityId, ManageActivityEnroll enroll){
 
+        ExcelExportDTO excelExportDTO = new ExcelExportDTO();
+
+
+
+
+        //List<ManageActivityEnrollRecord> list  =  activityService.listEnrollRecordUsable();
     }
 }

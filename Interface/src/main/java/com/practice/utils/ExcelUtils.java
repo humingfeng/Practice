@@ -1,19 +1,24 @@
 package com.practice.utils;
 
 
+import com.practice.dto.ExcelExportDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Xushd on 2017/6/30.
@@ -202,6 +207,82 @@ public class ExcelUtils {
         return value;
     }
 
+    /**
+     * 获得Workbook对象
+     *
+     * @param excelExportDTO
+     *            数据集合
+     * @return Workbook
+     * @throws Exception
+     */
+    public static <T> Workbook createWorkBook(ExcelExportDTO excelExportDTO,OutputStream out) throws Exception {
+        // 创建工作簿
+        Workbook wb = new SXSSFWorkbook();
+
+        // 创建一个工作表sheet
+        Sheet sheet = wb.createSheet();
+        // 申明行
+        Row row = sheet.createRow(0);
+        // 申明单元格
+        Cell cell;
+
+        Map<String, Integer> titleFileds = excelExportDTO.getTitleFileds();
+
+        XSSFCellStyle titleStyle = (XSSFCellStyle) wb.createCellStyle();
+        titleStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        // 设置前景色
+        titleStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(91, 155, 213)));
+
+        titleStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        Font font = wb.createFont();
+        font.setColor(HSSFColor.WHITE.index);
+        font.setBold(true);
+
+        // 设置字体
+        titleStyle.setFont(font);
+
+        row.setHeightInPoints(30);
+
+        int columnIndex = 0;
+
+
+        for (Map.Entry<String, Integer> field : titleFileds.entrySet()) {
+
+            // 列宽注意乘256
+            sheet.setColumnWidth(columnIndex, field.getValue() * 256);
+            // 写入标题
+            cell = row.createCell(columnIndex);
+            cell.setCellStyle(titleStyle);
+            cell.setCellValue(field.getKey());
+
+            columnIndex++;
+        }
+
+        int rowIndex = 1;
+
+        List<Map<String,String>> valueFileds = excelExportDTO.getValueFileds();
+
+
+        for (Map<String,String> t : valueFileds) {
+            row = sheet.createRow(rowIndex);
+            columnIndex = 0;
+
+            for (String key : titleFileds.keySet()) {
+
+                cell = row.createCell(columnIndex);
+                cell.setCellValue(t.get(key));
+
+                columnIndex++;
+            }
+
+            rowIndex++;
+        }
+
+        return wb;
+    }
 
 
 }
