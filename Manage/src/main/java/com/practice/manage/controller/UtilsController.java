@@ -11,6 +11,7 @@ import com.practice.po.ManageActivityEnrollRecord;
 import com.practice.po.ManageActivitySign;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
+import com.practice.service.EnrollService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.ExcelUtils;
 import com.practice.utils.ExceptionUtil;
@@ -40,6 +41,8 @@ public class UtilsController {
     private UploadService uploadService;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private EnrollService enrollService;
     /**
      * Upload file
      * @param file
@@ -273,14 +276,14 @@ public class UtilsController {
 
     }
 
+    /**
+     * 报名记录excel 导出
+     * @param activityId
+     * @param enroll
+     */
     @RequestMapping("/download/excel/enroll/{activityId}")
     public void exportEnroll(@PathVariable Long activityId, ManageActivityEnroll enroll){
 
-        ExcelExportDTO excelExportDTO = new ExcelExportDTO();
-
-
-
-
-        //List<ManageActivityEnrollRecord> list  =  activityService.listEnrollRecordUsable();
+        ExcelExportDTO excelExportDTO =  enrollService.listActivityEnrollRecordExcel(activityId,enroll);
     }
 }

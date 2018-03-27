@@ -695,4 +695,132 @@ public class EnrollServiceImpl implements EnrollService {
         return sortMap;
     }
 
+    /**
+     * List enroll export excel
+     *
+     * @param activityId
+     * @param enroll
+     * @return
+     */
+    @Override
+    public ExcelExportDTO listActivityEnrollRecordExcel(Long activityId, ManageActivityEnroll enroll) {
+        ManageActivityEnrollRecordExample example = new ManageActivityEnrollRecordExample();
+
+        example.createCriteria()
+                .andActivityIdEqualTo(activityId)
+                .andStatusEqualTo(8);
+
+        List<ManageActivityEnrollRecord> manageActivityEnrollRecords = enrollRecordMapper.selectByExample(example);
+
+        ExcelExportDTO excelExportDTO = new ExcelExportDTO();
+
+        Map<String,Integer> titleFileds = new HashMap<>();
+
+        List<Map<String,String>> list = new ArrayList<>();
+
+        titleFileds.put("学校",200);
+        titleFileds.put("班级年级",200);
+        titleFileds.put("姓名",200);
+
+        if(enroll.getParentName()==1){
+            titleFileds.put("家长姓名",200);
+        }
+        if(enroll.getPhone()==1){
+            titleFileds.put("手机号",200);
+        }
+        if(enroll.getIdNum()==1){
+            titleFileds.put("身份证",200);
+        }
+        if(enroll.getSex()==1){
+            titleFileds.put("性别",200);
+        }
+        if(enroll.getBirthday()==1){
+            titleFileds.put("出生日期",200);
+        }
+        if(enroll.getNation()==1){
+            titleFileds.put("民族",200);
+        }
+        if(enroll.getPassport()==1){
+            titleFileds.put("护照",200);
+        }
+        if(enroll.getWeight()==1){
+            titleFileds.put("体重",200);
+        }
+        if(enroll.getHeight()==1){
+            titleFileds.put("身高",200);
+        }
+
+        for (ManageActivityEnrollRecord record : manageActivityEnrollRecords) {
+
+            Long studentId = record.getStudentId();
+
+            StudentEnrollInfo studentEnrollInfo = this.getStudentEnrollInfo(studentId);
+
+            if(studentEnrollInfo==null){
+                continue;
+            }
+
+            Map<String,String> dto = new HashMap<>();
+
+
+            dto.put("学校",schoolService.getSchoolPO(record.getSchoolId()).getName());
+
+            String gradeClassName = dictionaryService.getDictionaryPO(record.getPeriodId()).getName()+
+                    dictionaryService.getDictionaryPO(record.getClassId()).getName();
+
+            dto.put("班级名称",gradeClassName);
+
+            dto.put("姓名",record.getName());
+
+            if(enroll.getParentName()==1){
+
+                dto.put("家长姓名",studentEnrollInfo.getParentName());
+            }
+            if(enroll.getPhone()==1){
+                dto.put("手机号",studentEnrollInfo.getPhone());
+            }
+            if(enroll.getIdNum()==1){
+                dto.put("身份证",studentEnrollInfo.getWeight());
+            }
+            if(enroll.getSex()==1){
+                dto.put("性别",studentEnrollInfo.getSex()==1?"男":"女");
+            }
+            if(enroll.getBirthday()==1){
+                dto.put("出生日期",studentEnrollInfo.getBirthday());
+            }
+            if(enroll.getNation()==1){
+                dto.put("民族",dictionaryService.getDictionaryPO(studentEnrollInfo.getNation()).getName());
+            }
+            if(enroll.getPassport()==1){
+                dto.put("护照",studentEnrollInfo.getPassport());
+            }
+            if(enroll.getWeight()==1){
+                dto.put("体重",studentEnrollInfo.getWeight());
+            }
+            if(enroll.getHeight()==1){
+                dto.put("身高",studentEnrollInfo.getHeight());
+            }
+
+
+
+        }
+
+        return null;
+    }
+
+    public StudentEnrollInfo getStudentEnrollInfo(Long studentId){
+
+        StudentEnrollInfoExample example = new StudentEnrollInfoExample();
+
+        example.createCriteria().andStudentIdEqualTo(studentId);
+
+        List<StudentEnrollInfo> studentEnrollInfos = studentEnrollInfoMapper.selectByExample(example);
+
+        if(studentEnrollInfos.size()>0){
+            return studentEnrollInfos.get(0);
+        }else{
+            return null;
+        }
+
+    }
 }

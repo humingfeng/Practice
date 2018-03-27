@@ -1,6 +1,8 @@
 package com.practice.service;
 
+import com.practice.dto.ExcelExportDTO;
 import com.practice.dto.SignErcodeDTO;
+import com.practice.po.ManageActivityEnroll;
 import com.practice.po.StudentEnrollInfo;
 import com.practice.result.JsonResult;
 
@@ -78,4 +80,12 @@ public interface EnrollService {
      * @return
      */
     JsonResult getSignRecord(Long activityId, int type);
+
+    /**
+     * List enroll export excel
+     * @param activityId
+     * @param enroll
+     * @return
+     */
+    ExcelExportDTO listActivityEnrollRecordExcel(Long activityId, ManageActivityEnroll enroll);
 }
