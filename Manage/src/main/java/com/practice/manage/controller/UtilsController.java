@@ -7,17 +7,16 @@ import com.practice.enums.OperateEnum;
 import com.practice.manage.service.UploadService;
 import com.practice.po.ManageActivity;
 import com.practice.po.ManageActivityEnroll;
-import com.practice.po.ManageActivityEnrollRecord;
 import com.practice.po.ManageActivitySign;
 import com.practice.result.JsonResult;
 import com.practice.service.ActivityService;
 import com.practice.service.EnrollService;
 import com.practice.utils.CommonUtils;
 import com.practice.utils.ExcelUtils;
-import com.practice.utils.ExceptionUtil;
 import com.practice.utils.TimeUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -282,8 +281,35 @@ public class UtilsController {
      * @param enroll
      */
     @RequestMapping("/download/excel/enroll/{activityId}")
-    public void exportEnroll(@PathVariable Long activityId, ManageActivityEnroll enroll){
+    public void exportEnroll(@PathVariable Long activityId, ManageActivityEnroll enroll,HttpServletResponse response) throws IOException {
 
         ExcelExportDTO excelExportDTO =  enrollService.listActivityEnrollRecordExcel(activityId,enroll);
+
+
+        ServletOutputStream outputStream = response.getOutputStream();
+
+        try {
+            Workbook workBook = ExcelUtils.createWorkBook(excelExportDTO);
+
+
+            // 设置强制下载不打开
+            response.setContentType("application/force-download");
+
+            String name = "活动报名列表"+TimeUtils.getNowTimeShort()+".xlsx";
+            String downloadFileName = new String(name.getBytes("UTF-8"),"iso-8859-1");
+            // 设置文件名
+            response.addHeader("Content-Disposition","attachment;fileName=" + downloadFileName);
+
+            workBook.write(outputStream);
+
+            outputStream.flush();
+            outputStream.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

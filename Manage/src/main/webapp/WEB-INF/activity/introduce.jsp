@@ -246,6 +246,7 @@
                 data.field.detail = editor.txt.html();
                 app.post('/auth/activity/introduce/update',data.field).then(d=>{
                     app.layerMessageS(d.message);
+                    $("#id").val(d.data);
                 },e=>{
                     app.layerMessageE(e);
                 })

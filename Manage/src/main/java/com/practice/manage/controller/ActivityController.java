@@ -1002,11 +1002,17 @@ public class ActivityController {
     @RequestMapping(value = "/attention/{activityId}")
     public String indexActivityAttention(@PathVariable Long activityId, Model model) {
 
-        List<ManageDictionary> manageDictionaries = dictionaryService.listDictionaryByEnumFromCache(DicParentEnum.ATTENTION_TYPE);
 
-        model.addAttribute("types",manageDictionaries);
+        ManageActivityAttention attention = activityService.getActivityAttentionPO(activityId);
 
+        if(attention==null){
+
+            attention = new ManageActivityAttention();
+            attention.setId(0L);
+            attention.setActivityId(activityId);
+        }
         model.addAttribute("activityId",activityId);
+        model.addAttribute("attention",attention);
 
         return "activity/attention";
     }

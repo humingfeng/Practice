@@ -714,40 +714,40 @@ public class EnrollServiceImpl implements EnrollService {
 
         ExcelExportDTO excelExportDTO = new ExcelExportDTO();
 
-        Map<String,Integer> titleFileds = new HashMap<>();
+        Map<String,Integer> titleFileds = new LinkedHashMap<>();
 
         List<Map<String,String>> list = new ArrayList<>();
 
-        titleFileds.put("学校",200);
-        titleFileds.put("班级年级",200);
-        titleFileds.put("姓名",200);
+        titleFileds.put("学校",30);
+        titleFileds.put("年级班级",30);
+        titleFileds.put("姓名",30);
 
         if(enroll.getParentName()==1){
-            titleFileds.put("家长姓名",200);
+            titleFileds.put("家长姓名",30);
         }
         if(enroll.getPhone()==1){
-            titleFileds.put("手机号",200);
+            titleFileds.put("手机号",30);
         }
         if(enroll.getIdNum()==1){
-            titleFileds.put("身份证",200);
+            titleFileds.put("身份证",30);
         }
         if(enroll.getSex()==1){
-            titleFileds.put("性别",200);
+            titleFileds.put("性别",10);
         }
         if(enroll.getBirthday()==1){
-            titleFileds.put("出生日期",200);
+            titleFileds.put("出生日期",30);
         }
         if(enroll.getNation()==1){
-            titleFileds.put("民族",200);
+            titleFileds.put("民族",10);
         }
         if(enroll.getPassport()==1){
-            titleFileds.put("护照",200);
+            titleFileds.put("护照",30);
         }
         if(enroll.getWeight()==1){
-            titleFileds.put("体重",200);
+            titleFileds.put("体重",10);
         }
         if(enroll.getHeight()==1){
-            titleFileds.put("身高",200);
+            titleFileds.put("身高",10);
         }
 
         for (ManageActivityEnrollRecord record : manageActivityEnrollRecords) {
@@ -760,7 +760,7 @@ public class EnrollServiceImpl implements EnrollService {
                 continue;
             }
 
-            Map<String,String> dto = new HashMap<>();
+            Map<String,String> dto = new LinkedHashMap<>();
 
 
             dto.put("学校",schoolService.getSchoolPO(record.getSchoolId()).getName());
@@ -768,7 +768,7 @@ public class EnrollServiceImpl implements EnrollService {
             String gradeClassName = dictionaryService.getDictionaryPO(record.getPeriodId()).getName()+
                     dictionaryService.getDictionaryPO(record.getClassId()).getName();
 
-            dto.put("班级名称",gradeClassName);
+            dto.put("年级班级",gradeClassName);
 
             dto.put("姓名",record.getName());
 

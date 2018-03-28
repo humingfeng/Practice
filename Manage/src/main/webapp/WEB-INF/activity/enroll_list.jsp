@@ -207,14 +207,14 @@
 
         }
 
-
+        var index;
         $("#export").click(function(){
             //获取该活动选择的信息
 
             app.get('/auth/activity/enroll/info/${id}').then(d=>{
 
                 laytpl(getTpl).render(d.data, function(html){
-                    layer.open({
+                    index = layer.open({
                         type: 1,area: ['800px', '400px'],title:'选择导出字段',
                         content: html
                     });
@@ -225,10 +225,33 @@
 
         form.on("submit(export)",function(data){
 
+            var form = $("<form>");
+            form.attr('style', 'display:none');
+            form.attr('target', '');
+            form.attr('method', 'post');
+            form.attr('action', '/download/excel/enroll/${id}');
+
             layui.each(data.field,function(key,value){
+
                 Fileds[key] = 1;
+
+
             })
 
+            $('body').append(form);
+
+            layui.each(Fileds,function(key,value){
+                var input = $('<input>');
+                input.attr('type', 'hidden');
+                input.attr('name', key);
+                input.attr('value', value);
+                form.append(input);
+            })
+
+            form.submit();
+            form.remove();
+
+            layer.close(index);
 
             return false;
         })

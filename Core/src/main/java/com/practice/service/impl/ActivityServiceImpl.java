@@ -1166,14 +1166,18 @@ public class ActivityServiceImpl implements ActivityService {
             introduce.setId(null);
 
             introduceMapper.insertSelective(introduce);
+
+            return JsonResult.success(OperateEnum.SUCCESS.getStateInfo(),introduce.getId());
         } else {
 
             introduceMapper.updateByPrimaryKeySelective(introduce);
 
+            return JsonResult.success(OperateEnum.SUCCESS);
+
         }
 
 
-        return JsonResult.success(OperateEnum.SUCCESS);
+
     }
 
     /**
@@ -1369,7 +1373,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         attentionMapper.insertSelective(attention);
 
-        return JsonResult.success(OperateEnum.SUCCESS);
+        return JsonResult.success(OperateEnum.SUCCESS.getStateInfo(),attention.getId());
     }
 
     /**
@@ -1862,6 +1866,25 @@ public class ActivityServiceImpl implements ActivityService {
         List<ManageActivityTask> manageActivityTasks = taskMapper.selectByExample(example);
 
         return JsonResult.success(manageActivityTasks);
+    }
+
+    /**
+     * Get ManageAttention PO
+     *
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ManageActivityAttention getActivityAttentionPO(Long activityId) {
+
+        List<ManageActivityAttention> attentions = attentionMapper.selectByActivityId(activityId);
+
+        if(attentions.size()>0){
+
+            return attentions.get(0);
+        }
+
+        return null;
     }
 
     /**

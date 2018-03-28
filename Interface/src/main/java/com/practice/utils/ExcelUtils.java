@@ -215,7 +215,7 @@ public class ExcelUtils {
      * @return Workbook
      * @throws Exception
      */
-    public static <T> Workbook createWorkBook(ExcelExportDTO excelExportDTO,OutputStream out) throws Exception {
+    public static Workbook createWorkBook(ExcelExportDTO excelExportDTO) throws Exception {
         // 创建工作簿
         Workbook wb = new SXSSFWorkbook();
 
@@ -280,6 +280,7 @@ public class ExcelUtils {
 
             rowIndex++;
         }
+
 
         return wb;
     }

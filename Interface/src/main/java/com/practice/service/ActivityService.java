@@ -677,5 +677,10 @@ public interface ActivityService {
      */
     JsonResult resetClassifyCache();
 
-
+    /**
+     * Get ManageAttention PO
+     * @param activityId
+     * @return
+     */
+    ManageActivityAttention getActivityAttentionPO(Long activityId);
 }

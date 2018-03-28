@@ -53,6 +53,8 @@
 
     <dubbo:reference id="statisticsService" interface="com.practice.service.StatisticsService"/>
 
+    <dubbo:reference id="enrollService" interface="com.practice.service.EnrollService"/>
+
 
 
 

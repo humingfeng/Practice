@@ -16,126 +16,102 @@
     <div class="layui-row">
         <form class="layui-form layui-form-pane">
             <input type="hidden" value="${activityId}" name="activityId" id="activityId">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">类型</label>
-                    <div class="layui-input-inline">
-                        <select name="type" id="user" lay-verify="required" >
-                            <option value=''>请选择</option>
-                            <c:forEach items="${types}" var="item">
-                                <option value="${item.id}">${item.name}</option>
-                            </c:forEach>
-                        </select>
+            <input type="hidden" value="${attention.id}" name="id" id="attentionId">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">注意事项</label>
+                <div class="layui-input-block">
+                    <div id="edit" >
+
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-inline" style="width:600px;">
-                    <label class="layui-form-label">注意事项</label>
-                    <div class="layui-input-block" >
-                        <input name="doc" lay-verify="required" maxlength="200" class="layui-input" placeholder="请输入注意事项" />
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <a class="layui-btn layui-btn-normal" lay-submit="return false" lay-filter="add">添加</a>
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="return false" lay-filter="submit">立即提交</button>
                 </div>
             </div>
         </form>
     </div>
-    <div class="layui-row">
-        <table class="layui-table">
-            <colgroup>
-                <col >
-                <col width="10%">
-                <col width="10%">
-            </colgroup>
-            <thead>
-            <tr>
-                <th>注意事项</th>
-                <th>类型</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
-            <script id="tpl" type="text/html">
-                {{#  layui.each(d, function(index, item){ }}
-                <tr>
-                    <td>{{ item.doc }}</td>
-                    <td>{{ item.typeStr }}</td>
-
-                    <td>
-                        <div class="layui-inline">
-                            <a class="layui-btn layui-btn-xs layui-btn-danger" data-type="del" data-index="{{index}}">
-                                <i class="iconfont icon-shanchu"></i>
-                                删除
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {{#  }); }}
-            </script>
-            </tbody>
-        </table>
-
-    </div>
 </fieldset>
 <script type="text/javascript" src="/static/layui/layui.js"></script>
+<script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
 <script type="text/javascript">
     layui.config({base:"/static/js/"}).use(['app','form','laytpl'],function() {
         var $ = layui.$, form = layui.form,  laytpl = layui.laytpl,app = layui.app;
 
-        var load,data=[];
+        var load;
 
-
-        var tpl = laytpl($("#tpl").html());
-
-        var initList = function(){
-            load = app.showLoading();
-            app.get('/auth/activity/attention/list/${activityId}').then(d=>{
-                data = d.data;
-                tpl.render(data,function(html){
-                    $("#tbody").html(html);
-                });
-            },e=>{}).finally(_=>{app.closeLoading(load);})
+        var editor = new window.wangEditor('#edit');
+        editor.customConfig.uploadFileName = 'file'
+        editor.customConfig.uploadImgServer = '/upload/img/activity_introduce';
+        editor.customConfig.uploadImgHooks = {
+            before: function (xhr, editor, files) {
+                load = app.showLoading();
+            },
+            customInsert: function (insertImg, result, editor) {
+                if(result.code==200){
+                    insertImg(result.data);
+                }else{
+                    app.layerMessageE(result.message);
+                }
+                app.closeLoading(load);
+            }
         }
+        editor.create();
 
-        initList();
+
+        editor.txt.html('${attention.doc}');
+
+        var id = $("#attentionId").val();
+
 
         $(document).ready(function () {
 
             parent.resetHeight(document.body.scrollHeight);
         });
 
-        form.on('submit(add)', function(data){
+        form.on('submit(submit)', function(data){
+
+            if(!editor.txt.html()){
+                $('.w-e-text-container').css("border-color","#FF5722");
+                app.layerMessageE("请输入活动介绍");
+                return false;
+            }else{
+                $('.w-e-text-container').css("border-color","#ccc");
+            }
+            data.field.doc = editor.txt.html();
 
             load = app.showLoading();
 
-            app.post("/auth/activity/attention/add",data.field).then(d=>{
-                initList();
-            },e=>{
-                app.layerMessageE(e);
-            }).finally(_=>{app.closeLoading(load)})
+            if(!Number(id)){
+                app.post("/auth/activity/attention/add",data.field).then(d=>{
+                    app.layerMessageS(d.message);
 
+                    $("#attentionId").val(d.data);
+                    id = d.data;
 
+                    $("#attentionId").val(d.data);
+
+                },e=>{
+                    app.layerMessageE(e);
+                }).finally(()=>{
+                    app.closeLoading(load)
+                });
+
+            }else{
+                app.post("/auth/activity/attention/update",data.field).then(d=>{
+                    app.layerMessageS(d.message);
+                },e=>{
+                    app.layerMessageE(e);
+                }).finally(()=>{
+                    app.closeLoading(load)
+                });
+            }
             return false;
         })
 
 
-        $('body').on("click", ".layui-btn-xs", function (e) {
-            var index = $(this).data("index");
 
-            var item = data[index];
-
-            app.layerDel('确定移除该条注意事项么?',_=>{
-                load = app.showLoading();
-                app.post('/auth/activity/attention/del/'+item.id).then(d=>{
-                    app.layerMessageS(d.message);
-                    initList()
-                },e=>{app.layerMessageE(e)}).finally(_=>{app.closeLoading(load)});
-            })
-
-            layui.stope(e);//阻止冒泡事件
-        });
     });
 </script>
 </body>
