@@ -801,11 +801,13 @@ public class EnrollServiceImpl implements EnrollService {
                 dto.put("身高",studentEnrollInfo.getHeight());
             }
 
-
-
+            list.add(dto);
         }
 
-        return null;
+        excelExportDTO.setTitleFileds(titleFileds);
+        excelExportDTO.setValueFileds(list);
+
+        return excelExportDTO;
     }
 
     public StudentEnrollInfo getStudentEnrollInfo(Long studentId){
